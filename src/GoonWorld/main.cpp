@@ -16,15 +16,11 @@ int main()
     geGameSetUpdateFunc(Update);
     geGameSetDrawFunc(Draw);
     geInitializeBgmContentType();
-    geBgm *bgm = geBgmNew("loading", 0.0f, 0.0f);
-    geBgm *bgm2 = geBgmNew("loading", 0.0f, 0.0f);
+    geBgm *bgm = geBgmNew("1-2", 8.727f, 0.0f);
     geLoadAllContent();
+
     geBgmPlay(bgm, 1.0, -1);
-
     gePlayLoop();
-
-    geBgmDelete(bgm);
-
     geUnloadAllContent();
 
     return 0;
