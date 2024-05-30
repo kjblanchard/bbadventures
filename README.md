@@ -1,16 +1,6 @@
 # Blanchard Babes Adventures
 - A C++ game that utilizes Tiled and Aseprite for the game "engine".
-- Uses C self made libraries for physics, sound, and engine, found in the Libraries section
-<!-- - ![Build All Platforms]( https://github.com/kjblanchard/GoonWorld/actions/workflows/test.yml/badge.svg)
-- ![Status Picture](https://github.com/kjblanchard/GoonWorld/blob/master/img/status.gif?raw=true)
-- Play the game here, or likely watch its "progress" [Supergoon.com](https://world.supergoon.com)
-- Currently have 2 macos executables, as libpng cannot handle multiple architectures currently with a mac universal build, [issue here]() -->
-
-## Tiled
-- Configure the background, entities, etc
-
-## Aseprite
-- Configure the Animations, time per frame, Sprites, etc
+- Uses C self made libraries for physics, sound, tweening, content loading and engine, found in the Libraries section
 
 ## Development
 - Mostly developed on macos apple silicon
@@ -29,6 +19,7 @@
 ## Components
 - SDL2: Low Level handling of windowing, events, input
 - OpenAL: Cross-Platform sound abstraction
+- Freetype: Text rendering
 - Emscripten: Build for web
 - Make: Streamlining building with one command
 - CMake: The actual cross-platform build system.

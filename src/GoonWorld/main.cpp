@@ -5,6 +5,7 @@
 #include <GoonEngine/game.h>
 
 static geRichText *thing = nullptr;
+static geBgm *bgm = nullptr;
 static geRectangle thingLoc = {100, 100, 400, 150};
 static geColor color = geColor{255, 255, 255, 255};
 
@@ -18,8 +19,7 @@ void Draw() {
 void initBgm() {
 	// This should be done inside of the engine
 	geInitializeBgmContentType();
-	geBgm *bgm = geBgmNew("1-2", 8.727f, 0.0f);
-	geBgmPlay(bgm, 1.0, -1);
+	bgm = geBgmNew("1-2", 8.727f, 0.0f);
 }
 
 int main() {
@@ -27,7 +27,7 @@ int main() {
 	geGameSetUpdateFunc(Update);
 	geGameSetDrawFunc(Draw);
 	SetLogLevel(Log_LDebug);
-	// initBgm();
+	initBgm();
 	geInitializeFontContentType();
 	geInitializeTextv2ContentType();
 	geInitializeImageContentType();
@@ -35,6 +35,9 @@ int main() {
 	thing = geRichTextNew("Hello world!", "BitPotion", 32, &size);
 	geRichTextSetDrawRect(thing, &thingLoc);
 	geLoadAllContent();
+	if (bgm) {
+		geBgmPlay(bgm, 1.0, -1);
+	}
 	gePlayLoop();
 	geRichTextFree(thing);
 	geUnloadAllContent();
