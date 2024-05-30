@@ -3,8 +3,6 @@
 #include <GoonEngine/content/content.h>
 #include <GoonEngine/debug.h>
 #include <GoonEngine/game.h>
-// #include <GoonEngine/ui/text.h>
-// #include <GoonEngine/content/textv2.h>
 
 static geRichText *thing = nullptr;
 static geRectangle thingLoc = {100, 100, 400, 150};
@@ -30,9 +28,9 @@ int main() {
 	geGameSetDrawFunc(Draw);
 	SetLogLevel(Log_LDebug);
 	// initBgm();
-	// geInitializeTextSubsystem("assets/fonts/BitPotion.ttf", 32);
 	geInitializeFontContentType();
 	geInitializeTextv2ContentType();
+	geInitializeImageContentType();
 	auto size = Point{400, 150};
 	thing = geRichTextNew("Hello world!", "BitPotion", 32, &size);
 	geRichTextSetDrawRect(thing, &thingLoc);
