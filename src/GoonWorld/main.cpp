@@ -3,9 +3,10 @@
 #include <GoonEngine/content/content.h>
 #include <GoonEngine/debug.h>
 #include <GoonEngine/game.h>
-#include <GoonEngine/ui/text.h>
+// #include <GoonEngine/ui/text.h>
+// #include <GoonEngine/content/textv2.h>
 
-static SDL_Texture *thing = nullptr;
+static geRichText *thing = nullptr;
 static geRectangle thingLoc = {100, 100, 400, 150};
 static geColor color = geColor{255, 255, 255, 255};
 
@@ -13,7 +14,7 @@ void Update(double deltatime) {}
 
 void Draw() {
 	geDrawRect(&thingLoc, &color);
-	geDrawTexture(thing, nullptr, &thingLoc, false);
+	geRichTextDraw(thing);
 }
 
 void initBgm() {
@@ -27,15 +28,17 @@ int main() {
 	geInitializeEngine();
 	geGameSetUpdateFunc(Update);
 	geGameSetDrawFunc(Draw);
+	SetLogLevel(Log_LDebug);
 	// initBgm();
 	// geInitializeTextSubsystem("assets/fonts/BitPotion.ttf", 32);
 	geInitializeFontContentType();
-	geFont* font = geFontNew("BitPotion", 32);
-	geLoadAllContent();
+	geInitializeTextv2ContentType();
 	auto size = Point{400, 150};
-	thing = geCreateTextureForString("Hello world!", &size,
-									 geColor{255, 0, 0, 255});
+	thing = geRichTextNew("Hello world!", "BitPotion", 32, &size);
+	geRichTextSetDrawRect(thing, &thingLoc);
+	geLoadAllContent();
 	gePlayLoop();
+	geRichTextFree(thing);
 	geUnloadAllContent();
 	return 0;
 }
