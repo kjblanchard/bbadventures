@@ -23,10 +23,10 @@ void initBgm() {
 }
 
 int main() {
+	SetLogLevel(Log_LDebug);
 	geInitializeEngine();
 	geGameSetUpdateFunc(Update);
 	geGameSetDrawFunc(Draw);
-	SetLogLevel(Log_LDebug);
 	initBgm();
 	geInitializeFontContentType();
 	geInitializeTextv2ContentType();
