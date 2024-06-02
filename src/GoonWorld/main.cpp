@@ -8,7 +8,7 @@
 
 static geText *testText = nullptr;
 static geBgm *bgm = nullptr;
-static geRectangle thingLoc = {0, 0, 200, 500};
+static geRectangle thingLoc = {0, 20, 200, 500};
 static geColor color = {255, 255, 255, 255};
 static geColor color2 = {255, 0, 0, 255};
 
@@ -20,7 +20,7 @@ void Draw() {
 	geTextDrawNative(testText);
 	gePoint s = geTextGetTextSize(testText);
 	geRectangle r;
-	r.x = r.y = 0;
+	r.x = 0, r.y = 20;
 	r.w = s.x;
 	r.h = s.y;
 	geUtilsDrawRect(&r, &color);
@@ -37,6 +37,7 @@ int main() {
 	geGameSetDrawFunc(Draw);
 	initBgm();
 	testText = geTextNew("Hello goon babes in the world!", "Roboto-Regular", 32);
+	// testText = geTextNew("Hello goon babes in the world!", "BitPotion", 32);
 	geTextSetDrawRect(testText, &thingLoc);
 	geLoadAllContent();
 	if (bgm) {
