@@ -15,13 +15,14 @@ static geColor color2 = {255, 0, 0, 255};
 void Update(double deltatime) {}
 
 void Draw() {
-	auto p = geTextMeasureDebug(testText);
+	// auto p = geTextMeasureDebug(testText);
 	// auto p = geTextGetTextSize(testText);
 	geTextDrawNative(testText);
+	gePoint s = geTextGetTextSize(testText);
 	geRectangle r;
 	r.x = r.y = 0;
-	r.w = p.x;
-	r.h = p.y;
+	r.w = s.x;
+	r.h = s.y;
 	geUtilsDrawRect(&r, &color);
 }
 
