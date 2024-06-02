@@ -1,20 +1,28 @@
-#include <GoonEngine/primitives/color.h>
 #include <GoonEngine/content/bgm.h>
-#include <GoonEngine/content/text.h>
 #include <GoonEngine/content/content.h>
-#include <GoonEngine/utils.h>
+#include <GoonEngine/content/text.h>
 #include <GoonEngine/debug.h>
 #include <GoonEngine/game.h>
+#include <GoonEngine/primitives/color.h>
+#include <GoonEngine/utils.h>
 
-static geText *thing = nullptr;
+static geText *testText = nullptr;
 static geBgm *bgm = nullptr;
-static geRectangle thingLoc = {100, 100, 400, 150};
+static geRectangle thingLoc = {0, 0, 200, 500};
+static geColor color = {255, 255, 255, 255};
+static geColor color2 = {255, 0, 0, 255};
 
 void Update(double deltatime) {}
 
 void Draw() {
-	// geDrawRect(&thingLoc, &color);
-	geTextDraw(thing);
+	auto p = geTextMeasureDebug(testText);
+	// auto p = geTextGetTextSize(testText);
+	geTextDrawNative(testText);
+	geRectangle r;
+	r.x = r.y = 0;
+	r.w = p.x;
+	r.h = p.y;
+	geUtilsDrawRect(&r, &color);
 }
 
 void initBgm() {
@@ -27,14 +35,14 @@ int main() {
 	geGameSetUpdateFunc(Update);
 	geGameSetDrawFunc(Draw);
 	initBgm();
-	thing = geTextNew("Hello world!", "BitPotion", 32);
-	geTextSetDrawRect(thing, &thingLoc);
+	testText = geTextNew("Hello goon babes in the world!", "Roboto-Regular", 32);
+	geTextSetDrawRect(testText, &thingLoc);
 	geLoadAllContent();
 	if (bgm) {
 		geBgmPlay(bgm, 1.0, -1);
 	}
 	gePlayLoop();
-	geTextFree(thing);
+	geTextFree(testText);
 	// geUnloadAllContent();
 	return 0;
 }
