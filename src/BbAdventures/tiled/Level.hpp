@@ -22,6 +22,7 @@ class Level {
 	inline gePoint GetSize() { return gePoint{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
 	std::vector<TiledMap::TiledObject> GetAllObjects();
 	inline std::vector<TiledMap::TiledObject> GetAllSolidObjects() const { return _mapData->SolidObjects; }
+	void Draw();
 	void RestartLevel();
 	~Level();
 
@@ -46,6 +47,7 @@ class Level {
 
    private:
 	std::string _name;
+	bool _loaded;
 	geImage *_background;
 	std::unique_ptr<TiledMap> _mapData;
 };

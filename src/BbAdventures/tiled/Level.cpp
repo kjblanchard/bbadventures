@@ -17,7 +17,9 @@ std::vector<TiledMap::TiledObject> Level::GetAllObjects() {
 }
 
 Level::~Level() {
-	geImageFree(_background);
+	if (_background) {
+		geImageFree(_background);
+	}
 }
 
 void Level::LoadSurfaces() {
@@ -94,5 +96,17 @@ void Level::CreateBackgroundImage() {
 }
 
 void Level::RestartLevel() {
-	LoadSolidObjects();
+	// LoadSolidObjects();
+	CreateBackgroundImage();
+}
+
+void Level::Draw() {
+	if (_background) {
+		geRectangle r;
+		r.x = 0;
+		r.y = 0;
+		r.w = 512;
+		r.h = 288;
+		geImageDraw(_background, NULL, &r);
+	}
 }
