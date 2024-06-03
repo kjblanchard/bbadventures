@@ -1,0 +1,116 @@
+{
+    "automappingRulesFile": "",
+    "commands": [
+    ],
+    "extensionsPath": ".",
+    "folders": [
+        "."
+    ],
+    "properties": [
+    ],
+    "propertyTypes": [
+        {
+            "id": 3,
+            "name": "Direction",
+            "storageType": "int",
+            "type": "enum",
+            "values": [
+                "North",
+                "East",
+                "South",
+                "West"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "color": "#ff04b348",
+            "drawFill": true,
+            "id": 2,
+            "members": [
+                {
+                    "name": "loadLocation",
+                    "type": "int",
+                    "value": 0
+                },
+                {
+                    "name": "loadMap",
+                    "type": "string",
+                    "value": ""
+                }
+            ],
+            "name": "Exit",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 4,
+            "members": [
+                {
+                    "name": "bgm",
+                    "type": "string",
+                    "value": ""
+                },
+                {
+                    "name": "loopEnd",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "loopStart",
+                    "type": "float",
+                    "value": 0
+                }
+            ],
+            "name": "RpgMap",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        },
+        {
+            "color": "#ff07b300",
+            "drawFill": true,
+            "id": 1,
+            "members": [
+                {
+                    "name": "loadLocation",
+                    "type": "int",
+                    "value": 0
+                }
+            ],
+            "name": "Start",
+            "type": "class",
+            "useAs": [
+                "property",
+                "map",
+                "layer",
+                "object",
+                "tile",
+                "tileset",
+                "wangcolor",
+                "wangset",
+                "project"
+            ]
+        }
+    ]
+}

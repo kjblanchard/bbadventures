@@ -5,6 +5,7 @@
 #include <GoonEngine/game.h>
 #include <GoonEngine/primitives/color.h>
 #include <GoonEngine/utils.h>
+#include <BbAdventures/tiled/TiledMap.hpp>
 
 static geText *testText = nullptr;
 static geBgm *bgm = nullptr;
@@ -35,7 +36,7 @@ void Draw() {
 }
 
 void initBgm() {
-	bgm = geBgmNew("1-2", 8.727f, 0.0f);
+	bgm = geBgmNew("town2");
 }
 
 int main() {
@@ -45,7 +46,7 @@ int main() {
 	geGameSetDrawFunc(Draw);
 	initBgm();
 	// testText = geTextNew("Hello goon babes in the world!", "Roboto-Regular", 32);
-	testText = geTextNew("Hello you prettiest girl of all time my wife!", "BitPotion", 48);
+	testText = geTextNew("Hello you prettiest girl of all time my wife!!! Lets gooo   to the store??", "BitPotion", 48);
 	auto xBound = 400;
 	geTextSetBounds(testText, xBound, 0);
 	geTextSetNumDrawCharacters(testText, revealedLetters);
@@ -55,6 +56,7 @@ int main() {
 	if (bgm) {
 		geBgmPlay(bgm, 1.0, -1);
 	}
+	auto level = Bba::TiledMap("debugTown");
 	gePlayLoop();
 	geTextFree(testText);
 	geUnloadAllContent();

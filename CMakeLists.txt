@@ -1,7 +1,7 @@
 # #########################################
 # Initial config
 # #########################################
-set(EXECUTABLE_TARGET_NAME SupergoonWorld)
+set(EXECUTABLE_TARGET_NAME BbAdventures)
 cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${EXECUTABLE_TARGET_NAME} project initialization")
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1) # This exports a file that clangd can use so that we know what compile/include flags so that we can use clangd language server properly with our cmake attributes.
@@ -20,7 +20,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # #########################################
 message(STATUS "Getting all files for cmake..")
 
-file(GLOB_RECURSE GOON_WORLD_FILES src/GoonWorld/*.cpp*)
+file(GLOB_RECURSE GOON_WORLD_FILES src/BbAdventures/*.cpp*)
 
 # #########################################
 # Platform specific Project setup
@@ -104,7 +104,7 @@ set(PNG_FRAMEWORK OFF CACHE BOOL "Build from what?" FORCE)
 # #########################################
 if(GOON_BUILD_PCH)
     target_precompile_headers(${EXECUTABLE_TARGET_NAME} PRIVATE
-        "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/GoonWorld/gnpch.hpp>")
+        "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_CURRENT_SOURCE_DIR}/src/BbAdventures/gnpch.hpp>")
 endif(GOON_BUILD_PCH)
 
 # #########################################
@@ -210,7 +210,6 @@ target_include_directories(${EXECUTABLE_TARGET_NAME}
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/external/sg_engine/include/
-    ${CMAKE_CURRENT_SOURCE_DIR}/external/sg_physics/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/external/nlohmann/include/
     /usr/local/include
 
@@ -227,7 +226,7 @@ target_link_libraries(${EXECUTABLE_TARGET_NAME}
 target_include_directories(${EXECUTABLE_TARGET_NAME}
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/GoonWorld/external/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/BbAdventures/external/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/
 )
 

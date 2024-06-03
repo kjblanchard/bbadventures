@@ -11,7 +11,7 @@ FULL_MAC_BUILD ?= OFF
 # Binary Config
 BUILD_FOLDER = build
 BINARY_FOLDER = bin
-BINARY_NAME = SupergoonWorld
+BINARY_NAME = BbAdventures
 BINARY_FOLDER_REL_PATH = $(BUILD_FOLDER)/$(BINARY_FOLDER)
 ##Build Specific Flags
 CMAKE_CONFIGURE_COMMAND = cmake

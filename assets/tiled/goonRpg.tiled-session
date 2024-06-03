@@ -1,0 +1,84 @@
+{
+    "activeFile": "debugTown.tmj",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "debugSouth.tmj": {
+            "scale": 2.185565476190476,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 232.43412541703552,
+                "y": 90.82317695921564
+            }
+        },
+        "debugSouth.tmx": {
+            "scale": 3.19734375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 240.04300444705078,
+                "y": 160.13292283633876
+            }
+        },
+        "debugTown.tmj": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 248,
+                "y": 141.25
+            }
+        },
+        "debugTown.tmx": {
+            "scale": 2,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 291.25,
+                "y": 139
+            }
+        },
+        "house..tsj": {
+            "scaleInDock": 1
+        },
+        "house.tsj": {
+            "scaleInDock": 1
+        },
+        "house.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "outside.tsj": {
+            "scaleInDock": 1
+        },
+        "outside.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "terrain.tsj": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1
+        },
+        "terrain.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.exportedFilePath": "/Users/kevin/git/c/bbAdventures/assets/tiled",
+    "last.externalTilesetPath": "/Users/kevin/git/c/bbAdventures/assets/tiled",
+    "lastUsedTilesetExportFilter": "JSON tileset files (*.tsj *.json)",
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "openFiles": [
+        "debugTown.tmj",
+        "debugSouth.tmj"
+    ],
+    "project": "goonRpg.tiled-project",
+    "recentFiles": [
+        "debugSouth.tmj",
+        "debugTown.tmj",
+        "terrain.tsx",
+        "outside.tsx",
+        "house.tsx",
+        "debugSouth.tmx",
+        "debugTown.tmx"
+    ]
+}
