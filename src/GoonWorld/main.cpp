@@ -10,13 +10,10 @@ static geText *testText = nullptr;
 static geBgm *bgm = nullptr;
 static geRectangle thingLoc = {0, 20, 200, 500};
 static geColor color = {255, 255, 255, 255};
-static geColor color2 = {255, 0, 0, 255};
 
 void Update(double deltatime) {}
 
 void Draw() {
-	// auto p = geTextMeasureDebug(testText);
-	// auto p = geTextGetTextSize(testText);
 	geTextDrawNative(testText);
 	gePoint s = geTextGetTextSize(testText);
 	geRectangle r;
@@ -36,8 +33,10 @@ int main() {
 	geGameSetUpdateFunc(Update);
 	geGameSetDrawFunc(Draw);
 	initBgm();
-	testText = geTextNew("Hello goon babes in the world!", "Roboto-Regular", 32);
-	// testText = geTextNew("Hello goon babes in the world!", "BitPotion", 32);
+	// testText = geTextNew("Hello goon babes in the world!", "Roboto-Regular", 32);
+	testText = geTextNew("Hello goon babes in the world!", "BitPotion", 48);
+	// auto xBound = 200;
+	// geTextSetBounds(testText, xBound, 0);
 	geTextSetDrawRect(testText, &thingLoc);
 	geLoadAllContent();
 	if (bgm) {
@@ -45,6 +44,6 @@ int main() {
 	}
 	gePlayLoop();
 	geTextFree(testText);
-	// geUnloadAllContent();
+	geUnloadAllContent();
 	return 0;
 }
