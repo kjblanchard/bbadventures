@@ -25,7 +25,7 @@ void Update(double deltatime) {
 }
 
 void Draw() {
-	geTextDrawNative(testText);
+	geTextDraw(testText);
 	gePoint s = geTextGetTextSize(testText);
 	geRectangle r;
 	r.x = 0, r.y = 20;
@@ -49,7 +49,8 @@ int main() {
 	auto xBound = 400;
 	geTextSetBounds(testText, xBound, 0);
 	geTextSetNumDrawCharacters(testText, revealedLetters);
-	geTextSetDrawRect(testText, &thingLoc);
+	auto p = gePoint{thingLoc.x, thingLoc.y};
+	geTextSetLocation(testText, p.x, p.y);
 	geLoadAllContent();
 	if (bgm) {
 		geBgmPlay(bgm, 1.0, -1);
