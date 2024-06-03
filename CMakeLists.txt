@@ -36,8 +36,6 @@ elseif(APPLE)
         set(MACOS ON CACHE BOOL "Is Macos")
 
         if(CMAKE_GENERATOR STREQUAL "Xcode")
-            # message(STATUS "Setting Build to Specific OS type, as libpng cannot handle universal.")
-            # set(CMAKE_OSX_ARCHITECTURES ${CMAKE_OSX_ARCHITECTURES} CACHE STRING "" FORCE)
             message(STATUS "Setting Build to Universal Binary")
             set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "" FORCE)
         endif(CMAKE_GENERATOR STREQUAL "Xcode")
@@ -98,6 +96,7 @@ set(PNG_SHARED OFF CACHE BOOL "Build the libpng tests" FORCE)
 set(GOON_FULL_MACOS_BUILD ${GOON_FULL_MACOS_BUILD} CACHE BOOL "Build the libpng tests" FORCE)
 set(GOON_DEBUG_SOUND ${GOON_DEBUG_SOUND} CACHE BOOL "Build from what?" FORCE)
 set(PNG_FRAMEWORK OFF CACHE BOOL "Build from what?" FORCE)
+set(INSTALL_SG_SOUND OFF CACHE BOOL "Do not install when installing" FORCE)
 
 # #########################################
 # Precompiled headers
@@ -211,6 +210,7 @@ target_include_directories(${EXECUTABLE_TARGET_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/external/sg_engine/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/external/nlohmann/include/
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/sg_engine/include/GoonEngine/primitives/
     /usr/local/include
 
     # Freetype cause yeah

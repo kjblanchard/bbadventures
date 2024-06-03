@@ -1,4 +1,4 @@
-#include <GoonEngine/primitives/point.h>
+#include <GoonEngine/prim/point.h>
 
 #include <BbAdventures/shared/constants.hpp>
 #include <BbAdventures/tiled/TiledMap.hpp>

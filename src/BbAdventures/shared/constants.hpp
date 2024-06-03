@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
 namespace Bba {
-std::string ASSET_PREFIX = "assets";
-std::string TILED_PREFIX = "tiled";
-std::string IMAGES_PREFIX = "img";
+
+extern std::string ASSET_PREFIX;
+extern std::string TILED_PREFIX;
+extern std::string IMAGES_PREFIX;
 }

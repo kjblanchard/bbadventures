@@ -3,9 +3,9 @@
 #include <GoonEngine/content/text.h>
 #include <GoonEngine/debug.h>
 #include <GoonEngine/game.h>
-#include <GoonEngine/primitives/color.h>
+#include <GoonEngine/prim/color.h>
 #include <GoonEngine/utils.h>
-#include <BbAdventures/tiled/TiledMap.hpp>
+#include <BbAdventures/tiled/Level.hpp>
 
 static geText *testText = nullptr;
 static geBgm *bgm = nullptr;
@@ -56,7 +56,8 @@ int main() {
 	if (bgm) {
 		geBgmPlay(bgm, 1.0, -1);
 	}
-	auto level = Bba::TiledMap("debugTown");
+	// auto level = Bba::TiledMap("debugTown");
+	auto level = Bba::Level("debugTown");
 	gePlayLoop();
 	geTextFree(testText);
 	geUnloadAllContent();

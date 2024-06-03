@@ -1,7 +1,7 @@
 #pragma once
-#include <GoonEngine/primitives/rectangle.h>
 #include <string>
 #include <vector>
+#include <GoonEngine/prim/rectangle.h>
 
 namespace Bba {
 /**
