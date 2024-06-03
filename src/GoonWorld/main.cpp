@@ -8,10 +8,21 @@
 
 static geText *testText = nullptr;
 static geBgm *bgm = nullptr;
-static geRectangle thingLoc = {0, 20, 200, 500};
+static geRectangle thingLoc = {5, 20, 200, 500};
 static geColor color = {255, 255, 255, 255};
+const float timeWait = 0.10;
+int revealedLetters = 0;
+float currentTime = 0;
 
-void Update(double deltatime) {}
+void Update(double deltatime) {
+	currentTime += deltatime;
+	if(currentTime > timeWait) {
+		currentTime -= timeWait;
+		++revealedLetters;
+		geTextSetNumDrawCharacters(testText, revealedLetters);
+	}
+
+}
 
 void Draw() {
 	geTextDrawNative(testText);
@@ -34,9 +45,10 @@ int main() {
 	geGameSetDrawFunc(Draw);
 	initBgm();
 	// testText = geTextNew("Hello goon babes in the world!", "Roboto-Regular", 32);
-	testText = geTextNew("Hello goon babes in the world!", "BitPotion", 48);
-	// auto xBound = 200;
-	// geTextSetBounds(testText, xBound, 0);
+	testText = geTextNew("Lets go put the chickens in their home.  I love you you sweet little cute pregnant girl!", "BitPotion", 48);
+	auto xBound = 400;
+	geTextSetBounds(testText, xBound, 0);
+	geTextSetNumDrawCharacters(testText, revealedLetters);
 	geTextSetDrawRect(testText, &thingLoc);
 	geLoadAllContent();
 	if (bgm) {
