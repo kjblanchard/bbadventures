@@ -8,6 +8,7 @@
 #include <GoonEngine/prim/rectangle.h>
 #include <GoonEngine/utils.h>
 
+#include <BbAdventures/shared/state.hpp>
 #include <BbAdventures/systems/Systems.hpp>
 #include <BbAdventures/tiled/Level.hpp>
 
@@ -21,6 +22,7 @@ int revealedLetters = 0;
 float currentTime = 0;
 
 void Update(double deltatime) {
+	Bba::State::DeltaTime = deltatime;
 	currentTime += deltatime;
 	if (currentTime > timeWait) {
 		currentTime -= timeWait;
@@ -28,11 +30,13 @@ void Update(double deltatime) {
 		geTextSetNumDrawCharacters(testText, revealedLetters);
 	}
 	Bba::UpdatePlayers();
+	Bba::UpdateAnimationComponents();
 }
 
 void Draw() {
 	level->Draw();
-	Bba::UpdateDebugDrawComponents();
+	Bba::DrawDebugDrawComponents();
+	Bba::DrawAnimationComponents();
 	geTextDraw(testText);
 	gePoint s = geTextGetTextSize(testText);
 	geRectangle r;
@@ -65,6 +69,7 @@ int main() {
 	level = new Bba::Level("debugTown");
 	level->LoadAllGameObjects();
 	level->RestartLevel();
+	Bba::LoadAnimationComponents();
 	gePlayLoop();
 	geTextFree(testText);
 	geUnloadAllContent();

@@ -1,7 +1,8 @@
 #pragma once
+#include <BbAdventures/shared/constants.hpp>
 namespace Bba {
 struct PlayerComponent {
-    int id;
+    Directions Direction;
 };
 
 }  // namespace Bba
