@@ -169,23 +169,6 @@
                  "width":16,
                  "x":112,
                  "y":80
-                }, 
-                {
-                 "height":16,
-                 "id":9,
-                 "name":"Start1",
-                 "properties":[
-                        {
-                         "name":"loadLocation",
-                         "type":"int",
-                         "value":1
-                        }],
-                 "rotation":0,
-                 "type":"Start",
-                 "visible":true,
-                 "width":16,
-                 "x":112,
-                 "y":192
                 }],
          "opacity":1,
          "type":"objectgroup",

@@ -225,6 +225,8 @@ target_link_libraries(${EXECUTABLE_TARGET_NAME}
 
 target_include_directories(${EXECUTABLE_TARGET_NAME}
     PUBLIC
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/external/entt/src/entt
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/src/BbAdventures/external/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/

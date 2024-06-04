@@ -1,8 +1,14 @@
+#include <GoonEngine/debug.h>
+
 #include <BbAdventures/gnpch.hpp>
 #include <BbAdventures/shared/constants.hpp>
 #include <BbAdventures/tiled/Level.hpp>
 #include <BbAdventures/tiled/TiledMap.hpp>
 #include <nlohmann/json.hpp>
+namespace Bba {
+
+extern std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject &)>> GameSpawnMap;
+}
 using namespace Bba;
 static std::vector<std::pair<std::string, geImage *>> _imagesCache;
 
@@ -22,6 +28,20 @@ Level::~Level() {
 	}
 }
 
+void Level::LoadAllGameObjects() {
+	for (auto &obj : _mapData->Objects) {
+		auto type = obj.ObjectType;
+		auto iter = GameSpawnMap.find(type);
+		if (iter == GameSpawnMap.end())
+			continue;
+		auto go = (*iter).second(obj);
+		if (!go) {
+			LogWarn("Could not create object of type %s", type.c_str());
+		}
+		_gameObjects.push_back(go);
+	}
+}
+
 void Level::LoadSurfaces() {
 	for (auto &tileset : _mapData->Tilesets) {
 		if (tileset.Type == TilesetType::Image) {
@@ -38,11 +58,9 @@ void Level::LoadSurfaces() {
 	}
 }
 void Level::LoadSolidObjects() {
-	for (auto &solid : _mapData->SolidObjects) {
-		auto box = geRectangle{solid.X, solid.Y, solid.Width, solid.Height};
-		// auto body = gpBodyNewStatic(box);
-		// gpSceneAddStaticBody(body);
-	}
+	// for (auto &solid : _mapData->SolidObjects) {
+	// 	auto box = geRectangle{solid.X, solid.Y, solid.Width, solid.Height};
+	// }
 }
 geImage *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	if (tileset->Type == TilesetType::Image) {

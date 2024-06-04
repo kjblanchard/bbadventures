@@ -29,9 +29,9 @@
 - MIT
 
 ## Libraries
-- [Supergoon Engine](https://github.com/supergoongaming/sg_engine) - MIT | Custom Physics, OpenAL wrapper, libpng/freetype wrapper, SDL wrapper, etc
-- [SDL](https://www.libsdl.org/license.php) - ZLIB - Low level Windowing / Eventing
+- [Supergoon Engine](https://github.com/supergoongaming/sg_engine) - MIT - OpenAL, libpng/freetype wrapper, SDL wrapper, base content types, etc
 - [nlohmann json](https://github.com/nlohmann/json) - MIT - json parsing for appsettings file
+- [EnTT ECS](https://github.com/skypjack/entt/tree/v3.13.2) - MIT - Entity Component System
 
 ## Valgrind Checks
 - valgrind --track-origins=yes --leak-check=yes --leak-resolution=low --show-leak-kinds=definite ./SupergoonWorld 2>&1 | tee memcheck.txt

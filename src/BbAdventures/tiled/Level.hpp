@@ -2,10 +2,10 @@
 #include <GoonEngine/content/image.h>
 #include <GoonEngine/prim/point.h>
 
+#include <BbAdventures/base/GameObject.hpp>
 #include <BbAdventures/tiled/TiledMap.hpp>
 #include <memory>
 #include <tuple>
-struct SDL_Texture;
 namespace Bba {
 /**
  * @brief A level that is loaded from tiled, this is loaded from json and contains all tiles, objects, properties, etc
@@ -20,6 +20,7 @@ class Level {
 	Level(const char *filename);
 	const inline std::string &GetName() const { return _name; }
 	inline gePoint GetSize() { return gePoint{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
+	void LoadAllGameObjects();
 	std::vector<TiledMap::TiledObject> GetAllObjects();
 	inline std::vector<TiledMap::TiledObject> GetAllSolidObjects() const { return _mapData->SolidObjects; }
 	void Draw();
@@ -47,8 +48,8 @@ class Level {
 
    private:
 	std::string _name;
-	bool _loaded;
 	geImage *_background;
+	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;
 };
 }  // namespace Bba
