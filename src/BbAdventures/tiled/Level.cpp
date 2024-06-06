@@ -1,6 +1,7 @@
 #include <GoonEngine/debug.h>
 
 #include <BbAdventures/gnpch.hpp>
+#include <BbAdventures/entities/Solid.hpp>
 #include <BbAdventures/shared/constants.hpp>
 #include <BbAdventures/tiled/Level.hpp>
 #include <BbAdventures/tiled/TiledMap.hpp>
@@ -58,9 +59,11 @@ void Level::LoadSurfaces() {
 	}
 }
 void Level::LoadSolidObjects() {
-	// for (auto &solid : _mapData->SolidObjects) {
-	// 	auto box = geRectangle{solid.X, solid.Y, solid.Width, solid.Height};
-	// }
+	for (auto &solid : _mapData->SolidObjects) {
+		auto go = NewSolidObject(solid);
+		_gameObjects.push_back(go);
+		// auto box = geRectangle{solid.X, solid.Y, solid.Width, solid.Height};
+	}
 }
 geImage *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	if (tileset->Type == TilesetType::Image) {
@@ -114,8 +117,8 @@ void Level::CreateBackgroundImage() {
 }
 
 void Level::RestartLevel() {
-	// LoadSolidObjects();
 	CreateBackgroundImage();
+	LoadSolidObjects();
 }
 
 void Level::Draw() {

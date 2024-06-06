@@ -102,7 +102,7 @@
         {
          "draworder":"topdown",
          "id":3,
-         "name":"solids",
+         "name":"solid",
          "objects":[
                 {
                  "height":112,

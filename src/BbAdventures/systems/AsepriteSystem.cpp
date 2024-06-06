@@ -26,7 +26,7 @@ void DrawAnimationComponents() {
 	auto view = GameObject::_registry.view<AnimationComponent, LocationComponent>();
 	for (auto [_, a, l] : view.each()) {
 		auto s = a.Animation->FrameCoords();
-		auto d = geRectangle{l.Location.x + a.Offset.x, l.Location.y + a.Offset.y, s.w, s.h};
+		auto d = geRectangle{(int)l.Location.x + a.Offset.x, (int)l.Location.y + a.Offset.y, s.w, s.h};
 		geImageDraw(a.AnimationImage, &s, &d);
 	}
 }

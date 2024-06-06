@@ -1,7 +1,7 @@
 #pragma once
-#include <GoonEngine/prim/point.h>
+#include <GoonEngine/prim/vec2.h>
 namespace Bba {
 struct LocationComponent {
-	gePoint Location = gePointZero();
+	geVec2 Location = {0,0};
 };
 }  // namespace Bba
