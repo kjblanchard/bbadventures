@@ -163,12 +163,35 @@
                  "height":16,
                  "id":7,
                  "name":"Start0",
+                 "properties":[
+                        {
+                         "name":"loadLocation",
+                         "type":"int",
+                         "value":0
+                        }],
                  "rotation":0,
                  "type":"Start",
                  "visible":true,
                  "width":16,
                  "x":112,
                  "y":80
+                }, 
+                {
+                 "height":16,
+                 "id":10,
+                 "name":"Start1",
+                 "properties":[
+                        {
+                         "name":"loadLocation",
+                         "type":"int",
+                         "value":1
+                        }],
+                 "rotation":0,
+                 "type":"Start",
+                 "visible":true,
+                 "width":16,
+                 "x":112,
+                 "y":192
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -177,7 +200,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":10,
+ "nextobjectid":11,
  "orientation":"orthogonal",
  "properties":[
         {

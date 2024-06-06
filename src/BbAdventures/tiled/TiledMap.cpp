@@ -127,6 +127,7 @@ TiledMap::TiledMap(std::string filename) {
 			if (name == "entities") {
 				for (auto &objectJson : layerJson["objects"]) {
 					auto object = TiledObject();
+					object.Name = objectJson["name"];
 					object.Id = objectJson["id"];
 					object.Height = objectJson["height"];
 					object.Width = objectJson["width"];

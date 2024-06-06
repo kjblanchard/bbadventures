@@ -5,11 +5,17 @@
     ],
     "fileStates": {
         "debugSouth.tmj": {
+            "expandedGroupLayers": [
+                3
+            ],
+            "expandedObjectLayers": [
+                2
+            ],
             "scale": 2.185565476190476,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 229.688840471165,
-                "y": 156.93878940559682
+                "x": 95.3986518689998,
+                "y": 65.88683870089194
             }
         },
         "debugSouth.tmx": {
@@ -21,11 +27,18 @@
             }
         },
         "debugTown.tmj": {
-            "scale": 2,
-            "selectedLayer": 1,
+            "expandedGroupLayers": [
+                6
+            ],
+            "expandedObjectLayers": [
+                5,
+                3
+            ],
+            "scale": 1.5,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 256.25,
-                "y": 141.25
+                "x": 118.99999999999999,
+                "y": 237.33333333333331
             }
         },
         "debugTown.tmx": {

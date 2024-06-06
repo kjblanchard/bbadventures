@@ -23,6 +23,7 @@ class TiledMap {
 		std::variant<int, std::string, float> Value;
 	};
 	struct TiledObject {
+		std::string Name;
 		int Id, Height, Width, X, Y;
 		std::string ObjectType;
 		std::vector<TiledProperty> Properties;

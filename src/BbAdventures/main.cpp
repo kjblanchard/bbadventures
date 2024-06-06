@@ -69,6 +69,7 @@ int main() {
 	level = new Bba::Level("debugTown");
 	level->LoadAllGameObjects();
 	level->RestartLevel();
+	Bba::LoadPlayers();
 	Bba::LoadAnimationComponents();
 	gePlayLoop();
 	geTextFree(testText);

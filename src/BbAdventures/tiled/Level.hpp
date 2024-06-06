@@ -20,6 +20,7 @@ class Level {
 	Level(const char *filename);
 	const inline std::string &GetName() const { return _name; }
 	inline gePoint GetSize() { return gePoint{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
+	inline void AddGameObjectToLevel(GameObject* g) {_gameObjects.push_back(g);}
 	void LoadAllGameObjects();
 	std::vector<TiledMap::TiledObject> GetAllObjects();
 	inline std::vector<TiledMap::TiledObject> GetAllSolidObjects() const { return _mapData->SolidObjects; }
