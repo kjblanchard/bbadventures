@@ -129,13 +129,13 @@ void UpdatePlayers() {
 
 void LoadPlayers() {
 	auto view = GameObject::_registry.view<PlayerSpawnComponent>();
-	for (auto [_, p] : view.each()) {
-		if (p.SpawnLocationId == State::SpawnLocation) {
+	for (auto [_, ps] : view.each()) {
+		if (ps.SpawnLocationId == State::SpawnLocation) {
 			for (size_t i = 0; i < State::NumPlayers; i++) {
 				auto go = new GameObject();
 				LocationComponent l = LocationComponent();
-				l.Location.x = p.Location.x + (i * 5);
-				l.Location.y = p.Location.y;
+				l.Location.x = ps.Location.x + (i * 5);
+				l.Location.y = ps.Location.y;
 				PlayerComponent p = PlayerComponent();
 				p.Direction = Directions::South;
 				auto a = AnimationComponent();

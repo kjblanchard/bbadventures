@@ -139,11 +139,11 @@ void Level::LoadNewLevel() {
 	Bba::State::CurrentLevel = l;
 	l->LoadAllGameObjects();
 	l->RestartLevel();
-	Bba::LoadPlayers();
-	Bba::LoadAnimationComponents();
 	if (lastLevel) {
 		delete (lastLevel);
 	}
+	Bba::LoadPlayers();
+	Bba::LoadAnimationComponents();
 	State::FadePanel->FadeIn(LevelLoaded);
 }
 
