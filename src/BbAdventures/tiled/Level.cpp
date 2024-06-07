@@ -134,19 +134,15 @@ static void LevelLoaded() {
 }
 
 void Level::LoadNewLevel() {
-	for (size_t i = 0; i < 1000; i++) {
-		/* code */
-
-		auto l = new Bba::Level(Bba::State::NextMapName.c_str());
-		lastLevel = Bba::State::CurrentLevel;
-		Bba::State::CurrentLevel = l;
-		l->LoadAllGameObjects();
-		l->RestartLevel();
-		Bba::LoadPlayers();
-		Bba::LoadAnimationComponents();
-		if (lastLevel) {
-			delete (lastLevel);
-		}
+	auto l = new Bba::Level(Bba::State::NextMapName.c_str());
+	lastLevel = Bba::State::CurrentLevel;
+	Bba::State::CurrentLevel = l;
+	l->LoadAllGameObjects();
+	l->RestartLevel();
+	Bba::LoadPlayers();
+	Bba::LoadAnimationComponents();
+	if (lastLevel) {
+		delete (lastLevel);
 	}
 	State::FadePanel->FadeIn(LevelLoaded);
 }

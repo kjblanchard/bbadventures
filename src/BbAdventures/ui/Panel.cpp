@@ -16,7 +16,6 @@ void Panel::FadeOut(std::function<void(void)> afterFunc) {
 void Panel::FadeIn(std::function<void(void)> afterFunc) {
 	_afterFunc = afterFunc;
 	_tween = std::make_unique<Tween>(255, 0, 0.25, Easings::Linear);
-	puts("Fade in done");
 }
 
 void Panel::Update() {

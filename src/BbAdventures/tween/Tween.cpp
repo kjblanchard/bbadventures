@@ -5,7 +5,6 @@
 #include <BbAdventures/tween/Tween.hpp>
 using namespace Bba;
 Tween::Tween(float start, float end, float duration, Easings ease) : _begin(start), _end(end), _duration(duration), _easeType(ease) {
-	puts("Tween created!");
 }
 float Tween::Value() {
 	if (_currentDuration >= _duration) {
