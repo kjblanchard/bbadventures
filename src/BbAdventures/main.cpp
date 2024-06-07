@@ -11,13 +11,16 @@
 #include <BbAdventures/shared/state.hpp>
 #include <BbAdventures/systems/Systems.hpp>
 #include <BbAdventures/tiled/Level.hpp>
+#include <BbAdventures/ui/Panel.hpp>
 
 static geText *testText = nullptr;
 static geBgm *bgm = nullptr;
 static geRectangle thingLoc = {120, 200, 200, 200};
 static geColor color = {255, 255, 255, 255};
-static Bba::Level *level;
+// static Bba::Level *level;
+static Bba::Panel *panel;
 const float timeWait = 0.10;
+std::string defaultLevel = "debugTown";
 int revealedLetters = 0;
 float currentTime = 0;
 
@@ -29,12 +32,17 @@ void Update(double deltatime) {
 		++revealedLetters;
 		geTextSetNumDrawCharacters(testText, revealedLetters);
 	}
-	Bba::UpdatePlayers();
-	Bba::UpdateAnimationComponents();
+	if (!Bba::State::IsLoadingMap) {
+		Bba::UpdatePlayers();
+		Bba::UpdateAnimationComponents();
+	}
+	panel->Update();
 }
 
 void Draw() {
-	level->Draw();
+	if (Bba::State::CurrentLevel) {
+		Bba::State::CurrentLevel->Draw();
+	}
 	Bba::DrawDebugDrawComponents();
 	Bba::DrawAnimationComponents();
 	geTextDraw(testText);
@@ -44,6 +52,7 @@ void Draw() {
 	r.w = s.x + 4;
 	r.h = s.y + 2;
 	geUtilsDrawRect(&r, &color);
+	panel->Draw();
 }
 
 void initBgm() {
@@ -65,12 +74,10 @@ int main() {
 	if (bgm) {
 		geBgmPlay(bgm, 1.0, -1);
 	}
-	// auto level = Bba::TiledMap("debugTown");
-	level = new Bba::Level("debugTown");
-	level->LoadAllGameObjects();
-	level->RestartLevel();
-	Bba::LoadPlayers();
-	Bba::LoadAnimationComponents();
+	panel = new Bba::Panel();
+	Bba::State::NextMapName = defaultLevel;
+	Bba::Level::LoadNewLevel();
+	Bba::State::FadePanel = panel;
 	gePlayLoop();
 	geTextFree(testText);
 	geUnloadAllContent();

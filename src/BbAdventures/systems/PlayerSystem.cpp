@@ -2,6 +2,7 @@
 #include <GoonEngine/input/keyboard.h>
 
 #include <BbAdventures/aseprite/AsepriteAnimation.hpp>
+#include <BbAdventures/ui/Panel.hpp>
 #include <BbAdventures/base/GameObject.hpp>
 #include <BbAdventures/components/AnimationComponent.hpp>
 #include <BbAdventures/components/LocationComponent.hpp>
@@ -28,6 +29,9 @@ static Directions GetOverlapDirection(geRectangle* obj, geRectangle* overlapBox)
 }
 
 void UpdatePlayers() {
+	if (State::IsLoadingMap) {
+		return;
+	}
 	auto view = GameObject::_registry.view<LocationComponent, PlayerComponent, AnimationComponent, RigidBodyComponent>();
 	for (auto [_, l, p, a, r] : view.each()) {
 		auto d = p.Direction;
@@ -110,11 +114,14 @@ void UpdatePlayers() {
 		playerRbRect.x += l.Location.x + tryMoveSpeed.x;
 		playerRbRect.y += l.Location.y + tryMoveSpeed.y;
 		auto peView = GameObject::_registry.view<PlayerExitComponent>();
+
 		for (auto [_, pe] : peView.each()) {
-			if(geRectangleIsOverlap(&playerRbRect, &pe.BoundingBox)) {
+			if (geRectangleIsOverlap(&playerRbRect, &pe.BoundingBox)) {
 				State::IsLoadingMap = true;
 				State::NextMapName = pe.NextMap;
 				State::SpawnLocation = pe.SpawnLocationId;
+				// Trigger fadeout
+				State::FadePanel->FadeOut(Level::LoadNewLevel);
 			}
 		}
 	}
@@ -136,9 +143,9 @@ void LoadPlayers() {
 				a.Offset = gePoint{0, 0};
 				auto r = RigidBodyComponent();
 				r.OffsetX = 2;
-				r.OffsetY = 6;
+				r.OffsetY = 20;
 				r.W = 16;
-				r.H = 28;
+				r.H = 14;
 				go->AddComponent<RigidBodyComponent>(r);
 				go->AddComponent<LocationComponent>(l);
 				go->AddComponent<PlayerComponent>(p);

@@ -7,6 +7,7 @@
 #include <memory>
 #include <tuple>
 namespace Bba {
+class Panel;
 /**
  * @brief A level that is loaded from tiled, this is loaded from json and contains all tiles, objects, properties, etc
  */
@@ -18,15 +19,17 @@ class Level {
 	 * @param filename The file to load from json
 	 */
 	Level(const char *filename);
+	~Level();
+	static void LoadNewLevel();
 	const inline std::string &GetName() const { return _name; }
 	inline gePoint GetSize() { return gePoint{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
-	inline void AddGameObjectToLevel(GameObject* g) {_gameObjects.push_back(g);}
+	inline void AddGameObjectToLevel(GameObject *g) { _gameObjects.push_back(g); }
 	void LoadAllGameObjects();
 	std::vector<TiledMap::TiledObject> GetAllObjects();
 	inline std::vector<TiledMap::TiledObject> GetAllSolidObjects() const { return _mapData->SolidObjects; }
+	Panel *LoadPanel;
 	void Draw();
 	void RestartLevel();
-	~Level();
 
    private:
 	/**

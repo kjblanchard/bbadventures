@@ -1,10 +1,13 @@
 #include <GoonEngine/debug.h>
 
-#include <BbAdventures/gnpch.hpp>
 #include <BbAdventures/entities/Solid.hpp>
+#include <BbAdventures/gnpch.hpp>
 #include <BbAdventures/shared/constants.hpp>
+#include <BbAdventures/shared/state.hpp>
+#include <BbAdventures/systems/Systems.hpp>
 #include <BbAdventures/tiled/Level.hpp>
 #include <BbAdventures/tiled/TiledMap.hpp>
+#include <BbAdventures/ui/Panel.hpp>
 #include <nlohmann/json.hpp>
 namespace Bba {
 
@@ -12,6 +15,7 @@ extern std::unordered_map<std::string, std::function<GameObject *(TiledMap::Tile
 }
 using namespace Bba;
 static std::vector<std::pair<std::string, geImage *>> _imagesCache;
+static Level *lastLevel = nullptr;
 
 Level::Level(const char *filename)
 	: _background(nullptr) {
@@ -19,14 +23,18 @@ Level::Level(const char *filename)
 	_name = filename;
 	LoadSurfaces();
 }
-std::vector<TiledMap::TiledObject> Level::GetAllObjects() {
-	return _mapData->Objects;
-}
-
 Level::~Level() {
 	if (_background) {
 		geImageFree(_background);
 	}
+	for (auto &&go : _gameObjects) {
+		delete (go);
+	}
+
+	_gameObjects.clear();
+}
+std::vector<TiledMap::TiledObject> Level::GetAllObjects() {
+	return _mapData->Objects;
 }
 
 void Level::LoadAllGameObjects() {
@@ -87,7 +95,7 @@ geImage *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 void Level::CreateBackgroundImage() {
 	if (_background)
 		return;
-	_background = geImageNewRenderTarget("needgoodnameplz", _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight);
+	_background = geImageNewRenderTarget(_name.c_str(), _mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight, nullptr);
 	for (auto &group : _mapData->Groups) {
 		if (group.Name == "background") {
 			for (auto &groupLayer : group.Layers) {
@@ -119,6 +127,24 @@ void Level::CreateBackgroundImage() {
 void Level::RestartLevel() {
 	CreateBackgroundImage();
 	LoadSolidObjects();
+}
+
+static void LevelLoaded() {
+	State::IsLoadingMap = false;
+}
+
+void Level::LoadNewLevel() {
+	auto l = new Bba::Level(Bba::State::NextMapName.c_str());
+	l->LoadAllGameObjects();
+	l->RestartLevel();
+	Bba::LoadPlayers();
+	Bba::LoadAnimationComponents();
+	lastLevel = Bba::State::CurrentLevel;
+	Bba::State::CurrentLevel = l;
+	if (lastLevel) {
+		delete (lastLevel);
+	}
+	State::FadePanel->FadeIn(LevelLoaded);
 }
 
 void Level::Draw() {
