@@ -1,7 +1,6 @@
 #include <BbAdventures/aseprite/AsepriteDocument.hpp>
 #include <fstream>
 #include <istream>
-#include <format>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 using namespace Bba;

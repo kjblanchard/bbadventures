@@ -211,6 +211,7 @@ target_include_directories(${EXECUTABLE_TARGET_NAME}
     ${CMAKE_CURRENT_SOURCE_DIR}/external/sg_engine/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/external/nlohmann/include/
     ${CMAKE_CURRENT_SOURCE_DIR}/external/sg_engine/include/GoonEngine/primitives/
+    ${CMAKE_CURRENT_SOURCE_DIR}/ external/entt/src/
     /usr/local/include
 
     # Freetype cause yeah

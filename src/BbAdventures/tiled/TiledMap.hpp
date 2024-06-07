@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <GoonEngine/prim/rectangle.h>
+#include <variant>
 
 namespace Bba {
 /**
