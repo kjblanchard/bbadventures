@@ -8,7 +8,7 @@ namespace Bba {
 void LoadAnimationComponents() {
 	auto view = GameObject::_registry.view<AnimationComponent>();
 	for (auto&& [_, a] : view.each()) {
-		a.Animation = std::make_unique<AsepriteAnimation>(a.AnimationName);
+		a.Animation = new AsepriteAnimation(a.AnimationName);
 		a.AnimationImage = geImageNewFromFile(a.Animation->Filename().c_str());
 	}
 }
@@ -29,6 +29,15 @@ void DrawAnimationComponents() {
 		auto s = a.Animation->FrameCoords();
 		auto d = geRectangle{(int)l.Location.x + a.Offset.x, (int)l.Location.y + a.Offset.y, s.w, s.h};
 		geImageDraw(a.AnimationImage, &s, &d);
+	}
+}
+
+void FreeAnimationComponents() {
+	auto view = GameObject::_registry.view<AnimationComponent>();
+	for (auto&& [_, a] : view.each()) {
+		delete (a.Animation);
+		// TODO should we actually unload this?  Currently just let it stay, the images in the animation component will still be there
+		// geImageFree(a.AnimationImage);
 	}
 }
 }  // namespace Bba

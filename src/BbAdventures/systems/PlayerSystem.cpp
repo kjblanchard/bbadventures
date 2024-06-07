@@ -33,7 +33,7 @@ void UpdatePlayers() {
 		return;
 	}
 	auto view = GameObject::_registry.view<LocationComponent, PlayerComponent, AnimationComponent, RigidBodyComponent>();
-	for (auto [_, l, p, a, r] : view.each()) {
+	for (auto&& [_, l, p, a, r] : view.each()) {
 		auto d = p.Direction;
 		std::string letter = "";
 		auto moved = false;
@@ -115,7 +115,7 @@ void UpdatePlayers() {
 		playerRbRect.y += l.Location.y + tryMoveSpeed.y;
 		auto peView = GameObject::_registry.view<PlayerExitComponent>();
 
-		for (auto [_, pe] : peView.each()) {
+		for (auto&& [_, pe] : peView.each()) {
 			if (geRectangleIsOverlap(&playerRbRect, &pe.BoundingBox)) {
 				State::IsLoadingMap = true;
 				State::NextMapName = pe.NextMap;
@@ -129,7 +129,7 @@ void UpdatePlayers() {
 
 void LoadPlayers() {
 	auto view = GameObject::_registry.view<PlayerSpawnComponent>();
-	for (auto [_, ps] : view.each()) {
+	for (auto&& [_, ps] : view.each()) {
 		if (ps.SpawnLocationId == State::SpawnLocation) {
 			for (size_t i = 0; i < State::NumPlayers; i++) {
 				auto go = new GameObject();

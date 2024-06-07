@@ -192,6 +192,62 @@
                  "width":16,
                  "x":112,
                  "y":192
+                }, 
+                {
+                 "height":48,
+                 "id":11,
+                 "name":"Sign Interact",
+                 "properties":[
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"Welcome to the Debug Town!  Please check out Mishas cute home or head to the forest."
+                        }],
+                 "rotation":0,
+                 "type":"TextInteract",
+                 "visible":true,
+                 "width":64,
+                 "x":256,
+                 "y":144
+                }, 
+                {
+                 "height":32,
+                 "id":13,
+                 "name":"House Exit",
+                 "properties":[
+                        {
+                         "name":"loadLocation",
+                         "type":"int",
+                         "value":1
+                        }, 
+                        {
+                         "name":"loadMap",
+                         "type":"string",
+                         "value":"debugTownHome"
+                        }],
+                 "rotation":0,
+                 "type":"Exit",
+                 "visible":true,
+                 "width":48,
+                 "x":432,
+                 "y":96
+                }, 
+                {
+                 "height":16,
+                 "id":14,
+                 "name":"Start2",
+                 "properties":[
+                        {
+                         "name":"loadLocation",
+                         "type":"int",
+                         "value":2
+                        }],
+                 "rotation":0,
+                 "type":"Start",
+                 "visible":true,
+                 "width":16,
+                 "x":448,
+                 "y":132.5
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -200,7 +256,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":11,
+ "nextobjectid":15,
  "orientation":"orthogonal",
  "properties":[
         {

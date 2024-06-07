@@ -9,7 +9,7 @@
 namespace Bba {
 void DrawDebugDrawComponents() {
 	auto view = GameObject::_registry.view<const LocationComponent, DebugDrawComponent>();
-	for (auto [_, l, d] : view.each()) {
+	for (auto&& [_, l, d] : view.each()) {
 		auto r = geRectangle{(int)l.Location.x + d.Box.x, (int)l.Location.y + d.Box.y, d.Box.w, d.Box.h};
 		auto c = geColor{255, 255, 255, 255};
 		geUtilsDrawRect(&r, &c);

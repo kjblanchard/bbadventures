@@ -25,7 +25,8 @@ Level::Level(const char *filename)
 }
 Level::~Level() {
 	if (_background) {
-		geImageFree(_background);
+		// TODO should we actually clear this?  Save for manual cleanup.
+		// geImageFree(_background);
 	}
 	for (auto &&go : _gameObjects) {
 		delete (go);
@@ -128,6 +129,9 @@ void Level::RestartLevel() {
 	CreateBackgroundImage();
 	LoadSolidObjects();
 }
+void Level::UnloadLevel() {
+	Bba::FreeAnimationComponents();
+}
 
 static void LevelLoaded() {
 	State::IsLoadingMap = false;
@@ -140,6 +144,7 @@ void Level::LoadNewLevel() {
 	l->LoadAllGameObjects();
 	l->RestartLevel();
 	if (lastLevel) {
+		lastLevel->UnloadLevel();
 		delete (lastLevel);
 	}
 	Bba::LoadPlayers();
