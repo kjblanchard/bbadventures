@@ -7,7 +7,6 @@
 #include <string>
 namespace Bba {
 struct AnimationComponent {
-	// std::shared_ptr<AsepriteAnimation> Animation;
 	std::unique_ptr<AsepriteAnimation> Animation;
 	std::string AnimationName;
 	geImage* AnimationImage;
