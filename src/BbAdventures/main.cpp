@@ -71,9 +71,9 @@ int main() {
 	auto p = gePoint{thingLoc.x, thingLoc.y};
 	geTextSetLocation(testText, p.x, p.y);
 	geLoadAllContent();
-	// if (bgm) {
-	// 	geBgmPlay(bgm, 1.0, -1);
-	// }
+	if (bgm) {
+		geBgmPlay(bgm, 1.0, -1);
+	}
 	panel = new Bba::Panel();
 	Bba::State::NextMapName = defaultLevel;
 	Bba::Level::LoadNewLevel();

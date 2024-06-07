@@ -7,7 +7,7 @@ class GameObject {
 	GameObject();
 	~GameObject();
 	template <typename T, typename... Args>
-	void AddComponent(Args&&... args);
+	void AddComponent(Args&... args);
 	template <typename T>
 	T& GetComponent();
 	template <typename T>
@@ -23,7 +23,8 @@ class GameObject {
 
 
 template <typename T, typename... Args>
-void GameObject::AddComponent(Args&&... args) {
+// void GameObject::AddComponent(Args&&... args) {
+void GameObject::AddComponent(Args&... args) {
 	_registry.emplace<T>(_entity, std::forward<Args>(args)...);
 }
 template <typename T>
