@@ -1,17 +1,21 @@
 #include <GoonEngine/debug.h>
 #include <GoonEngine/input/keyboard.h>
+#include <GoonEngine/utils.h>
 
 #include <BbAdventures/aseprite/AsepriteAnimation.hpp>
-#include <BbAdventures/ui/Panel.hpp>
 #include <BbAdventures/base/GameObject.hpp>
 #include <BbAdventures/components/AnimationComponent.hpp>
+#include <BbAdventures/components/InteractorComponent.hpp>
 #include <BbAdventures/components/LocationComponent.hpp>
 #include <BbAdventures/components/PlayerComponent.hpp>
 #include <BbAdventures/components/PlayerExitComponent.hpp>
 #include <BbAdventures/components/PlayerSpawnComponent.hpp>
 #include <BbAdventures/components/RigidBodyComponent.hpp>
 #include <BbAdventures/components/SolidObjectComponent.hpp>
+#include <BbAdventures/components/TextInteractionComponent.hpp>
 #include <BbAdventures/shared/state.hpp>
+#include <BbAdventures/ui/Panel.hpp>
+#include <BbAdventures/ui/Textbox.hpp>
 
 const int moveSpeed = 100;
 namespace Bba {
@@ -32,8 +36,12 @@ void UpdatePlayers() {
 	if (State::IsLoadingMap) {
 		return;
 	}
-	auto view = GameObject::_registry.view<LocationComponent, PlayerComponent, AnimationComponent, RigidBodyComponent>();
-	for (auto [_, l, p, a, r] : view.each()) {
+	auto view = GameObject::_registry.view<PlayerComponent>();
+	for (auto&& [e, p] : view.each()) {
+		auto go = GameObject(e);
+		auto& l = go.GetComponent<LocationComponent>();
+		auto& a = go.GetComponent<AnimationComponent>();
+		auto& r = go.GetComponent<RigidBodyComponent>();
 		auto d = p.Direction;
 		std::string letter = "";
 		auto moved = false;
@@ -115,7 +123,7 @@ void UpdatePlayers() {
 		playerRbRect.y += l.Location.y + tryMoveSpeed.y;
 		auto peView = GameObject::_registry.view<PlayerExitComponent>();
 
-		for (auto [_, pe] : peView.each()) {
+		for (auto&& [_, pe] : peView.each()) {
 			if (geRectangleIsOverlap(&playerRbRect, &pe.BoundingBox)) {
 				State::IsLoadingMap = true;
 				State::NextMapName = pe.NextMap;
@@ -124,12 +132,31 @@ void UpdatePlayers() {
 				State::FadePanel->FadeOut(Level::LoadNewLevel);
 			}
 		}
+		// Check if we should interact
+		if (geKeyJustPressed(geKey_SPACE) && go.HasComponent<InteractorComponent>()) {
+			// If we are displaying text, close it.
+			if (State::TextDisplay->Text) {
+				State::TextDisplay->UnDisplayText();
+				break;
+			}
+			auto& i = go.GetComponent<InteractorComponent>();
+			// Check to see if we are interacting
+			auto tView = GameObject::_registry.view<LocationComponent, TextInteractionComponent>();
+			for (auto&& [_, li, ti] : tView.each()) {
+				gePoint p = {(int)li.Location.x, (int)li.Location.y};
+				auto ir = geRectangle{(int)l.Location.x + i.Box.x, (int)l.Location.y + i.Box.y, i.Box.w, i.Box.h};
+
+				if (geUtilsIsPointInRect(&ir, &p)) {
+					State::TextDisplay->DisplayText(ti.TextImage);
+				}
+			}
+		}
 	}
 }
 
 void LoadPlayers() {
 	auto view = GameObject::_registry.view<PlayerSpawnComponent>();
-	for (auto [_, ps] : view.each()) {
+	for (auto&& [_, ps] : view.each()) {
 		if (ps.SpawnLocationId == State::SpawnLocation) {
 			for (size_t i = 0; i < State::NumPlayers; i++) {
 				auto go = new GameObject();
@@ -146,10 +173,13 @@ void LoadPlayers() {
 				r.OffsetY = 20;
 				r.W = 16;
 				r.H = 14;
+				auto ic = InteractorComponent();
+				ic.Box = geRectangle{-14, -14, 40, 40};
 				go->AddComponent<RigidBodyComponent>(r);
 				go->AddComponent<LocationComponent>(l);
 				go->AddComponent<PlayerComponent>(p);
 				go->AddComponent<AnimationComponent>(a);
+				go->AddComponent<InteractorComponent>(ic);
 				if (State::CurrentLevel) {
 					State::CurrentLevel->AddGameObjectToLevel(go);
 					continue;

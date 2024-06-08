@@ -2,6 +2,6 @@
 #include <BbAdventures/tiled/TiledMap.hpp>
 
 namespace Bba {
-    class GameObject;
-    GameObject* NewPlayer(TiledMap::TiledObject&);
+    // class GameObject;
+    // GameObject* NewPlayer(TiledMap::TiledObject&);
 }

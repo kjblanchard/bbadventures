@@ -22,7 +22,7 @@ GameObject* NewSolidObject(TiledMap::TiledObject& t) {
     l.Location.y = s.BoxCollider.y;
 	go->AddComponent<SolidObjectComponent>(s);
 	go->AddComponent<LocationComponent>(l);
-	go->AddComponent<DebugDrawComponent>(d);
+	// go->AddComponent<DebugDrawComponent>(d);
 	return go;
 }
 

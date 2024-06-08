@@ -3,10 +3,13 @@ using namespace Bba;
 
 entt::registry GameObject::_registry;
 
-GameObject::GameObject() {
-	_entity = _registry.create();
+GameObject::GameObject(entt::entity e) : _entity(e) {
 }
 
-GameObject::~GameObject() {
+void GameObject::FreeGameObject() {
 	_registry.destroy(_entity);
+}
+
+GameObject::GameObject() {
+	_entity = _registry.create();
 }

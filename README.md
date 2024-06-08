@@ -1,10 +1,15 @@
 # Blanchard Babes Adventures
-- A C++ game that utilizes Tiled and Aseprite for the game "engine".
+- A short C++ RPG.
 - Uses C self made libraries for physics, sound, tweening, content loading and engine, found in the Libraries section
+- BGMs created in Garageband
+- Play the game here, or likely watch its "progress" [Play!](https://rpg.supergoon.com)
+- Project board [Board](https://github.com/users/kjblanchard/projects/11/views/1)
+- ![Build All Platforms]( https://github.com/kjblanchard/bbadventures/actions/workflows/build.yml/badge.svg)
+- ![Status Picture](https://github.com/kjblanchard/bbadventures/blob/master/img/debug.gif?raw=true)
 
 ## Development
 - Mostly developed on macos apple silicon
-- Builds on Mac locally until game is playable, build on Windows, Universal Mac, Ubuntu, and Emscripten via github actions
+- Builds on Mac locally until game is playable, Universal Mac, Ubuntu, and Emscripten via github actions
 
 ## Goals
 - Better at C
@@ -21,6 +26,13 @@
 - OpenAL: Cross-Platform sound abstraction
 - Freetype: Text rendering
 - Emscripten: Build for web
+
+## Tools
+- VS Code
+- Garage Band - BGM
+- Audacity - Tweaks
+- Aseprite - Animations / Pixel art
+- Tiled - Levels
 - Make: Streamlining building with one command
 - CMake: The actual cross-platform build system.
 
@@ -33,5 +45,9 @@
 - [nlohmann json](https://github.com/nlohmann/json) - MIT - json parsing for appsettings file
 - [EnTT ECS](https://github.com/skypjack/entt/tree/v3.13.2) - MIT - Entity Component System
 
+## Shout Outs
+- [Time Fantasy Sprites](https://finalbossblues.com/timefantasy/)
+- [Typing Text sound](https://freesound.org/people/Sky_Motion/sounds/416777/) - Creative Commons
+
 ## Valgrind Checks
-- valgrind --track-origins=yes --leak-check=yes --leak-resolution=low --show-leak-kinds=definite ./SupergoonWorld 2>&1 | tee memcheck.txt
+- valgrind --track-origins=yes --leak-check=yes --leak-resolution=low --show-leak-kinds=definite ./BbAdventures 2>&1 | tee memcheck.txt

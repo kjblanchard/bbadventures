@@ -97,6 +97,9 @@ set(GOON_FULL_MACOS_BUILD ${GOON_FULL_MACOS_BUILD} CACHE BOOL "Build the libpng 
 set(GOON_DEBUG_SOUND ${GOON_DEBUG_SOUND} CACHE BOOL "Build from what?" FORCE)
 set(PNG_FRAMEWORK OFF CACHE BOOL "Build from what?" FORCE)
 set(INSTALL_SG_SOUND OFF CACHE BOOL "Do not install when installing" FORCE)
+# Freetype settings
+set(FT_DISABLE_BROTLI ON CACHE BOOL "Do not install when installing" FORCE)
+set(FT_DISABLE_HARFBUZZ ON CACHE BOOL "Do not install when installing" FORCE)
 
 # #########################################
 # Precompiled headers

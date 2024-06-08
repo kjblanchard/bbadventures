@@ -4,6 +4,7 @@
 #include <string>
 namespace Bba {
 	class Panel;
+	class Textbox;
 class State {
    public:
 	static int NumPlayers;
@@ -14,8 +15,10 @@ class State {
 	static std::string NextMapName;
 	static Level* CurrentLevel;
 	static bool IsLoadingMap;
+	static bool IsDisplayingText;
 	// TODO this shouldn't be here.
 	static Panel* FadePanel;
+	static Textbox* TextDisplay;
 
    private:
 };

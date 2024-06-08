@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "supergoon-terraform-plans"
-    key    = "cSupergoonWorld"
+    key    = "bbAdventures"
     region = "us-east-2"
   }
 }

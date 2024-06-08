@@ -1,5 +1,9 @@
 {
-    "activeFile": "debugSouth.tmj",
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "debugTownHome.tmj",
     "expandedProjectPaths": [
         "."
     ],
@@ -9,13 +13,14 @@
                 3
             ],
             "expandedObjectLayers": [
+                5,
                 2
             ],
             "scale": 2.185565476190476,
-            "selectedLayer": 2,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 331.2643834683734,
-                "y": 169.75011915299245
+                "x": 239.7548852726902,
+                "y": 159.9128480969565
             }
         },
         "debugSouth.tmx": {
@@ -34,11 +39,11 @@
                 5,
                 3
             ],
-            "scale": 1.5,
+            "scale": 2,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 462.6666666666667,
-                "y": 388.6666666666667
+                "x": 253,
+                "y": 83.25
             }
         },
         "debugTown.tmx": {
@@ -47,6 +52,21 @@
             "viewCenter": {
                 "x": 291.25,
                 "y": 139
+            }
+        },
+        "debugTownHome.tmj": {
+            "expandedGroupLayers": [
+                4
+            ],
+            "expandedObjectLayers": [
+                5,
+                6
+            ],
+            "scale": 4.0409926470588236,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 107.89428194513945,
+                "y": 118.1640358458809
             }
         },
         "house..tsj": {
@@ -59,8 +79,12 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "inside.tsj": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        },
         "outside.tsj": {
-            "scaleInDock": 1
+            "scaleInDock": 2
         },
         "outside.tsx": {
             "scaleInDock": 1,
@@ -78,20 +102,35 @@
     },
     "last.exportedFilePath": "/Users/kevin/git/c/bbAdventures/assets/tiled",
     "last.externalTilesetPath": "/Users/kevin/git/c/bbAdventures/assets/tiled",
+    "last.imagePath": "/Users/kevin/git/c/bbAdventures/assets/img",
     "lastUsedTilesetExportFilter": "JSON tileset files (*.tsj *.json)",
+    "map.height": 10,
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "json",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 16,
     "openFiles": [
         "debugTown.tmj",
-        "debugSouth.tmj"
+        "debugTownHome.tmj",
+        "debugSouth.tmj",
+        "inside.tsj"
     ],
     "project": "goonRpg.tiled-project",
     "recentFiles": [
         "debugTown.tmj",
+        "inside.tsj",
         "debugSouth.tmj",
+        "debugTownHome.tmj",
         "terrain.tsx",
         "outside.tsx",
         "house.tsx",
         "debugSouth.tmx",
         "debugTown.tmx"
-    ]
+    ],
+    "tileset.lastUsedFormat": "json",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
 }

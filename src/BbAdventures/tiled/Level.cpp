@@ -25,9 +25,11 @@ Level::Level(const char *filename)
 }
 Level::~Level() {
 	if (_background) {
-		geImageFree(_background);
+		// TODO should we actually clear this?  Save for manual cleanup.
+		// geImageFree(_background);
 	}
 	for (auto &&go : _gameObjects) {
+		go->FreeGameObject();
 		delete (go);
 	}
 
@@ -70,7 +72,6 @@ void Level::LoadSolidObjects() {
 	for (auto &solid : _mapData->SolidObjects) {
 		auto go = NewSolidObject(solid);
 		_gameObjects.push_back(go);
-		// auto box = geRectangle{solid.X, solid.Y, solid.Width, solid.Height};
 	}
 }
 geImage *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
@@ -128,6 +129,9 @@ void Level::RestartLevel() {
 	CreateBackgroundImage();
 	LoadSolidObjects();
 }
+void Level::UnloadLevel() {
+	Bba::FreeAnimationComponents();
+}
 
 static void LevelLoaded() {
 	State::IsLoadingMap = false;
@@ -140,10 +144,12 @@ void Level::LoadNewLevel() {
 	l->LoadAllGameObjects();
 	l->RestartLevel();
 	if (lastLevel) {
+		lastLevel->UnloadLevel();
 		delete (lastLevel);
 	}
 	Bba::LoadPlayers();
 	Bba::LoadAnimationComponents();
+	Bba::LoadTextInteractions();
 	State::FadePanel->FadeIn(LevelLoaded);
 }
 

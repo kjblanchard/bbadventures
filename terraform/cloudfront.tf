@@ -10,8 +10,8 @@ locals {
 }
 
 resource "aws_cloudfront_origin_access_control" "access_control" {
-  name                              = "CSupergoonWorldAccessControl"
-  description                       = "SupergoonWorld C access control"
+  name                              = "BbaAccessControl"
+  description                       = "Bba access control"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
@@ -25,8 +25,8 @@ resource "aws_cloudfront_distribution" "supergoon_world_distribution" {
     origin_id   = local.s3_origin
   }
   enabled             = true
-  default_root_object = "SupergoonWorld.html" # The main HTML file for your website
-  aliases = ["supergoonworld.supergoon.com"]
+  default_root_object = "BbAdventures.html" # The main HTML file for your website
+  aliases = ["rpg.supergoon.com"]
 
   restrictions {
     geo_restriction {

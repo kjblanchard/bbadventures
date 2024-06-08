@@ -8,4 +8,6 @@ int State::SpawnLocation = 0;
 std::string State::NextMapName = "";
 Level* State::CurrentLevel;
 bool State::IsLoadingMap = false;
+bool State::IsDisplayingText = false;
 Panel* State::FadePanel = nullptr;
+Textbox* State::TextDisplay = nullptr;
