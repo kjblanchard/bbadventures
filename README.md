@@ -45,4 +45,4 @@
 - [Typing Text sound](https://freesound.org/people/Sky_Motion/sounds/416777/) - Creative Commons
 
 ## Valgrind Checks
-- valgrind --track-origins=yes --leak-check=yes --leak-resolution=low --show-leak-kinds=definite ./SupergoonWorld 2>&1 | tee memcheck.txt
+- valgrind --track-origins=yes --leak-check=yes --leak-resolution=low --show-leak-kinds=definite ./BbAdventures 2>&1 | tee memcheck.txt

@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "supergoon_world_bucket" {
-  bucket = "supergoon-world-c-external-site"
+  bucket = "bba-external-site"
   tags = {
-    Name = "Supergoon World C External Site Bucket"
+    Name = "Bba External Site Bucket"
   }
 }
 resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
@@ -12,7 +12,7 @@ resource "aws_s3_bucket_ownership_controls" "s3_bucket_acl_ownership" {
 }
 
 resource "aws_iam_user" "supergoon_world_user" {
-  name = "supergoon-world-c-uploader"
+  name = "bba-uploader"
 }
 
 resource "aws_s3_bucket_acl" "b_acl" {
@@ -22,7 +22,7 @@ resource "aws_s3_bucket_acl" "b_acl" {
 }
 
 resource "aws_iam_policy" "pipeline_access_policy" {
-  name        = "supergoon_world_c_s3_upload_policy"
+  name        = "bba_s3_upload_policy"
   description = "Policy for adding items to the supergoon world bucket."
 
   policy = jsonencode({
