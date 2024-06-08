@@ -4,8 +4,9 @@
 namespace Bba {
 class GameObject {
    public:
+	GameObject(entt::entity e);
 	GameObject();
-	~GameObject();
+	void FreeGameObject();
 	template <typename T, typename... Args>
 	void AddComponent(Args&&... args);
 	template <typename T>

@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
 #include <memory>
-#include <GoonEngine/content/image.h>
+#include <GoonEngine/content/text.h>
 namespace Bba {
-struct InteractorComponent {
+struct TextInteractionComponent {
 	std::string Text;
-    geImage* TextImage;
+    geText* TextImage;
 };
 }  // namespace Bba

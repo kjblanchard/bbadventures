@@ -7,4 +7,5 @@ void FreeAnimationComponents();
 void LoadPlayers();
 void UpdatePlayers();
 void DrawDebugDrawComponents();
+void LoadTextInteractions();
 }  // namespace Bba

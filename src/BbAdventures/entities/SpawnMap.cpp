@@ -3,6 +3,7 @@
 #include <BbAdventures/entities/PlayerStart.hpp>
 #include <BbAdventures/entities/PlayerExit.hpp>
 #include <BbAdventures/tiled/TiledMap.hpp>
+#include <BbAdventures/entities/TextInteraction.hpp>
 #include <functional>
 #include <unordered_map>
 namespace Bba {
@@ -12,6 +13,9 @@ std::unordered_map<std::string, std::function<GameObject *(TiledMap::TiledObject
 	 }},
 	{"Exit", [](TiledMap::TiledObject &object) {
 		 return NewPlayerExit(object);
+	 }},
+	{"TextInteract", [](TiledMap::TiledObject &object) {
+		 return NewTextInteraction(object);
 	 }}
 };
 

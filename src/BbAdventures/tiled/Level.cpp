@@ -29,6 +29,7 @@ Level::~Level() {
 		// geImageFree(_background);
 	}
 	for (auto &&go : _gameObjects) {
+		go->FreeGameObject();
 		delete (go);
 	}
 
