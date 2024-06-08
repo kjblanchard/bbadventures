@@ -25,7 +25,7 @@ resource "aws_cloudfront_distribution" "supergoon_world_distribution" {
     origin_id   = local.s3_origin
   }
   enabled             = true
-  default_root_object = "bba.html" # The main HTML file for your website
+  default_root_object = "BbAdventures.html" # The main HTML file for your website
   aliases = ["rpg.supergoon.com"]
 
   restrictions {
