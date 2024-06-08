@@ -1,5 +1,5 @@
 name: Build All Platforms
-run-name: "Build All Platforms: ${{ github.actor }} 🚀"
+run-name: "Build All Platforms: ${{ github.actor }}"
 on:
   push:
     tags:
