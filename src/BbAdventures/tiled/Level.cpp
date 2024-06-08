@@ -72,7 +72,6 @@ void Level::LoadSolidObjects() {
 	for (auto &solid : _mapData->SolidObjects) {
 		auto go = NewSolidObject(solid);
 		_gameObjects.push_back(go);
-		// auto box = geRectangle{solid.X, solid.Y, solid.Width, solid.Height};
 	}
 }
 geImage *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {

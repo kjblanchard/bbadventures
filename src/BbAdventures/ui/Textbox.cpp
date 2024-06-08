@@ -12,6 +12,10 @@ void Textbox::DisplayText(geText* t) {
 	_revealedLetters = 0;
 	_currentTime = 0;
 }
+void Textbox:: UnDisplayText() {
+	geTextSetNumDrawCharacters(Text, 0);
+	Text = nullptr;
+}
 void Textbox::Update() {
 	if (!Text) {
 		return;

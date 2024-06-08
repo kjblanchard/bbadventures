@@ -6,6 +6,7 @@ class Textbox {
    public:
 	Textbox();
     void DisplayText(geText* t);
+    void UnDisplayText();
 	void Update();
 	void Draw();
 	geText* Text;

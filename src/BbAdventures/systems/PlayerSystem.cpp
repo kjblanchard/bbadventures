@@ -136,7 +136,7 @@ void UpdatePlayers() {
 		if (geKeyJustPressed(geKey_SPACE) && go.HasComponent<InteractorComponent>()) {
 			// If we are displaying text, close it.
 			if (State::TextDisplay->Text) {
-				State::TextDisplay->Text = nullptr;
+				State::TextDisplay->UnDisplayText();
 				break;
 			}
 			auto& i = go.GetComponent<InteractorComponent>();
