@@ -32,7 +32,7 @@ jobs:
     steps:
       - run: pip install --upgrade cppclean
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Initialize subdirectories
         run: make init
       - name: Initialize subdirectories
@@ -40,7 +40,7 @@ jobs:
       - name: Configure CMake
         run: make CMAKE_BUILD_TYPE=Release ${{ matrix.make_cmd}}
       - name: Save packaged artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}-artifacts
           path: build/BbAdventures.${{ matrix.suffix }}
@@ -74,20 +74,20 @@ jobs:
         run: cd repo && make init && make CMAKE_BUILD_TYPE=Release erebuild
       - name: Update html build
         run: cd repo/build/bin && awk '/<textarea id="output" rows="8"><\/textarea>/ {print; print ENVIRON["THING_ADD"]; next} 1' BbAdventures.html > temp.html && mv temp.html BbAdventures.html
-      # - uses: actions/upload-artifact@v3
-      #   name: Upload to S3
-      #   with:
-      #     name: s3Artifact
-      #     path: repo/build/bin
-  # Push-Files-To-S3:
-  #   uses: supergoongaming/sharedWorkflows/.github/workflows/push_to_s3.yml@master
-  #   needs: Build-Emscripten
-  #   secrets:
-  #     IAM_SECRET: ${{ secrets.IAM_SECRET }}
-  #   with:
-  #     IAM_USER: ${{ vars.IAM_USER }}
-  #     bucket_region: "us-east-1"
-  #     bucket_name: "supergoon-world-external-site"
+      - uses: actions/upload-artifact@v4
+        name: Upload to S3
+        with:
+          name: s3Artifact
+          path: repo/build/bin
+  Push-Files-To-S3:
+    uses: supergoongaming/sharedWorkflows/.github/workflows/push_to_s3.yml@master
+    needs: Build-Emscripten
+    secrets:
+      IAM_SECRET: ${{ secrets.IAM_SECRET }}
+    with:
+      IAM_USER: ${{ vars.IAM_USER }}
+      bucket_region: "us-east-1"
+      bucket_name: "bba-external-site"
   Create-Release:
     strategy:
         matrix:
@@ -108,7 +108,7 @@ jobs:
     - Build-Desktop
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Fetch tags
         run: git fetch --tags --force
       - name: Download Build Artifacts
