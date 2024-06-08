@@ -16,17 +16,12 @@ BINARY_FOLDER_REL_PATH = $(BUILD_FOLDER)/$(BINARY_FOLDER)
 ##Build Specific Flags
 CMAKE_CONFIGURE_COMMAND = cmake
 EMSCRIPTEN_CONFIGURE_FLAGS = '-DCMAKE_VERBOSE_MAKEFILE=ON'
-XCODE_CONFIGURE_FLAGS = -DIOS_PLATFORM=OS -Dvendored_default=TRUE -DSDL2TTF_VENDORED=TRUE
+# XCODE_CONFIGURE_FLAGS = -DIOS_PLATFORM=OS -Dvendored_default=TRUE -DSDL2TTF_VENDORED=TRUE
+XCODE_CONFIGURE_FLAGS = -DIOS_PLATFORM=OS
 UNIX_PACKAGE_COMMAND = tar --exclude='*.aseprite' -czvf $(BUILD_FOLDER)/$(BINARY_NAME).tgz -C $(BINARY_FOLDER_REL_PATH) .
 WINDOWS_PACKAGE_COMMAND = 7z a -r $(BUILD_FOLDER)/$(BINARY_NAME).zip $(BINARY_FOLDER_REL_PATH)
 PACKAGE_COMMAND = $(UNIX_PACKAGE_COMMAND)
 BUILD_COMMAND = cmake --build build --config $(CMAKE_BUILD_TYPE)
-# Tiled Configuration
-TILED_PATH = /Applications/Tiled.app/Contents/MacOS/Tiled
-TILED_FOLDER_PATH = ./assets/tiled
-TILED_EXPORT_TILESETS = background terrain
-TILED_EXPORT_MAPS = level1
-### ### ###
 ### ### ###
 ### Targets / Rules for easy calls into cmake and runners utilize these instead of interfacing with cmake directly. ##
 ### ### ###
