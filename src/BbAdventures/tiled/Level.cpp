@@ -150,6 +150,7 @@ void Level::LoadNewLevel() {
 	}
 	Bba::LoadPlayers();
 	Bba::LoadAnimationComponents();
+	Bba::LoadTextInteractions();
 	State::FadePanel->FadeIn(LevelLoaded);
 }
 

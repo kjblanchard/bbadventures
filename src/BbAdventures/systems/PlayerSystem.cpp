@@ -15,6 +15,7 @@
 #include <BbAdventures/components/TextInteractionComponent.hpp>
 #include <BbAdventures/shared/state.hpp>
 #include <BbAdventures/ui/Panel.hpp>
+#include <BbAdventures/ui/Textbox.hpp>
 
 const int moveSpeed = 100;
 namespace Bba {
@@ -133,6 +134,11 @@ void UpdatePlayers() {
 		}
 		// Check if we should interact
 		if (geKeyJustPressed(geKey_SPACE) && go.HasComponent<InteractorComponent>()) {
+			// If we are displaying text, close it.
+			if (State::TextDisplay->Text) {
+				State::TextDisplay->Text = nullptr;
+				break;
+			}
 			auto& i = go.GetComponent<InteractorComponent>();
 			// Check to see if we are interacting
 			auto tView = GameObject::_registry.view<LocationComponent, TextInteractionComponent>();
@@ -141,7 +147,7 @@ void UpdatePlayers() {
 				auto ir = geRectangle{(int)l.Location.x + i.Box.x, (int)l.Location.y + i.Box.y, i.Box.w, i.Box.h};
 
 				if (geUtilsIsPointInRect(&ir, &p)) {
-					LogWarn("Should open the textbox");
+					State::TextDisplay->DisplayText(ti.TextImage);
 				}
 			}
 		}

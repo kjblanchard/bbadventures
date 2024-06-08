@@ -12,28 +12,22 @@
 #include <BbAdventures/systems/Systems.hpp>
 #include <BbAdventures/tiled/Level.hpp>
 #include <BbAdventures/ui/Panel.hpp>
+#include <BbAdventures/ui/Textbox.hpp>
 
 static geBgm *bgm = nullptr;
-// static geRectangle thingLoc = {120, 200, 200, 200};
-// static geColor color = {255, 255, 255, 255};
 static Bba::Panel *panel;
-// const float timeWait = 0.10;
+static Bba::Textbox *textbox;
 std::string defaultLevel = "debugTown";
 int revealedLetters = 0;
 float currentTime = 0;
 
 void Update(double deltatime) {
 	Bba::State::DeltaTime = deltatime;
-	// currentTime += deltatime;
-	// if (currentTime > timeWait) {
-	// 	currentTime -= timeWait;
-	// 	++revealedLetters;
-	// 	geTextSetNumDrawCharacters(testText, revealedLetters);
-	// }
 	if (!Bba::State::IsLoadingMap) {
 		Bba::UpdatePlayers();
 		Bba::UpdateAnimationComponents();
 	}
+	textbox->Update();
 	panel->Update();
 }
 
@@ -44,6 +38,7 @@ void Draw() {
 	Bba::DrawDebugDrawComponents();
 	Bba::DrawAnimationComponents();
 	panel->Draw();
+	textbox->Draw();
 }
 
 void initBgm() {
@@ -60,9 +55,11 @@ int main() {
 		geBgmPlay(bgm, 1.0, -1);
 	}
 	panel = new Bba::Panel();
+	textbox = new Bba::Textbox;
 	Bba::State::NextMapName = defaultLevel;
 	Bba::Level::LoadNewLevel();
 	Bba::State::FadePanel = panel;
+	Bba::State::TextDisplay = textbox;
 	gePlayLoop();
 	geUnloadAllContent();
 	return 0;
