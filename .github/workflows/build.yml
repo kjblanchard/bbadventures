@@ -112,7 +112,7 @@ jobs:
       - name: Fetch tags
         run: git fetch --tags --force
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.os }}-artifacts
       - name: Get current tag annotation
