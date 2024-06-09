@@ -22,6 +22,8 @@ class GameObject {
 	void RemoveComponent();
 	template <typename... Components, typename Func>
 	static void ForEach(Func func);
+	template <typename... Components>
+	static std::optional<GameObject> GetGameObjectWithComponents();
 
    private:
 	static entt::registry _registry;
@@ -47,6 +49,16 @@ bool GameObject::HasComponent() const {
 template <typename T>
 void GameObject::RemoveComponent() {
 	_registry.remove<T>(_entity);
+}
+
+template <typename... Components>
+std::optional<GameObject> GameObject::GetGameObjectWithComponents() {
+	auto view = _registry.view<Components...>();
+	if (!view.empty()) {
+		return GameObject{*view.begin()};
+	} else {
+		return std::nullopt;
+	}
 }
 
 template <typename... Components>

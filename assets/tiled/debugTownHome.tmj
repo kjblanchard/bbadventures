@@ -101,6 +101,39 @@
         }, 
         {
          "draworder":"topdown",
+         "id":6,
+         "name":"solid",
+         "objects":[
+                {
+                 "height":16,
+                 "id":18,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":256,
+                 "x":0,
+                 "y":48
+                }, 
+                {
+                 "height":27,
+                 "id":19,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":31,
+                 "x":136,
+                 "y":60
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":5,
          "name":"entities",
          "objects":[
@@ -227,39 +260,6 @@
                  "width":16,
                  "x":226.333333333333,
                  "y":127
-                }],
-         "opacity":1,
-         "type":"objectgroup",
-         "visible":true,
-         "x":0,
-         "y":0
-        }, 
-        {
-         "draworder":"topdown",
-         "id":6,
-         "name":"solid",
-         "objects":[
-                {
-                 "height":16,
-                 "id":18,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":32,
-                 "y":64
-                }, 
-                {
-                 "height":27,
-                 "id":19,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":31,
-                 "x":136,
-                 "y":60
                 }],
          "opacity":1,
          "type":"objectgroup",

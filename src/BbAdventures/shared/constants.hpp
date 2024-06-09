@@ -5,6 +5,8 @@ namespace Bba {
 extern std::string ASSET_PREFIX;
 extern std::string TILED_PREFIX;
 extern std::string IMAGES_PREFIX;
+extern int SCREEN_WIDTH;
+extern int SCREEN_HEIGHT;
 enum class Directions {
 	North,
 	East,

@@ -2,6 +2,8 @@
 #include <GoonEngine/debug.h>
 #include <GoonEngine/utils.h>
 
+#include <BbAdventures/components/CameraComponent.hpp>
+#include <BbAdventures/entities/Camera.hpp>
 #include <BbAdventures/entities/Solid.hpp>
 #include <BbAdventures/gnpch.hpp>
 #include <BbAdventures/shared/constants.hpp>
@@ -155,6 +157,12 @@ void Level::LoadNewLevel() {
 	lastLevel = Bba::State::CurrentLevel;
 	Bba::State::CurrentLevel = l;
 	l->LoadAllGameObjects();
+	auto c = NewCamera();
+	auto& cc = c->GetComponent<CameraComponent>();
+	auto worldSize = l->GetSize();
+	cc.Bounds.x = worldSize.x;
+	cc.Bounds.y = worldSize.y;
+	l->AddGameObjectToLevel(c);
 	l->RestartLevel();
 	if (lastLevel) {
 		lastLevel->UnloadLevel();
@@ -164,9 +172,8 @@ void Level::LoadNewLevel() {
 	Bba::LoadAnimationComponents();
 	Bba::LoadTextInteractions();
 	l->StartBgm();
-
 	Bba::StartPlayers();
-	// geBgmPlay(_bgm, 1.0, -1);
+	Bba::UpdateCamera();
 	State::FadePanel->FadeIn(LevelLoaded);
 }
 
@@ -187,11 +194,17 @@ void Level::StartBgm() {
 
 void Level::Draw() {
 	if (_background) {
+		geRectangle s;
+		// Need to get the camera.
+		s.x = State::CameraX;
+		s.y = State::CameraY;
+		s.w = 512;
+		s.h = 288;
 		geRectangle r;
 		r.x = 0;
 		r.y = 0;
 		r.w = 512;
 		r.h = 288;
-		geImageDraw(_background, NULL, &r);
+		geImageDraw(_background, &s, &r);
 	}
 }

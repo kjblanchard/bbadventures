@@ -13,14 +13,14 @@
                 3
             ],
             "expandedObjectLayers": [
-                2,
-                5
+                5,
+                2
             ],
             "scale": 2.185565476190476,
-            "selectedLayer": 4,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 191.25485122897805,
-                "y": 160.14162184244572
+                "x": 187.59447130115072,
+                "y": 162.4293592973378
             }
         },
         "debugSouth.tmx": {
@@ -36,14 +36,14 @@
                 6
             ],
             "expandedObjectLayers": [
-                3,
-                5
+                5,
+                3
             ],
             "scale": 2,
-            "selectedLayer": 5,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 202.5,
-                "y": 141
+                "x": 371.5,
+                "y": 140
             }
         },
         "debugTown.tmx": {
@@ -59,14 +59,14 @@
                 4
             ],
             "expandedObjectLayers": [
-                6,
-                5
+                5,
+                6
             ],
             "scale": 3,
             "selectedLayer": 4,
             "viewCenter": {
                 "x": 144.33333333333331,
-                "y": 169.33333333333334
+                "y": 152
             }
         },
         "house..tsj": {

@@ -21,6 +21,9 @@ class State {
 	static Panel* FadePanel;
 	static Textbox* TextDisplay;
 
+	static int CameraX;
+	static int CameraY;
+
    private:
 };
 }  // namespace Bba
