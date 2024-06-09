@@ -1,7 +1,7 @@
+#include <GoonEngine/content/sfx.h>
 #include <GoonEngine/debug.h>
 #include <GoonEngine/input/keyboard.h>
 #include <GoonEngine/utils.h>
-#include <GoonEngine/content/sfx.h>
 
 #include <BbAdventures/aseprite/AsepriteAnimation.hpp>
 #include <BbAdventures/base/GameObject.hpp>
@@ -127,7 +127,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	playerRbRect.y += l.Location.y + tryMoveSpeed.y;
 	GameObject::ForEach<PlayerExitComponent>([&playerRbRect](GameObject g, PlayerExitComponent pe) {
 		if (geRectangleIsOverlap(&playerRbRect, &pe.BoundingBox)) {
-			if(!sfx) {
+			if (!sfx) {
 				sfx = geSfxNew("transition");
 				geSfxLoad(sfx);
 			}
@@ -155,6 +155,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 			auto ir = geRectangle{(int)l.Location.x + i.Box.x, (int)l.Location.y + i.Box.y, i.Box.w, i.Box.h};
 
 			if (geUtilsIsPointInRect(&ir, &p)) {
+				// Start the sound
 				State::IsDisplayingText = true;
 				State::TextDisplay->DisplayText(ti.TextImage);
 			}
