@@ -164,6 +164,7 @@ void Level::LoadNewLevel() {
 	Bba::LoadAnimationComponents();
 	Bba::LoadTextInteractions();
 	l->StartBgm();
+
 	Bba::StartPlayers();
 	// geBgmPlay(_bgm, 1.0, -1);
 	State::FadePanel->FadeIn(LevelLoaded);

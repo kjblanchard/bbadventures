@@ -1,6 +1,7 @@
 #include <GoonEngine/debug.h>
 #include <GoonEngine/input/keyboard.h>
 #include <GoonEngine/utils.h>
+#include <GoonEngine/content/sfx.h>
 
 #include <BbAdventures/aseprite/AsepriteAnimation.hpp>
 #include <BbAdventures/base/GameObject.hpp>
@@ -17,6 +18,8 @@
 #include <BbAdventures/shared/state.hpp>
 #include <BbAdventures/ui/Panel.hpp>
 #include <BbAdventures/ui/Textbox.hpp>
+
+static geSfx* sfx = nullptr;
 
 const int moveSpeed = 100;
 namespace Bba {
@@ -124,6 +127,11 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	playerRbRect.y += l.Location.y + tryMoveSpeed.y;
 	GameObject::ForEach<PlayerExitComponent>([&playerRbRect](GameObject g, PlayerExitComponent pe) {
 		if (geRectangleIsOverlap(&playerRbRect, &pe.BoundingBox)) {
+			if(!sfx) {
+				sfx = geSfxNew("transition");
+				geSfxLoad(sfx);
+			}
+			geSfxPlay(sfx, 1.0, 1);
 			State::IsLoadingMap = true;
 			State::NextMapName = pe.NextMap;
 			State::SpawnLocation = pe.SpawnLocationId;
