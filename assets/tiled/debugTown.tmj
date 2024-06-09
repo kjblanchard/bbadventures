@@ -297,6 +297,12 @@
                  "name":"Start0",
                  "properties":[
                         {
+                         "name":"direction",
+                         "propertytype":"Direction",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
                          "name":"loadLocation",
                          "type":"int",
                          "value":0
@@ -313,6 +319,12 @@
                  "id":10,
                  "name":"Start1",
                  "properties":[
+                        {
+                         "name":"direction",
+                         "propertytype":"Direction",
+                         "type":"int",
+                         "value":0
+                        }, 
                         {
                          "name":"loadLocation",
                          "type":"int",
@@ -352,6 +364,12 @@
                  "id":14,
                  "name":"Start2",
                  "properties":[
+                        {
+                         "name":"direction",
+                         "propertytype":"Direction",
+                         "type":"int",
+                         "value":2
+                        }, 
                         {
                          "name":"loadLocation",
                          "type":"int",

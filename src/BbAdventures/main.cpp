@@ -21,6 +21,7 @@ std::string defaultLevel = "debugTown";
 int revealedLetters = 0;
 float currentTime = 0;
 
+
 void Update(double deltatime) {
 	Bba::State::DeltaTime = deltatime;
 	if (!Bba::State::IsLoadingMap) {
@@ -45,7 +46,7 @@ void initBgm() {
 	bgm = geBgmNew("town2");
 }
 
-int main() {
+int main(int argc, char *argv[]) {
 	geInitializeEngine();
 	geGameSetUpdateFunc(Update);
 	geGameSetDrawFunc(Draw);

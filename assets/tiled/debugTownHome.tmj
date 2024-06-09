@@ -118,8 +118,8 @@
                  "type":"Start",
                  "visible":true,
                  "width":16,
-                 "x":128,
-                 "y":96
+                 "x":119,
+                 "y":108
                 }, 
                 {
                  "height":16,
@@ -142,6 +142,91 @@
                  "width":32,
                  "x":112,
                  "y":144
+                }, 
+                {
+                 "height":16,
+                 "id":25,
+                 "name":"Sign",
+                 "properties":[
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"Pots and pans"
+                        }],
+                 "rotation":0,
+                 "type":"TextInteract",
+                 "visible":true,
+                 "width":16,
+                 "x":0,
+                 "y":96
+                }, 
+                {
+                 "height":16,
+                 "id":26,
+                 "name":"Sign",
+                 "properties":[
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"Pots and pans"
+                        }],
+                 "rotation":0,
+                 "type":"TextInteract",
+                 "visible":true,
+                 "width":16,
+                 "x":16,
+                 "y":96
+                }, 
+                {
+                 "height":16,
+                 "id":27,
+                 "name":"Sign",
+                 "properties":[
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"Pots and pans"
+                        }],
+                 "rotation":0,
+                 "type":"TextInteract",
+                 "visible":true,
+                 "width":16,
+                 "x":32,
+                 "y":96
+                }, 
+                {
+                 "height":16,
+                 "id":28,
+                 "name":"Sign",
+                 "properties":[
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"Pots and pans"
+                        }],
+                 "rotation":0,
+                 "type":"TextInteract",
+                 "visible":true,
+                 "width":16,
+                 "x":48,
+                 "y":96
+                }, 
+                {
+                 "height":16,
+                 "id":29,
+                 "name":"Sign",
+                 "properties":[
+                        {
+                         "name":"text",
+                         "type":"string",
+                         "value":"Comfy bed"
+                        }],
+                 "rotation":0,
+                 "type":"TextInteract",
+                 "visible":true,
+                 "width":16,
+                 "x":226.333333333333,
+                 "y":127
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -162,104 +247,19 @@
                  "type":"",
                  "visible":true,
                  "width":64,
-                 "x":0,
-                 "y":96
+                 "x":32,
+                 "y":64
                 }, 
                 {
-                 "height":32,
+                 "height":27,
                  "id":19,
                  "name":"",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":48,
-                 "x":128,
-                 "y":64
-                }, 
-                {
-                 "height":16,
-                 "id":20,
-                 "name":"Sign",
-                 "properties":[
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"Pots and pans"
-                        }],
-                 "rotation":0,
-                 "type":"TextInteract",
-                 "visible":true,
-                 "width":16,
-                 "x":16,
-                 "y":96
-                }, 
-                {
-                 "height":16,
-                 "id":21,
-                 "name":"Sign",
-                 "properties":[
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"Pots and pans"
-                        }],
-                 "rotation":0,
-                 "type":"TextInteract",
-                 "visible":true,
-                 "width":16,
-                 "x":32,
-                 "y":96
-                }, 
-                {
-                 "height":16,
-                 "id":22,
-                 "name":"Sign",
-                 "properties":[
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"Pots and pans"
-                        }],
-                 "rotation":0,
-                 "type":"TextInteract",
-                 "visible":true,
-                 "width":16,
-                 "x":48,
-                 "y":96
-                }, 
-                {
-                 "height":16,
-                 "id":23,
-                 "name":"Sign",
-                 "properties":[
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"Pots and pans"
-                        }],
-                 "rotation":0,
-                 "type":"TextInteract",
-                 "visible":true,
-                 "width":16,
-                 "x":0,
-                 "y":96
-                }, 
-                {
-                 "height":16,
-                 "id":24,
-                 "name":"Sign",
-                 "properties":[
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"Comfy bed"
-                        }],
-                 "rotation":0,
-                 "type":"TextInteract",
-                 "visible":true,
-                 "width":16,
-                 "x":224,
-                 "y":128
+                 "width":31,
+                 "x":136,
+                 "y":60
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -268,7 +268,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":25,
+ "nextobjectid":30,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.8.6",

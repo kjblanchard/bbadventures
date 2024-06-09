@@ -1,14 +1,23 @@
 #include <BbAdventures/aseprite/AsepriteDocument.hpp>
+#include <GoonEngine/debug.h>
+#include <GoonEngine/utils.h>
 #include <fstream>
 #include <istream>
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 using namespace Bba;
+#ifdef GN_PLATFORM_MACOS
+static const char *_asepritePrefix = "../Resources/assets/aseprite/";
+#else
+static const char *_asepritePrefix = "assets/aseprite/";
+#endif
 AsepriteDocument::AsepriteDocument(std::string p) {
-	auto fullPathNoType = "assets/aseprite/" + p;
+	auto fullPathNoType = _asepritePrefix + p;
 	auto fullPathJson = fullPathNoType + ".json";
-	// auto fullPathImg = fullPathNoType + ".png";
-	std::ifstream fileStream(fullPathJson);
+	char buf[1000];
+	GetLoadFilename(buf, sizeof(buf), fullPathJson.c_str());
+
+	std::ifstream fileStream(buf);
 	auto j = json::parse(fileStream);
 	for (const auto &frameJson : j["frames"]) {
 		Frame frame;

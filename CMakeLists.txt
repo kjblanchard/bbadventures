@@ -6,6 +6,13 @@ cmake_minimum_required(VERSION 3.16)
 message(STATUS "Starting ${EXECUTABLE_TARGET_NAME} project initialization")
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1) # This exports a file that clangd can use so that we know what compile/include flags so that we can use clangd language server properly with our cmake attributes.
 include(FindPkgConfig)
+
+# Set universal needs to be done before project?
+if(CMAKE_GENERATOR STREQUAL "Xcode")
+    message(STATUS "Setting Build to Universal Binary")
+    set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "" FORCE)
+endif(CMAKE_GENERATOR STREQUAL "Xcode")
+
 project(${EXECUTABLE_TARGET_NAME} VERSION 0.1.0 LANGUAGES C CXX)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
@@ -35,6 +42,11 @@ elseif(APPLE)
         message(STATUS "Configuring Macos")
         set(MACOS ON CACHE BOOL "Is Macos")
 
+        # For bundles
+        set(CMAKE_OSX_DEPLOYMENT_TARGET "10.14" CACHE STRING "Minimum OS X deployment version")
+        set(IS_BUNDLE "MACOSX_BUNDLE" CACHE STRING "Is this a bundle")
+        set(ICON_PATH cmake/AppIcon.icns CACHE STRING "Icon path")
+
         if(CMAKE_GENERATOR STREQUAL "Xcode")
             message(STATUS "Setting Build to Universal Binary")
             set(CMAKE_OSX_ARCHITECTURES "x86_64;arm64" CACHE STRING "" FORCE)
@@ -54,8 +66,10 @@ endif(EMSCRIPTEN)
 # Initialize
 # #########################################
 message(STATUS "Initializing the project")
-add_executable(${EXECUTABLE_TARGET_NAME}
-    ${GOON_WORLD_FILES})
+
+# add_executable(MyApp MACOSX_BUNDLE main.cpp)
+add_executable(${EXECUTABLE_TARGET_NAME} ${IS_BUNDLE}
+    ${GOON_WORLD_FILES} ${ICON_PATH})
 set_property(TARGET ${EXECUTABLE_TARGET_NAME} PROPERTY CXX_STANDARD 17)
 
 # #########################################
@@ -87,6 +101,7 @@ if(APPLE)
 endif(APPLE)
 
 set(PNG_TESTS OFF CACHE BOOL "Build the libpng tests" FORCE)
+
 # set(PNG_HARDWARE_OPTIMIZATIONS OFF CACHE BOOL "Universal" FORCE)
 # set(PNG_ARM_NEON off CACHE BOOL "Build the libpng tests" FORCE)
 # set(PNG_ARM_NEON_OPT 0 CACHE BOOL "What" FORCE)
@@ -97,6 +112,7 @@ set(GOON_FULL_MACOS_BUILD ${GOON_FULL_MACOS_BUILD} CACHE BOOL "Build the libpng 
 set(GOON_DEBUG_SOUND ${GOON_DEBUG_SOUND} CACHE BOOL "Build from what?" FORCE)
 set(PNG_FRAMEWORK OFF CACHE BOOL "Build from what?" FORCE)
 set(INSTALL_SG_SOUND OFF CACHE BOOL "Do not install when installing" FORCE)
+
 # Freetype settings
 set(FT_DISABLE_BROTLI ON CACHE BOOL "Do not install when installing" FORCE)
 set(FT_DISABLE_HARFBUZZ ON CACHE BOOL "Do not install when installing" FORCE)
@@ -133,6 +149,11 @@ if(EMSCRIPTEN)
     set_target_properties(${EXECUTABLE_TARGET_NAME} PROPERTIES LINK_FLAGS ${LINK_FLAGS} " -O0 -g -s -sUSE_SDL=2 -sUSE_LIBPNG=1 -sUSE_FREETYPE=1 -sUSE_OGG=1 -sUSE_VORBIS=1 --preload-file ${CMAKE_SOURCE_DIR}/assets@/assets")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s 'DEFAULT_LIBRARY_FUNCS_TO_INCLUDE=[\"$autoResumeAudioContext\",\"$dynCall\"]'")
 endif(EMSCRIPTEN)
+
+if(MACOS)
+    # set_target_properties(${EXECUTABLE_TARGET_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/Resources/Info.plist)
+    set_target_properties(${EXECUTABLE_TARGET_NAME} PROPERTIES MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/cmake/Info.plist)
+endif(MACOS)
 
 # #########################################
 # Compile Definitions
@@ -207,6 +228,7 @@ target_link_directories(${EXECUTABLE_TARGET_NAME}
     PRIVATE
     /usr/local/lib
 )
+target_link_libraries(${EXECUTABLE_TARGET_NAME} PRIVATE "-framework Foundation")
 
 target_include_directories(${EXECUTABLE_TARGET_NAME}
     PUBLIC
@@ -241,12 +263,26 @@ target_include_directories(${EXECUTABLE_TARGET_NAME}
 # #########################################
 set(FOLDERS_TO_COPY assets)
 
-if(MSVC OR CMAKE_GENERATOR STREQUAL "Xcode")
+if(MSVC)
     set(INSTALL_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>)
+elseif(MACOS)
+    if(CMAKE_GENERATOR STREQUAL "Xcode")
+        set(INSTALL_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/${EXECUTABLE_TARGET_NAME}.app/Contents/Resources)
+    else()
+        set(INSTALL_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/${EXECUTABLE_TARGET_NAME}.app/Contents/Resources)
+    endif(CMAKE_GENERATOR STREQUAL "Xcode")
+
 else()
     set(INSTALL_DIR ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-endif(MSVC OR CMAKE_GENERATOR STREQUAL "Xcode")
+endif(MSVC)
 
 install(DIRECTORY ${FOLDERS_TO_COPY}
     DESTINATION ${INSTALL_DIR}
     COMPONENT assets)
+
+if(MACOS)
+    set_source_files_properties(${ICON_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_source_files_properties(${CMAKE_SOURCE_DIR}/cmake/Info.plist PROPERTIES
+        MACOSX_PACKAGE_LOCATION Resources
+    )
+endif(MACOS)

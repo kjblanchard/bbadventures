@@ -39,6 +39,27 @@ jobs:
         run: make ${{ matrix.zlib }}
       - name: Configure CMake
         run: make CMAKE_BUILD_TYPE=Release ${{ matrix.make_cmd}}
+        # Add macOS-specific steps
+      - name: Decode and import certificate
+        if: matrix.os == 'macos'
+        env:
+          P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12 }}
+          P12_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+        run: |
+          echo "$P12_BASE64" | base64 --decode > certificate.p12
+          security create-keychain -p "" build.keychain
+          security import certificate.p12 -k build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
+          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
+          security unlock-keychain -p "" build.keychain
+
+      - name: Sign app bundle
+        if: matrix.os == 'macos'
+        run: codesign --deep --force --verify --verbose --sign "Kevin Blanchard Dev" build/BbAdventures.app
+
+      - name: Verify code signing
+        if: matrix.os == 'macos'
+        run: codesign --verify --deep --strict --verbose=2 build/BbAdventures.app
+
       - name: Save packaged artifacts
         uses: actions/upload-artifact@v4
         with:

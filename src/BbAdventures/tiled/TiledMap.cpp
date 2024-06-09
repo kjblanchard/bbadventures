@@ -1,4 +1,6 @@
 #include <GoonEngine/prim/point.h>
+#include <GoonEngine/utils.h>
+#include <GoonEngine/debug.h>
 
 #include <BbAdventures/shared/constants.hpp>
 #include <BbAdventures/tiled/TiledMap.hpp>
@@ -58,7 +60,9 @@ geRectangle TiledMap::GetGidSourceRect(int gid) {
 
 TiledMap::TiledMap(std::string filename) {
 	auto pathPrefix = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + filename + ".tmj";
-	std::ifstream file(pathPrefix);
+	char buf[1000];
+	GetLoadFilename(buf, sizeof(buf), pathPrefix.c_str());
+	std::ifstream file(buf);
 	json data = json::parse(file);
 	// auto &tilesets = data["tilesets"];
 	Width = data["width"];
@@ -75,7 +79,8 @@ TiledMap::TiledMap(std::string filename) {
 		auto tileset = Tileset();
 		tileset.FirstGid = tiledmapTileset.FirstGid;
 		std::string tilesetPrefix = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + tiledmapTileset.Source;
-		std::ifstream file(tilesetPrefix);
+		GetLoadFilename(buf, sizeof(buf), tilesetPrefix.c_str());
+		std::ifstream file(buf);
 		json tilesetData = json::parse(file);
 		// read the tileset file, and load info about it here.
 		tileset.Name = tilesetData["name"];

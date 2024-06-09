@@ -38,31 +38,26 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	auto& a = go.GetComponent<AnimationComponent>();
 	auto& r = go.GetComponent<RigidBodyComponent>();
 	auto d = p.Direction;
-	std::string letter = "";
 	auto moved = false;
 	auto tryMoveSpeed = geVec2{0, 0};
 	if (geKeyJustPressed(geKey_W) || geKeyHeldDown(geKey_W)) {
 		d = Directions::North;
 		moved = true;
-		letter = 'U';
 		tryMoveSpeed.y -= moveSpeed * State::DeltaTime;
 	}
 	if (geKeyJustPressed(geKey_A) || geKeyHeldDown(geKey_A)) {
 		d = Directions::West;
 		moved = true;
-		letter = 'L';
 		tryMoveSpeed.x -= moveSpeed * State::DeltaTime;
 	}
 	if (geKeyJustPressed(geKey_S) || geKeyHeldDown(geKey_S)) {
 		d = Directions::South;
 		moved = true;
-		letter = 'D';
 		tryMoveSpeed.y += moveSpeed * State::DeltaTime;
 	}
 	if (geKeyJustPressed(geKey_D) || geKeyHeldDown(geKey_D)) {
 		d = Directions::East;
 		moved = true;
-		letter = 'R';
 		tryMoveSpeed.x += moveSpeed * State::DeltaTime;
 	}
 	// Check if we can move
@@ -110,7 +105,8 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	}
 	a.Playing = moved;
 	if (d != p.Direction) {
-		a.Animation->PlayAnimation("walk" + letter);
+		auto letter = GetLetterForDirection(d);
+		a.Animation->PlayAnimation("walk" + std::string(letter));
 		p.Direction = d;
 	}
 	// Check if we overlapped with a exit after moving
@@ -160,7 +156,7 @@ static void loadPlayerEach(GameObject g, PlayerSpawnComponent& ps) {
 		l.Location.x = ps.Location.x + (i * 5);
 		l.Location.y = ps.Location.y;
 		PlayerComponent p = PlayerComponent();
-		p.Direction = Directions::South;
+		p.Direction = ps.SpawnDirection;
 		auto a = AnimationComponent();
 		a.AnimationName = "player";
 		a.Offset = gePoint{0, 0};
@@ -189,6 +185,11 @@ static void loadPlayerEach(GameObject g, PlayerSpawnComponent& ps) {
 		LogWarn("Somehow couldn't add player, current level doesn't exist?");
 	}
 }
+static void startPlayersEach(GameObject g, PlayerComponent p) {
+	auto a = g.GetComponent<AnimationComponent>();
+	auto letter = GetLetterForDirection(p.Direction);
+	a.Animation->PlayAnimation("walk" + std::string(letter));
+}
 
 void UpdatePlayers() {
 	if (State::IsLoadingMap) {
@@ -199,5 +200,9 @@ void UpdatePlayers() {
 
 void LoadPlayers() {
 	GameObject::ForEach<PlayerSpawnComponent>(loadPlayerEach);
+}
+
+void StartPlayers() {
+	GameObject::ForEach<PlayerComponent>(startPlayersEach);
 }
 }  // namespace Bba

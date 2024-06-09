@@ -1,4 +1,5 @@
 #include <GoonEngine/debug.h>
+#include <GoonEngine/utils.h>
 
 #include <BbAdventures/entities/Solid.hpp>
 #include <BbAdventures/gnpch.hpp>
@@ -58,12 +59,16 @@ void Level::LoadSurfaces() {
 		if (tileset.Type == TilesetType::Image) {
 			for (auto &tile : tileset.Tiles) {
 				auto surfacePath = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + tile.Image;
-				auto i = geImageNewFromFile(surfacePath.c_str());
+				char buf[1000];
+				GetLoadFilename(buf, sizeof(buf), surfacePath.c_str());
+				auto i = geImageNewFromFile(buf);
 				_imagesCache.push_back({tile.Image, i});
 			}
 		} else {
 			auto surfacePath = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + tileset.Image;
-			auto i = geImageNewFromFile(surfacePath.c_str());
+			char buf[1000];
+			GetLoadFilename(buf, sizeof(buf), surfacePath.c_str());
+			auto i = geImageNewFromFile(buf);
 			_imagesCache.push_back({tileset.Image, i});
 		}
 	}
@@ -117,6 +122,10 @@ void Level::CreateBackgroundImage() {
 							dstY -= (sourceRect.h - _mapData->TileHeight);
 						}
 						auto dstRect = geRectangle{dstX, dstY, sourceRect.w, sourceRect.h};
+						if (!tileSurface || !_background) {
+							continue;
+						}
+
 						geImageDrawImageToImage(tileSurface, _background, &sourceRect, &dstRect);
 					}
 				}
@@ -128,6 +137,7 @@ void Level::CreateBackgroundImage() {
 void Level::RestartLevel() {
 	CreateBackgroundImage();
 	LoadSolidObjects();
+	Bba::StartPlayers();
 }
 void Level::UnloadLevel() {
 	Bba::FreeAnimationComponents();
@@ -150,6 +160,7 @@ void Level::LoadNewLevel() {
 	Bba::LoadPlayers();
 	Bba::LoadAnimationComponents();
 	Bba::LoadTextInteractions();
+	Bba::StartPlayers();
 	State::FadePanel->FadeIn(LevelLoaded);
 }
 

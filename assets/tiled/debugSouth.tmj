@@ -206,6 +206,12 @@
                  "name":"Start1",
                  "properties":[
                         {
+                         "name":"direction",
+                         "propertytype":"Direction",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
                          "name":"loadLocation",
                          "type":"int",
                          "value":1
@@ -214,8 +220,8 @@
                  "type":"Start",
                  "visible":true,
                  "width":16,
-                 "x":82.2877374548921,
-                 "y":23.7358207938994
+                 "x":80,
+                 "y":16
                 }, 
                 {
                  "height":16,

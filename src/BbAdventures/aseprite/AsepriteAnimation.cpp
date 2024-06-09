@@ -1,10 +1,16 @@
 #include <GoonEngine/debug.h>
+#include <GoonEngine/utils.h>
 
 #include <BbAdventures/aseprite/AsepriteAnimation.hpp>
 #include <BbAdventures/aseprite/AsepriteDocument.hpp>
 using namespace Bba;
 
 std::unordered_map<std::string, std::shared_ptr<AsepriteDocument>> AsepriteAnimation::_asepriteDocuments;
+#ifdef GN_PLATFORM_MACOS
+static const char *_animationPrefix = "../Resources/assets/img/";
+#else
+static const char *_animationPrefix = "assets/img/";
+#endif
 
 AsepriteAnimation::AsepriteAnimation(std::string n) : _animNum(0), _frame(0), _nextFrame(0), _frameTime(0), _aseDocument(nullptr) {
 	_rect = std::make_unique<geRectangle>();
@@ -15,8 +21,10 @@ AsepriteAnimation::AsepriteAnimation(std::string n) : _animNum(0), _frame(0), _n
 AsepriteAnimation::~AsepriteAnimation() {
 }
 std::string AsepriteAnimation::Filename() {
-	auto f = "assets/img/" + _aseDocument->meta.image;
-	return f;
+	auto f = _animationPrefix+ _aseDocument->meta.image;
+	char buf[1000];
+	GetLoadFilename(buf, sizeof(buf), f.c_str());
+	return buf;
 }
 
 void AsepriteAnimation::Load() {

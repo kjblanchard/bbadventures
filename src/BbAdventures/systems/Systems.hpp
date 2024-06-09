@@ -5,6 +5,7 @@ void UpdateAnimationComponents();
 void DrawAnimationComponents();
 void FreeAnimationComponents();
 void LoadPlayers();
+void StartPlayers();
 void UpdatePlayers();
 void DrawDebugDrawComponents();
 void LoadTextInteractions();
