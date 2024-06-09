@@ -13,6 +13,7 @@ class State {
 	static int SpawnLocation;
 	static Directions SpawnDirection;
 	static std::string NextMapName;
+	static std::string PlayingMusic;
 	static Level* CurrentLevel;
 	static bool IsLoadingMap;
 	static bool IsDisplayingText;

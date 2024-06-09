@@ -11,3 +11,4 @@ bool State::IsLoadingMap = false;
 bool State::IsDisplayingText = false;
 Panel* State::FadePanel = nullptr;
 Textbox* State::TextDisplay = nullptr;
+std::string State::PlayingMusic = "";

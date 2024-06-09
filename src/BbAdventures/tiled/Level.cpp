@@ -1,3 +1,4 @@
+#include <GoonEngine/content/bgm.h>
 #include <GoonEngine/debug.h>
 #include <GoonEngine/utils.h>
 
@@ -35,6 +36,8 @@ Level::~Level() {
 	}
 
 	_gameObjects.clear();
+	// TODO should we actually clear this?  Save for manual cleanup.
+	// geBgmDelete(_bgm);
 }
 std::vector<TiledMap::TiledObject> Level::GetAllObjects() {
 	return _mapData->Objects;
@@ -160,8 +163,25 @@ void Level::LoadNewLevel() {
 	Bba::LoadPlayers();
 	Bba::LoadAnimationComponents();
 	Bba::LoadTextInteractions();
+	l->StartBgm();
 	Bba::StartPlayers();
+	// geBgmPlay(_bgm, 1.0, -1);
 	State::FadePanel->FadeIn(LevelLoaded);
+}
+
+void Level::StartBgm() {
+	for (auto &&prop : _mapData->Properties) {
+		if (prop.Name == "bgm") {
+			auto bgmName = std::get<std::string>(prop.Value);
+			_bgm = geBgmNew(bgmName.c_str());
+			if (bgmName != State::PlayingMusic) {
+				State::PlayingMusic = bgmName;
+				geBgmLoad(_bgm);
+				geBgmPlay(_bgm, 1.0, -1);
+			}
+			break;
+		}
+	}
 }
 
 void Level::Draw() {

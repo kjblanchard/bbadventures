@@ -48,6 +48,7 @@
 ## Shout Outs
 - [Time Fantasy Sprites](https://finalbossblues.com/timefantasy/)
 - [Typing Text sound](https://freesound.org/people/Sky_Motion/sounds/416777/) - Creative Commons
+- [Screen Transition Sound](https://freesound.org/people/distillerystudio/sounds/327754/) - distillerystudio
 
 ## Valgrind Checks
 - valgrind --track-origins=yes --leak-check=yes --leak-resolution=low --show-leak-kinds=definite ./BbAdventures 2>&1 | tee memcheck.txt
