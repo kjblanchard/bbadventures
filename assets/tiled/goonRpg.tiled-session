@@ -42,8 +42,8 @@
             "scale": 2,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 256.25,
-                "y": 141.5
+                "x": 202.5,
+                "y": 141
             }
         },
         "debugTown.tmx": {
@@ -65,8 +65,8 @@
             "scale": 3,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 180.16666666666666,
-                "y": 169.66666666666663
+                "x": 144.33333333333331,
+                "y": 169.33333333333334
             }
         },
         "house..tsj": {
@@ -117,7 +117,7 @@
         "inside.tsj"
     ],
     "project": "goonRpg.tiled-project",
-    "property.type": "Direction",
+    "property.type": "string",
     "recentFiles": [
         "debugTown.tmj",
         "inside.tsj",

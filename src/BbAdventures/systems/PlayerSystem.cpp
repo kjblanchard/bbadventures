@@ -21,7 +21,7 @@
 const int moveSpeed = 100;
 namespace Bba {
 
-static Directions GetOverlapDirection(geRectangle* obj, geRectangle* overlapBox) {
+static Directions getOverlapDirection(geRectangle* obj, geRectangle* overlapBox) {
 	if (overlapBox->w < overlapBox->h) {
 		if (overlapBox->x > obj->x) {
 			return Directions::East;
@@ -33,33 +33,42 @@ static Directions GetOverlapDirection(geRectangle* obj, geRectangle* overlapBox)
 	}
 	return Directions::North;
 }
+
+static bool handleMovement(Directions& d, geVec2& m) {
+	if (State::IsDisplayingText) {
+		return false;
+	}
+	bool moved = false;
+	if (geKeyJustPressed(geKey_W) || geKeyHeldDown(geKey_W)) {
+		d = Directions::North;
+		moved = true;
+		m.y -= moveSpeed * State::DeltaTime;
+	}
+	if (geKeyJustPressed(geKey_A) || geKeyHeldDown(geKey_A)) {
+		d = Directions::West;
+		moved = true;
+		m.x -= moveSpeed * State::DeltaTime;
+	}
+	if (geKeyJustPressed(geKey_S) || geKeyHeldDown(geKey_S)) {
+		d = Directions::South;
+		moved = true;
+		m.y += moveSpeed * State::DeltaTime;
+	}
+	if (geKeyJustPressed(geKey_D) || geKeyHeldDown(geKey_D)) {
+		d = Directions::East;
+		moved = true;
+		m.x += moveSpeed * State::DeltaTime;
+	}
+	return moved;
+}
+
 static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	auto& l = go.GetComponent<LocationComponent>();
 	auto& a = go.GetComponent<AnimationComponent>();
 	auto& r = go.GetComponent<RigidBodyComponent>();
 	auto d = p.Direction;
-	auto moved = false;
 	auto tryMoveSpeed = geVec2{0, 0};
-	if (geKeyJustPressed(geKey_W) || geKeyHeldDown(geKey_W)) {
-		d = Directions::North;
-		moved = true;
-		tryMoveSpeed.y -= moveSpeed * State::DeltaTime;
-	}
-	if (geKeyJustPressed(geKey_A) || geKeyHeldDown(geKey_A)) {
-		d = Directions::West;
-		moved = true;
-		tryMoveSpeed.x -= moveSpeed * State::DeltaTime;
-	}
-	if (geKeyJustPressed(geKey_S) || geKeyHeldDown(geKey_S)) {
-		d = Directions::South;
-		moved = true;
-		tryMoveSpeed.y += moveSpeed * State::DeltaTime;
-	}
-	if (geKeyJustPressed(geKey_D) || geKeyHeldDown(geKey_D)) {
-		d = Directions::East;
-		moved = true;
-		tryMoveSpeed.x += moveSpeed * State::DeltaTime;
-	}
+	auto moved = handleMovement(d, tryMoveSpeed);
 	// Check if we can move
 	auto playerRbRect = r.GetRect();
 	playerRbRect.x += l.Location.x + tryMoveSpeed.x;
@@ -70,7 +79,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 		// for (auto [_, s] : sView.each()) {
 		if (geRectangleIsOverlap(&playerRbRect, &s.BoxCollider)) {
 			auto r = geRectangleGetOverlapRect(&playerRbRect, &s.BoxCollider);
-			auto d = GetOverlapDirection(&playerRbRect, &r);
+			auto d = getOverlapDirection(&playerRbRect, &r);
 			switch (d) {
 				case Directions::North:
 					l.Location.y += tryMoveSpeed.y += r.h;
@@ -113,7 +122,6 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	playerRbRect = r.GetRect();
 	playerRbRect.x += l.Location.x + tryMoveSpeed.x;
 	playerRbRect.y += l.Location.y + tryMoveSpeed.y;
-	// auto peView = GameObject::_registry.view<PlayerExitComponent>();
 	GameObject::ForEach<PlayerExitComponent>([&playerRbRect](GameObject g, PlayerExitComponent pe) {
 		if (geRectangleIsOverlap(&playerRbRect, &pe.BoundingBox)) {
 			State::IsLoadingMap = true;
@@ -123,13 +131,12 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 			State::FadePanel->FadeOut(Level::LoadNewLevel);
 		}
 	});
-	// for (auto&& [_, pe] : peView.each()) {
-	// }
 	// Check if we should interact
 	if (geKeyJustPressed(geKey_SPACE) && go.HasComponent<InteractorComponent>()) {
 		// If we are displaying text, close it.
 		if (State::TextDisplay->Text) {
 			State::TextDisplay->UnDisplayText();
+			State::IsDisplayingText = false;
 			return;
 		}
 
@@ -140,6 +147,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 			auto ir = geRectangle{(int)l.Location.x + i.Box.x, (int)l.Location.y + i.Box.y, i.Box.w, i.Box.h};
 
 			if (geUtilsIsPointInRect(&ir, &p)) {
+				State::IsDisplayingText = true;
 				State::TextDisplay->DisplayText(ti.TextImage);
 			}
 		});

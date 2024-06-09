@@ -463,7 +463,7 @@
         {
          "name":"bgm",
          "type":"string",
-         "value":"debug"
+         "value":"town2"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.8.6",

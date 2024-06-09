@@ -270,6 +270,12 @@
  "nextlayerid":7,
  "nextobjectid":30,
  "orientation":"orthogonal",
+ "properties":[
+        {
+         "name":"bgm",
+         "type":"string",
+         "value":"town2"
+        }],
  "renderorder":"right-down",
  "tiledversion":"1.8.6",
  "tileheight":16,
