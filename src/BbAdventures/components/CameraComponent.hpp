@@ -3,6 +3,6 @@
 #include <GoonEngine/prim/rectangle.h>
 
 struct CameraComponent {
-	geRectangle Box;
+	geRectangleF Box;
 	gePoint Bounds;
 };

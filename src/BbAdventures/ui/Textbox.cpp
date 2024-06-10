@@ -21,7 +21,7 @@ void Textbox::DisplayText(geText* t) {
 		geBgmSetBackground(_textBgm, true);
 		geBgmLoad(_textBgm);
 	}
-	geBgmPlay(_textBgm, 0.5, -1);
+	geBgmPlay(_textBgm, 1.0, -1);
 }
 void Textbox::UnDisplayText() {
 	geTextSetNumDrawCharacters(Text, 0);

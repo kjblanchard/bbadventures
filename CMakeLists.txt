@@ -228,7 +228,7 @@ target_link_directories(${EXECUTABLE_TARGET_NAME}
     PRIVATE
     /usr/local/lib
 )
-target_link_libraries(${EXECUTABLE_TARGET_NAME} PRIVATE "-framework Foundation")
+# target_link_libraries(${EXECUTABLE_TARGET_NAME} PRIVATE "-framework Foundation")
 
 target_include_directories(${EXECUTABLE_TARGET_NAME}
     PUBLIC

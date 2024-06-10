@@ -21,8 +21,8 @@ class State {
 	static Panel* FadePanel;
 	static Textbox* TextDisplay;
 
-	static int CameraX;
-	static int CameraY;
+	static float CameraX;
+	static float CameraY;
 
    private:
 };

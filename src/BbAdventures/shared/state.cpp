@@ -12,5 +12,5 @@ bool State::IsDisplayingText = false;
 Panel* State::FadePanel = nullptr;
 Textbox* State::TextDisplay = nullptr;
 std::string State::PlayingMusic = "";
-int State::CameraX = 0;
-int State::CameraY = 0;
+float State::CameraX = 0;
+float State::CameraY = 0;

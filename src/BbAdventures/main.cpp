@@ -19,11 +19,9 @@ std::string defaultLevel = "debugTown";
 int revealedLetters = 0;
 float currentTime = 0;
 
-
 void Update(double deltatime) {
 	Bba::State::DeltaTime = deltatime;
 	if (!Bba::State::IsLoadingMap) {
-
 		Bba::UpdatePlayers();
 		Bba::UpdateCamera();
 		Bba::UpdateAnimationComponents();
@@ -41,7 +39,6 @@ void Draw() {
 	panel->Draw();
 	textbox->Draw();
 }
-
 
 int main(int argc, char *argv[]) {
 	geInitializeEngine();

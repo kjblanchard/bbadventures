@@ -12,9 +12,9 @@ namespace Bba {
 void DrawDebugDrawComponents() {
 	Bba::GameObject::ForEach<LocationComponent, DebugDrawComponent>(
 		[](Bba::GameObject gameObject, const LocationComponent& location, const DebugDrawComponent& debugDraw) {
-			auto r = geRectangle{(int)(location.Location.x + debugDraw.Box.x) - State::CameraX, (int)(location.Location.y + debugDraw.Box.y) - State::CameraY, debugDraw.Box.w, debugDraw.Box.h};
+			auto r = geRectangleF{(location.Location.x + debugDraw.Box.x) - State::CameraX,(location.Location.y + debugDraw.Box.y) - State::CameraY, (float)debugDraw.Box.w, (float)debugDraw.Box.h};
 			auto c = geColor{255, 255, 255, 255};
-			geUtilsDrawRect(&r, &c);
+			geUtilsDrawRectF(&r, &c);
 		});
 }
 

@@ -25,8 +25,9 @@ void UpdateAnimationComponents() {
 void DrawAnimationComponents() {
 	GameObject::ForEach<AnimationComponent, LocationComponent>([](GameObject g, AnimationComponent& a, LocationComponent& l) {
 		auto s = a.Animation->FrameCoords();
-		auto d = geRectangle{(int)(l.Location.x + a.Offset.x) - State::CameraX, (int)(l.Location.y + a.Offset.y) - State::CameraY, s.w, s.h};
-		geImageDraw(a.AnimationImage, &s, &d);
+		auto d = geRectangleF{(l.Location.x + a.Offset.x) - State::CameraX, (l.Location.y + a.Offset.y) - State::CameraY, (float)s.w, (float)s.h};
+		// geImageDraw(a.AnimationImage, &s, &d);
+		geImageDrawF(a.AnimationImage, &s, &d);
 	});
 }
 
