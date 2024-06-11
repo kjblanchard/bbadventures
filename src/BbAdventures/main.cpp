@@ -23,8 +23,8 @@ void Update(double deltatime) {
 	Bba::State::DeltaTime = deltatime;
 	if (!Bba::State::IsLoadingMap) {
 		Bba::UpdatePlayers();
-		Bba::UpdateCamera();
 		Bba::UpdateAnimationComponents();
+		Bba::UpdateCamera();
 	}
 	textbox->Update();
 	panel->Update();

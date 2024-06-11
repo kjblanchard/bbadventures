@@ -200,6 +200,8 @@ void Level::Draw() {
 		int camX = static_cast<int>(State::CameraX);
 		int camY = static_cast<int>(State::CameraY);
 		// Calculate the fractional part of the camera coordinates
+		// float offsetX = (int)State::CameraX - camX;
+		// float offsetY = (int)State::CameraY - camY;
 		float offsetX = State::CameraX - camX;
 		float offsetY = State::CameraY - camY;
 		// Source rectangle using integer coordinates
@@ -210,6 +212,8 @@ void Level::Draw() {
 		s.h = 288;
 		// Destination rectangle with floating-point offsets
 		geRectangleF d;
+		// d.x = (float)(int)-offsetX;  // Offset by the fractional part
+		// d.y = (float)(int)-offsetY;  // Offset by the fractional part
 		d.x = -offsetX;  // Offset by the fractional part
 		d.y = -offsetY;  // Offset by the fractional part
 		d.w = 512.0f;

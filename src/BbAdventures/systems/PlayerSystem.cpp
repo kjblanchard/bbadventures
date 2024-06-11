@@ -21,11 +21,24 @@
 
 static geSfx* sfx = nullptr;
 
-const geRectangle interactionRect = {-14, -14, 30, 30};
+const geRectangle interactionRect = {-14, -14, 20, 20};
 const int moveSpeed = 100;
 namespace Bba {
 
 static Directions getOverlapDirection(geRectangle* obj, geRectangle* overlapBox) {
+	if (overlapBox->w < overlapBox->h) {
+		if (overlapBox->x > obj->x) {
+			return Directions::East;
+		}
+		return Directions::West;
+	}
+	if (overlapBox->y > obj->y) {
+		return Directions::South;
+	}
+	return Directions::North;
+}
+
+static Directions getOverlapDirectionF(geRectangleF* obj, geRectangleF* overlapBox) {
 	if (overlapBox->w < overlapBox->h) {
 		if (overlapBox->x > obj->x) {
 			return Directions::East;
@@ -75,37 +88,32 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	auto tryMoveSpeed = geVec2{0, 0};
 	auto moved = handleMovement(d, tryMoveSpeed);
 	// Check if we can move
-	auto playerRbRect = r.GetRect();
+	auto playerRbRect = r.GetRectF();
 	playerRbRect.x += l.Location.x + tryMoveSpeed.x;
 	playerRbRect.y += l.Location.y + tryMoveSpeed.y;
+	geVec2 desiredPosition = {l.Location.x + tryMoveSpeed.x, l.Location.y + tryMoveSpeed.y};
 	bool collision = false;
-	GameObject::ForEach<SolidObjectComponent>([&l, &tryMoveSpeed, &collision, &playerRbRect](GameObject g, SolidObjectComponent s) {
-		// auto sView = GameObject::_registry.view<SolidObjectComponent>();
-		// for (auto [_, s] : sView.each()) {
-		if (geRectangleIsOverlap(&playerRbRect, &s.BoxCollider)) {
-			auto r = geRectangleGetOverlapRect(&playerRbRect, &s.BoxCollider);
-			auto d = getOverlapDirection(&playerRbRect, &r);
+	GameObject::ForEach<SolidObjectComponent>([&l, &tryMoveSpeed, &collision, &playerRbRect, &desiredPosition](GameObject g, SolidObjectComponent s) {
+		auto bcf = s.BoxColliderF();
+		if (geRectangleFIsOverlap(&playerRbRect, &bcf)) {
+			auto r = geRectangleFGetOverlapRect(&playerRbRect, &bcf);
+			auto d = getOverlapDirectionF(&playerRbRect, &r);
+
 			switch (d) {
 				case Directions::North:
-					l.Location.y += tryMoveSpeed.y += r.h;
-					l.Location.x += tryMoveSpeed.x;
+					desiredPosition.y += r.h;
 					collision = true;
 					break;
 				case Directions::East:
-					l.Location.x += tryMoveSpeed.x -= r.w;
-					l.Location.y += tryMoveSpeed.y;
+					desiredPosition.x -= r.w;  // Adjust x to move out of collision
 					collision = true;
-
 					break;
 				case Directions::South:
-					l.Location.y += tryMoveSpeed.y -= r.h;
-					l.Location.x += tryMoveSpeed.x;
+					desiredPosition.y -= r.h;  // Adjust y to move out of collision
 					collision = true;
 					break;
-
 				case Directions::West:
-					l.Location.x += tryMoveSpeed.x += r.w;
-					l.Location.y += tryMoveSpeed.y;
+					desiredPosition.x += r.w;  // Adjust x to move out of collision
 					collision = true;
 					break;
 				default:
@@ -113,10 +121,10 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 			}
 		}
 	});
-	if (!collision) {
-		l.Location.x += tryMoveSpeed.x;
-		l.Location.y += tryMoveSpeed.y;
-	}
+	l.Location.x = desiredPosition.x;
+	l.Location.y = desiredPosition.y;
+	// l.Location.x += tryMoveSpeed.x;
+	// l.Location.y += tryMoveSpeed.y;
 	a.Playing = moved;
 	if (d != p.Direction) {
 		// Update the Animation for the new direction
@@ -125,7 +133,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 		p.Direction = d;
 		// Update the interaction rect
 		// int iOffsetX = 0, iOffsetY = 0;
-		auto& dd = go.GetComponent<DebugDrawComponent>();
+		// auto& dd = go.GetComponent<DebugDrawComponent>();
 		switch (d) {
 			case Directions::East:
 				// i.Box.x = interactionRect.x - r.W + interactionRect.w;
@@ -146,67 +154,15 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 				i.Box.y = r.H - interactionRect.y;
 				i.Box.x = r.W + interactionRect.x;
 				break;
-				}
-		dd.Box.x = i.Box.x;
-		dd.Box.y = i.Box.y;
-// 		switch (d) {
-//     case Directions::East:
-//         // Set x and y for East direction
-//         i.Box.x = r.W + interactionRect.x;  // Adjust x based on the width of r and starting x of interactionRect
-//         i.Box.y = interactionRect.y;         // Set y starting at the y position of interactionRect
-//         break;
-
-//     case Directions::West:
-//         // Set x and y for West direction
-//         i.Box.x = interactionRect.x - r.W;  // Adjust x by subtracting the width of r from the starting x of interactionRect
-//         i.Box.y = interactionRect.y;        // Set y starting at the y position of interactionRect
-//         break;
-
-//     case Directions::North:
-//         // Set x and y for North direction
-//         i.Box.x = interactionRect.x;                    // Set x starting at the x position of interactionRect
-//         i.Box.y = interactionRect.y + r.H - interactionRect.h;  // Adjust y to account for the height of r and the offset in interactionRect
-//         break;
-
-//     case Directions::South:
-//         // Set x and y for South direction
-//         i.Box.x = interactionRect.x;                    // Set x starting at the x position of interactionRect
-//         i.Box.y = interactionRect.y + r.H;             // Adjust y to be below the starting y of interactionRect by the height of r
-//         break;
-// }
-
-// // Copy the box position to dd.Box
-// dd.Box.x = i.Box.x;
-// dd.Box.y = i.Box.y;
-
-		// switch (d) {
-		// 	case Directions::East:
-		// 		i.Box.x = r.W + interactionRect.x;
-		// 		i.Box.y = interactionRect.y;
-		// 		break;
-		// 	case Directions::West:
-		// 		i.Box.x = interactionRect.x - r.W;
-		// 		i.Box.y = interactionRect.y;
-		// 		break;
-		// 	case Directions::North:
-		// 		i.Box.x = interactionRect.x;
-		// 		i.Box.y = interactionRect.y + r.H - interactionRect.h;
-		// 		break;
-		// 	case Directions::South:
-		// 		i.Box.x = interactionRect.x;
-		// 		i.Box.y = interactionRect.y + r.H;
-		// 		break;
-		// }
-
-		// dd.Box.x = i.Box.x;
-		// dd.Box.y = i.Box.y;
+		}
 	}
 	// Check if we overlapped with a exit after moving
-	playerRbRect = r.GetRect();
+	playerRbRect = r.GetRectF();
 	playerRbRect.x += l.Location.x + tryMoveSpeed.x;
 	playerRbRect.y += l.Location.y + tryMoveSpeed.y;
 	GameObject::ForEach<PlayerExitComponent>([&playerRbRect](GameObject g, PlayerExitComponent pe) {
-		if (geRectangleIsOverlap(&playerRbRect, &pe.BoundingBox)) {
+		auto pebf = geRectangleF { (float)pe.BoundingBox.x, (float)pe.BoundingBox.y, (float)pe.BoundingBox.w, (float)pe.BoundingBox.h };
+		if (geRectangleFIsOverlap(&playerRbRect, &pebf)) {
 			if (!sfx) {
 				sfx = geSfxNew("transition");
 				geSfxLoad(sfx);
@@ -270,7 +226,7 @@ static void loadPlayerEach(GameObject g, PlayerSpawnComponent& ps) {
 		go->AddComponent<PlayerComponent>(p);
 		go->AddComponent<AnimationComponent>(a);
 		go->AddComponent<InteractorComponent>(ic);
-		go->AddComponent<DebugDrawComponent>(dd);
+		// go->AddComponent<DebugDrawComponent>(dd);
 		if (State::CurrentLevel) {
 			State::CurrentLevel->AddGameObjectToLevel(go);
 			return;
