@@ -1,10 +1,10 @@
 #include <BbAdventures/shared/constants.hpp>
 namespace Bba {
-#ifdef GN_PLATFORM_MACOS
-std::string ASSET_PREFIX = "../Resources/assets";
-#else
+// #ifdef GN_PLATFORM_MACOS
+// std::string ASSET_PREFIX = "../Resources/assets";
+// #else
 std::string ASSET_PREFIX = "assets";
-#endif
+// #endif
 std::string TILED_PREFIX = "tiled";
 std::string IMAGES_PREFIX = "images";
 int SCREEN_WIDTH = 512;

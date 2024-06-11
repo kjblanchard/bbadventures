@@ -158,7 +158,7 @@ void Level::LoadNewLevel() {
 	Bba::State::CurrentLevel = l;
 	l->LoadAllGameObjects();
 	auto c = NewCamera();
-	auto& cc = c->GetComponent<CameraComponent>();
+	auto &cc = c->GetComponent<CameraComponent>();
 	auto worldSize = l->GetSize();
 	cc.Bounds.x = worldSize.x;
 	cc.Bounds.y = worldSize.y;
@@ -194,17 +194,26 @@ void Level::StartBgm() {
 
 void Level::Draw() {
 	if (_background) {
+		// Try to reduce jitter / blurryness from the camera offset on the background due to float/int
+		// Other options
+		// SDL_RenderSetViewport, rendering full src and offset dst, something else?
+		int camX = static_cast<int>(State::CameraX);
+		int camY = static_cast<int>(State::CameraY);
+		// Calculate the fractional part of the camera coordinates
+		float offsetX = State::CameraX - camX;
+		float offsetY = State::CameraY - camY;
+		// Source rectangle using integer coordinates
 		geRectangle s;
-		// Need to get the camera.
-		s.x = State::CameraX;
-		s.y = State::CameraY;
+		s.x = camX;
+		s.y = camY;
 		s.w = 512;
 		s.h = 288;
-		geRectangle r;
-		r.x = 0;
-		r.y = 0;
-		r.w = 512;
-		r.h = 288;
-		geImageDraw(_background, &s, &r);
+		// Destination rectangle with floating-point offsets
+		geRectangleF d;
+		d.x = -offsetX;  // Offset by the fractional part
+		d.y = -offsetY;  // Offset by the fractional part
+		d.w = 512.0f;
+		d.h = 288.0f;
+		geImageDrawF(_background, &s, &d);
 	}
 }

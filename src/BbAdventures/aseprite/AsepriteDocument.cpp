@@ -6,11 +6,11 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 using namespace Bba;
-#ifdef GN_PLATFORM_MACOS
-static const char *_asepritePrefix = "../Resources/assets/aseprite/";
-#else
+// #ifdef GN_PLATFORM_MACOS
+// static const char *_asepritePrefix = "../Resources/assets/aseprite/";
+// #else
 static const char *_asepritePrefix = "assets/aseprite/";
-#endif
+// #endif
 AsepriteDocument::AsepriteDocument(std::string p) {
 	auto fullPathNoType = _asepritePrefix + p;
 	auto fullPathJson = fullPathNoType + ".json";

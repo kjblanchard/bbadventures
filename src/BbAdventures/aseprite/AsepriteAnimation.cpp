@@ -6,11 +6,11 @@
 using namespace Bba;
 
 std::unordered_map<std::string, std::shared_ptr<AsepriteDocument>> AsepriteAnimation::_asepriteDocuments;
-#ifdef GN_PLATFORM_MACOS
-static const char *_animationPrefix = "../Resources/assets/img/";
-#else
+// #ifdef GN_PLATFORM_MACOS
+// static const char *_animationPrefix = "../Resources/assets/img/";
+// #else
 static const char *_animationPrefix = "assets/img/";
-#endif
+// #endif
 
 AsepriteAnimation::AsepriteAnimation(std::string n) : _animNum(0), _frame(0), _nextFrame(0), _frameTime(0), _aseDocument(nullptr) {
 	_rect = std::make_unique<geRectangle>();

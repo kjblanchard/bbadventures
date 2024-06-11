@@ -56,6 +56,7 @@ elseif(APPLE)
     endif(NOT IOS)
 elseif(WIN32)
     message(STATUS "Configuring Windows")
+    set(IS_WIN32 "WIN32" CACHE STRING "Is building win32")
     set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} /c/cmake)
 elseif(UNIX AND NOT APPLE)
     message(STATUS "Configuring Linux")
@@ -67,9 +68,7 @@ endif(EMSCRIPTEN)
 # #########################################
 message(STATUS "Initializing the project")
 
-# add_executable(MyApp MACOSX_BUNDLE main.cpp)
-add_executable(${EXECUTABLE_TARGET_NAME} ${IS_BUNDLE}
-    ${GOON_WORLD_FILES} ${ICON_PATH})
+add_executable(${EXECUTABLE_TARGET_NAME} ${IS_BUNDLE} ${IS_WIN32} ${GOON_WORLD_FILES} ${ICON_PATH})
 set_property(TARGET ${EXECUTABLE_TARGET_NAME} PROPERTY CXX_STANDARD 17)
 
 # #########################################
@@ -228,8 +227,8 @@ target_link_directories(${EXECUTABLE_TARGET_NAME}
     PRIVATE
     /usr/local/lib
 )
-# target_link_libraries(${EXECUTABLE_TARGET_NAME} PRIVATE "-framework Foundation")
 
+# target_link_libraries(${EXECUTABLE_TARGET_NAME} PRIVATE "-framework Foundation")
 target_include_directories(${EXECUTABLE_TARGET_NAME}
     PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include/
