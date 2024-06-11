@@ -21,6 +21,7 @@
 
 static geSfx* sfx = nullptr;
 
+const geRectangle interactionRect = {-14, -14, 30, 30};
 const int moveSpeed = 100;
 namespace Bba {
 
@@ -69,6 +70,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	auto& l = go.GetComponent<LocationComponent>();
 	auto& a = go.GetComponent<AnimationComponent>();
 	auto& r = go.GetComponent<RigidBodyComponent>();
+	auto& i = go.GetComponent<InteractorComponent>();
 	auto d = p.Direction;
 	auto tryMoveSpeed = geVec2{0, 0};
 	auto moved = handleMovement(d, tryMoveSpeed);
@@ -117,9 +119,87 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	}
 	a.Playing = moved;
 	if (d != p.Direction) {
+		// Update the Animation for the new direction
 		auto letter = GetLetterForDirection(d);
 		a.Animation->PlayAnimation("walk" + std::string(letter));
 		p.Direction = d;
+		// Update the interaction rect
+		// int iOffsetX = 0, iOffsetY = 0;
+		auto& dd = go.GetComponent<DebugDrawComponent>();
+		switch (d) {
+			case Directions::East:
+				// i.Box.x = interactionRect.x - r.W + interactionRect.w;
+				i.Box.x = r.W;
+				i.Box.y = r.H + interactionRect.y;
+				break;
+			case Directions::West:
+				i.Box.x = -r.W + interactionRect.x;
+				i.Box.y = r.H + interactionRect.y;
+				break;
+			case Directions::North:
+				// i.Box.y = r.H - interactionRect.y;
+				// i.Box.y = interactionRect.y + r.H + r.OffsetY - interactionRect.h;
+				i.Box.y = (interactionRect.y + r.OffsetY - interactionRect.h) + r.H;
+				i.Box.x = r.W + interactionRect.x;
+				break;
+			case Directions::South:
+				i.Box.y = r.H - interactionRect.y;
+				i.Box.x = r.W + interactionRect.x;
+				break;
+				}
+		dd.Box.x = i.Box.x;
+		dd.Box.y = i.Box.y;
+// 		switch (d) {
+//     case Directions::East:
+//         // Set x and y for East direction
+//         i.Box.x = r.W + interactionRect.x;  // Adjust x based on the width of r and starting x of interactionRect
+//         i.Box.y = interactionRect.y;         // Set y starting at the y position of interactionRect
+//         break;
+
+//     case Directions::West:
+//         // Set x and y for West direction
+//         i.Box.x = interactionRect.x - r.W;  // Adjust x by subtracting the width of r from the starting x of interactionRect
+//         i.Box.y = interactionRect.y;        // Set y starting at the y position of interactionRect
+//         break;
+
+//     case Directions::North:
+//         // Set x and y for North direction
+//         i.Box.x = interactionRect.x;                    // Set x starting at the x position of interactionRect
+//         i.Box.y = interactionRect.y + r.H - interactionRect.h;  // Adjust y to account for the height of r and the offset in interactionRect
+//         break;
+
+//     case Directions::South:
+//         // Set x and y for South direction
+//         i.Box.x = interactionRect.x;                    // Set x starting at the x position of interactionRect
+//         i.Box.y = interactionRect.y + r.H;             // Adjust y to be below the starting y of interactionRect by the height of r
+//         break;
+// }
+
+// // Copy the box position to dd.Box
+// dd.Box.x = i.Box.x;
+// dd.Box.y = i.Box.y;
+
+		// switch (d) {
+		// 	case Directions::East:
+		// 		i.Box.x = r.W + interactionRect.x;
+		// 		i.Box.y = interactionRect.y;
+		// 		break;
+		// 	case Directions::West:
+		// 		i.Box.x = interactionRect.x - r.W;
+		// 		i.Box.y = interactionRect.y;
+		// 		break;
+		// 	case Directions::North:
+		// 		i.Box.x = interactionRect.x;
+		// 		i.Box.y = interactionRect.y + r.H - interactionRect.h;
+		// 		break;
+		// 	case Directions::South:
+		// 		i.Box.x = interactionRect.x;
+		// 		i.Box.y = interactionRect.y + r.H;
+		// 		break;
+		// }
+
+		// dd.Box.x = i.Box.x;
+		// dd.Box.y = i.Box.y;
 	}
 	// Check if we overlapped with a exit after moving
 	playerRbRect = r.GetRect();
@@ -149,7 +229,6 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 		}
 
 		// Check to see if we are interacting
-		auto& i = go.GetComponent<InteractorComponent>();
 		GameObject::ForEach<LocationComponent, TextInteractionComponent>([&l, &i](GameObject g, LocationComponent li, TextInteractionComponent ti) {
 			gePoint p = {(int)li.Location.x, (int)li.Location.y};
 			auto ir = geRectangle{(int)l.Location.x + i.Box.x, (int)l.Location.y + i.Box.y, i.Box.w, i.Box.h};
@@ -178,17 +257,14 @@ static void loadPlayerEach(GameObject g, PlayerSpawnComponent& ps) {
 		a.AnimationName = "player";
 		a.Offset = gePoint{0, 0};
 		auto r = RigidBodyComponent();
-		r.OffsetX = 2;
+		r.OffsetX = 8;
 		r.OffsetY = 20;
-		r.W = 16;
+		r.W = 10;
 		r.H = 14;
-		auto dd = DebugDrawComponent();
-		dd.Box.x = 2;
-		dd.Box.y = 20;
-		dd.Box.w = 16;
-		dd.Box.h = 14;
 		auto ic = InteractorComponent();
-		ic.Box = geRectangle{-14, -14, 40, 40};
+		ic.Box = interactionRect;
+		auto dd = DebugDrawComponent();
+		dd.Box = interactionRect;
 		go->AddComponent<RigidBodyComponent>(r);
 		go->AddComponent<LocationComponent>(l);
 		go->AddComponent<PlayerComponent>(p);
