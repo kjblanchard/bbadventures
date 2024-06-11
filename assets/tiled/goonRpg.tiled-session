@@ -39,11 +39,11 @@
                 5,
                 3
             ],
-            "scale": 2,
+            "scale": 4,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 371.5,
-                "y": 140
+                "x": 451.5,
+                "y": 110.25
             }
         },
         "debugTown.tmx": {
