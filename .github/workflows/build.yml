@@ -40,40 +40,15 @@ jobs:
       - name: Configure CMake
         run: make CMAKE_BUILD_TYPE=Release ${{ matrix.make_cmd}}
         # Add macOS-specific steps
-      - name: Decode and import certificate
+      - name: Set up base64 encoded certificate
         if: matrix.os == 'macos'
         env:
-          P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12 }}
-          P12_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          ENCODED_CERTIFICATE: ${{ secrets.MACOS_CERTIFICATE_P12 }}
+          CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
         run: |
-          echo "$P12_BASE64" | base64 --decode > certificate.p12
-          security create-keychain -p "" build.keychain
-          security import certificate.p12 -k build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
-          security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
-          security unlock-keychain -p "" build.keychain
-      - name: Get Signing Identity
-        if: matrix.os == 'macos'
-        id: get_signing_identity
-        run: |
-          IDENTITIES=$(security find-identity -p codesigning)
-          echo "Available identities: $IDENTITIES"
-          SIGNING_IDENTITY=$(echo "$IDENTITIES" | grep "\"Kevin Blanchard Dev\"")
-          echo "Identified Signing Identity: $SIGNING_IDENTITY"
-          echo "::set-output name=signing_identity::$SIGNING_IDENTITY"
-
-      - name: Sign app bundle
-        if: matrix.os == 'macos'
-        run: |
-          SIGNING_IDENTITY="${{ steps.get_signing_identity.outputs.signing_identity }}"
-          codesign --deep --force --verify --verbose --sign "$SIGNING_IDENTITY" build/BbAdventures.app
-
-      - name: Sign app bundle
-        if: matrix.os == 'macos'
-        run: codesign --deep --force --verify --verbose --sign "Kevin Blanchard Dev" build/BbAdventures.app
-
-      - name: Verify code signing
-        if: matrix.os == 'macos'
-        run: codesign --verify --deep --strict --verbose=2 build/BbAdventures.app
+          echo "$ENCODED_CERTIFICATE" | base64 --decode > certificate.p12
+          security import certificate.p12 -P "$CERTIFICATE_PASSWORD"
+          codesign --deep --force --verify --verbose --sign "Kevin Blanchard Dev" build/BbAdventures.app
 
       - name: Save packaged artifacts
         uses: actions/upload-artifact@v4
