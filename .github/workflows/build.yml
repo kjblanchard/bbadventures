@@ -51,6 +51,21 @@ jobs:
           security import certificate.p12 -k build.keychain -P "$P12_PASSWORD" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple: -s -k "" build.keychain
           security unlock-keychain -p "" build.keychain
+      - name: Get Signing Identity
+        if: matrix.os == 'macos'
+        id: get_signing_identity
+        run: |
+          IDENTITIES=$(security find-identity -p codesigning)
+          echo "Available identities: $IDENTITIES"
+          SIGNING_IDENTITY=$(echo "$IDENTITIES" | grep "\"Kevin Blanchard Dev\"")
+          echo "Identified Signing Identity: $SIGNING_IDENTITY"
+          echo "::set-output name=signing_identity::$SIGNING_IDENTITY"
+
+      - name: Sign app bundle
+        if: matrix.os == 'macos'
+        run: |
+          SIGNING_IDENTITY="${{ steps.get_signing_identity.outputs.signing_identity }}"
+          codesign --deep --force --verify --verbose --sign "$SIGNING_IDENTITY" build/BbAdventures.app
 
       - name: Sign app bundle
         if: matrix.os == 'macos'
