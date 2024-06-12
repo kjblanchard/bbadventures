@@ -1,3 +1,4 @@
+#include <SDL2/SDL.h>
 #include <GoonEngine/content/content.h>
 #include <GoonEngine/content/text.h>
 #include <GoonEngine/debug.h>

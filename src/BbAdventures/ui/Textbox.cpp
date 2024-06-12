@@ -9,6 +9,7 @@ static geBgm* _textBgm = nullptr;
 const float timeWait = 0.05;
 
 Textbox::Textbox() {
+	Text = nullptr;
 }
 
 void Textbox::DisplayText(geText* t) {
