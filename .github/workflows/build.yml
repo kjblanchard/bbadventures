@@ -48,7 +48,11 @@ jobs:
         run: |
           echo "$ENCODED_CERTIFICATE" | base64 --decode > certificate.p12
           security import certificate.p12 -P "$CERTIFICATE_PASSWORD"
-          codesign --deep --force --verify --verbose --sign "Kevin Blanchard Dev" build/BbAdventures.app
+          ls
+          ls build
+          ls build/bin
+          ls build/bin/Release
+          codesign --deep --force --verify --verbose --sign "Kevin Blanchard Dev" build/bin/Release/BbAdventures.app
 
       - name: Save packaged artifacts
         uses: actions/upload-artifact@v4
