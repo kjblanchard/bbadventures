@@ -65,7 +65,9 @@ jobs:
           # security find-identity -v macos-build.keychain"
 
           # Force the codesignature
-          codesign --force $OPTIONS -s "Kevin Blanchard Dev" build/bin/Release/BbAdventures.app
+          # codesign --force $OPTIONS -s "Kevin Blanchard Dev" build/bin/Release/BbAdventures.app
+          codesign --deep --force --verify --verbose --sign "Kevin Blanchard Dev" BbAdventures.app
+
 
       - name: Save packaged artifacts
         uses: actions/upload-artifact@v4
