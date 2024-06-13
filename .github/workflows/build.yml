@@ -52,7 +52,9 @@ jobs:
           ls build
           ls build/bin
           ls build/bin/Release
-          codesign --deep --force --verify --verbose --sign "Kevin Blanchard Dev" build/bin/Release/BbAdventures.app
+          security unlock-keychain -p "$CERTIFICATE_PASSWORD" ~/Library/Keychains/login.keychain
+          codesign --deep --force --verify --verbose=4 --sign "Kevin Blanchard Dev" build/bin/Release/BbAdventures.app
+
 
       - name: Save packaged artifacts
         uses: actions/upload-artifact@v4

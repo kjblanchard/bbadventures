@@ -83,7 +83,18 @@ void Level::LoadSolidObjects() {
 		auto go = NewSolidObject(solid);
 		_gameObjects.push_back(go);
 	}
+	const int boxSize = 16;
+	auto size = GetSize();
+	geRectangle top = {0, 0, size.x, boxSize};
+	geRectangle right = {size.x + 1, 0, boxSize, size.y};
+	geRectangle bottom = {0, size.y + 1, size.x, boxSize};
+	geRectangle left = {-boxSize, 0, boxSize, size.y};
+	_gameObjects.push_back(NewSolidObject(top));
+	_gameObjects.push_back(NewSolidObject(right));
+	_gameObjects.push_back(NewSolidObject(bottom));
+	_gameObjects.push_back(NewSolidObject(left));
 }
+
 geImage *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	if (tileset->Type == TilesetType::Image) {
 		for (auto &tile : tileset->Tiles) {
@@ -205,19 +216,26 @@ void Level::Draw() {
 		float offsetX = State::CameraX - camX;
 		float offsetY = State::CameraY - camY;
 		// Source rectangle using integer coordinates
+
+		// If the map is smaller than the screen size, the source size should be the size of it.
+		auto size = GetSize();
 		geRectangle s;
 		s.x = camX;
 		s.y = camY;
-		s.w = 512;
-		s.h = 288;
+		// s.w = 512;
+		s.w = size.x <= SCREEN_WIDTH ? size.x : SCREEN_WIDTH;
+		// s.h = 288;
+		s.h = size.y <= SCREEN_HEIGHT ? size.y : SCREEN_HEIGHT;
 		// Destination rectangle with floating-point offsets
 		geRectangleF d;
 		// d.x = (float)(int)-offsetX;  // Offset by the fractional part
 		// d.y = (float)(int)-offsetY;  // Offset by the fractional part
-		d.x = -offsetX;  // Offset by the fractional part
-		d.y = -offsetY;  // Offset by the fractional part
-		d.w = 512.0f;
-		d.h = 288.0f;
+		d.x = -offsetX;	 // Offset by the fractional part
+		d.y = -offsetY;	 // Offset by the fractional part
+		// d.w = 512.0f;
+		// d.h = 288.0f;
+		d.w = size.x <= SCREEN_WIDTH ? size.x : SCREEN_WIDTH;
+		d.h = size.y <= SCREEN_HEIGHT ? size.y : SCREEN_HEIGHT;
 		geImageDrawF(_background, &s, &d);
 	}
 }

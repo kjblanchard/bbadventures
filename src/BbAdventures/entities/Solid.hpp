@@ -4,4 +4,5 @@
 namespace Bba {
     class GameObject;
     GameObject* NewSolidObject(TiledMap::TiledObject&);
+    GameObject* NewSolidObject(geRectangle& r);
 }

@@ -58,7 +58,7 @@
                  "name":"Tile Layer 2",
                  "opacity":1,
                  "type":"tilelayer",
-                 "visible":true,
+                 "visible":false,
                  "width":38,
                  "x":0,
                  "y":0
@@ -87,7 +87,7 @@
                  "name":"Tile Layer 3",
                  "opacity":1,
                  "type":"tilelayer",
-                 "visible":true,
+                 "visible":false,
                  "width":38,
                  "x":0,
                  "y":0
@@ -257,50 +257,6 @@
                  "width":96,
                  "x":512,
                  "y":0
-                }, 
-                {
-                 "height":288,
-                 "id":39,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":16,
-                 "x":608,
-                 "y":0
-                }, 
-                {
-                 "height":32,
-                 "id":40,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":608,
-                 "x":0,
-                 "y":288
-                }, 
-                {
-                 "height":288,
-                 "id":41,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":-32,
-                 "y":0
-                }, 
-                {
-                 "height":32,
-                 "id":42,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":624,
-                 "x":0,
-                 "y":-32
                 }, 
                 {
                  "height":16,
