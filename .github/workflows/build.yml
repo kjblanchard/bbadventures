@@ -47,12 +47,31 @@ jobs:
           CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
         run: |
           echo "$ENCODED_CERTIFICATE" | base64 --decode > certificate.p12
-          security create-keychain -p $CERTIFICATE_PASSWORD build.keychain
-          security unlock-keychain -u -p $CERTIFICATE_PASSWORD build.keychain
-          list-keychains -d user -s build.keychain login.keychain
-          security import certificate.p12 -k build.keychain -P $CERTIFICATE_PASSWORD
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $CERTIFICATE_PASSWORD build.keychain
-          codesign --deep --force --verify --verbose=4 --sign "Kevin Blanchard Dev" build/bin/Release/BbAdventures.app
+           # Create keychain
+          security create-keychain -p actions macos-build.keychain
+          security default-keychain -s macos-build.keychain
+          security unlock-keychain -p actions macos-build.keychain
+          security set-keychain-settings -t 3600 -u macos-build.keychain
+
+          # Import certs to keychain
+          security import certificate.p12 -k ~/Library/Keychains/macos-build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign -T /usr/bin/productsign
+
+          # Key signing
+          security set-key-partition-list -S apple-tool:,apple: -s -k actions macos-build.keychain
+
+          # Verify keychain things
+          # security find-identity -v macos-build.keychain | grep "Developer ID Application"
+          # security find-identity -v macos-build.keychain | grep "Developer ID Installer"
+          # security find-identity -v macos-build.keychain"
+
+          # Force the codesignature
+          codesign --force $OPTIONS -s "Kevin Blanchard Dev" build/bin/Release/BbAdventures.app
+          # security create-keychain -p $CERTIFICATE_PASSWORD build.keychain
+          # security unlock-keychain -u -p $CERTIFICATE_PASSWORD build.keychain
+          # list-keychains -d user -s build.keychain login.keychain
+          # security import certificate.p12 -k build.keychain -P $CERTIFICATE_PASSWORD
+          # security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $CERTIFICATE_PASSWORD build.keychain
+          # codesign --deep --force --verify --verbose=4 --sign "Kevin Blanchard Dev" build/bin/Release/BbAdventures.app
 
 
       - name: Save packaged artifacts
