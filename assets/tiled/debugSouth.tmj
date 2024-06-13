@@ -157,17 +157,6 @@
                  "y":16
                 }, 
                 {
-                 "height":16,
-                 "id":12,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":48,
-                 "x":64,
-                 "y":320
-                }, 
-                {
                  "height":64,
                  "id":14,
                  "name":"",

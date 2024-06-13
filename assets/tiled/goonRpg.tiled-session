@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "debugTownHome.tmj",
+    "activeFile": "debugSouth.tmj",
     "expandedProjectPaths": [
         "."
     ],
@@ -19,8 +19,8 @@
             "scale": 2.185565476190476,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 239.75488527269016,
-                "y": 159.6840743514673
+                "x": 164.48832300674067,
+                "y": 231.5190304350787
             }
         },
         "debugSouth.tmx": {
@@ -62,11 +62,11 @@
                 6,
                 5
             ],
-            "scale": 5.5,
+            "scale": 3.9731,
             "selectedLayer": 4,
             "viewCenter": {
-                "x": 126.63636363636365,
-                "y": 100.36363636363637
+                "x": 164.73282827011653,
+                "y": 121.06415645214064
             }
         },
         "house..tsj": {
@@ -120,9 +120,9 @@
     "property.type": "string",
     "recentFiles": [
         "debugTown.tmj",
+        "debugTownHome.tmj",
         "inside.tsj",
         "debugSouth.tmj",
-        "debugTownHome.tmj",
         "terrain.tsx",
         "outside.tsx",
         "house.tsx",
