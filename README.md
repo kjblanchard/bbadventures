@@ -4,6 +4,7 @@
 - BGMs created in Garageband
 - Play the game here, or likely watch its "progress" [Play!](https://rpg.supergoon.com)
 - Project board [Board](https://github.com/users/kjblanchard/projects/11/views/1)
+- Note - MacOS bundle is not signed currently and will not open.. have to run the executable inside of it for it to work, and is a universal build.
 - ![Build All Platforms]( https://github.com/kjblanchard/bbadventures/actions/workflows/build.yml/badge.svg)
 - ![Status Picture](https://github.com/kjblanchard/bbadventures/blob/master/img/debug.gif?raw=true)
 
