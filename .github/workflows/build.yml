@@ -47,12 +47,11 @@ jobs:
           CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
         run: |
           echo "$ENCODED_CERTIFICATE" | base64 --decode > certificate.p12
-          security import certificate.p12 -P "$CERTIFICATE_PASSWORD"
-          ls
-          ls build
-          ls build/bin
-          ls build/bin/Release
-          security unlock-keychain -p "$CERTIFICATE_PASSWORD" ~/Library/Keychains/login.keychain
+          security create-keychain -p $CERTIFICATE_PASSWORD build.keychain
+          security unlock-keychain -u -p $CERTIFICATE_PASSWORD build.keychain
+          list-keychains -d user -s build.keychain login.keychain
+          security import certificate.p12 -k build.keychain -P $CERTIFICATE_PASSWORD
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $CERTIFICATE_PASSWORD build.keychain
           codesign --deep --force --verify --verbose=4 --sign "Kevin Blanchard Dev" build/bin/Release/BbAdventures.app
 
 
