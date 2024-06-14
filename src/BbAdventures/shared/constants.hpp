@@ -24,5 +24,6 @@ inline const char* GetLetterForDirection(Directions d) {
 		case Directions::West:
 			return "L";
 	}
+	return "";
 }
 }  // namespace Bba
