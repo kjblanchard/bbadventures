@@ -1,5 +1,6 @@
 
 #include <GoonEngine/content/bgm.h>
+#include <GoonEngine/content/image.h>
 
 #include <BbAdventures/shared/state.hpp>
 #include <BbAdventures/ui/Textbox.hpp>
@@ -10,6 +11,8 @@ const float timeWait = 0.05;
 
 Textbox::Textbox() {
 	Text = nullptr;
+	geColor c = {0,0,100,200};
+	_backgroundTexture = geImageNewRenderTarget("textboxBackground", 300, 75, &c );
 }
 
 void Textbox::DisplayText(geText* t) {

@@ -1,5 +1,6 @@
 #pragma once
 #include <GoonEngine/content/text.h>
+typedef struct geImage geImage;
 
 namespace Bba {
 class Textbox {
@@ -11,11 +12,14 @@ class Textbox {
 	void Draw();
 	inline bool Complete() { return _isComplete; }
 	geText* Text;
+	// TODO this should be private?
+	geImage* _backgroundTexture;
 
    private:
 	float _currentTime = 0;
 	int _revealedLetters = 0;
 	bool _isComplete = false;
+
 };
 
 }  // namespace Bba

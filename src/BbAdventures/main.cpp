@@ -48,10 +48,10 @@ int main(int argc, char *argv[]) {
 	geLoadAllContent();
 	panel = new Bba::Panel();
 	textbox = new Bba::Textbox;
+	Bba::State::TextDisplay = textbox;
 	Bba::State::NextMapName = defaultLevel;
 	Bba::Level::LoadNewLevel();
 	Bba::State::FadePanel = panel;
-	Bba::State::TextDisplay = textbox;
 	gePlayLoop();
 	geUnloadAllContent();
 	return 0;
