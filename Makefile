@@ -56,8 +56,9 @@ erebuild: BUILD_COMMAND := sudo $(BUILD_COMMAND)
 erebuild: BUILD_SYSTEM = $(BACKUP_BUILD_SYSTEM)
 erebuild: CONFIGURE_FLAGS = $(EMSCRIPTEN_CONFIGURE_FLAGS)
 erebuild: clean configure build
+
 run:
-	@cd ./$(BUILD_FOLDER)/$(BINARY_FOLDER) && ./$(BINARY_NAME)
+	@cd ./$(BUILD_FOLDER)/$(BINARY_FOLDER)/BbAdventures.app/Contents/MacOs && ./$(BINARY_NAME)
 erun:
 	@emrun ./$(BUILD_FOLDER)/$(BINARY_FOLDER)/$(BINARY_NAME).html
 init:
@@ -69,3 +70,9 @@ zlib:
 	@cd external/sg_engine/external/zlib && cmake . -B build && cmake --build build --config Release && sudo cmake --install build
 wzlib:
 	@cd external/sg_engine/external/zlib && cmake . -B build && cmake --build build --config Release && cmake --install build
+
+sign:
+	@cd ./$(BUILD_FOLDER)/$(BINARY_FOLDER) && codesign --deep --force --verify --verbose --sign "Kevin Blanchard Dev" BbAdventures.app
+
+validate:
+	@cd ./$(BUILD_FOLDER)/$(BINARY_FOLDER) && codesign --verify --deep --strict --verbose=2 ./BbAdventures.app

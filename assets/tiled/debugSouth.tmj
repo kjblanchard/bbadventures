@@ -157,17 +157,6 @@
                  "y":16
                 }, 
                 {
-                 "height":16,
-                 "id":12,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":48,
-                 "x":64,
-                 "y":320
-                }, 
-                {
                  "height":64,
                  "id":14,
                  "name":"",
@@ -206,6 +195,12 @@
                  "name":"Start1",
                  "properties":[
                         {
+                         "name":"direction",
+                         "propertytype":"Direction",
+                         "type":"int",
+                         "value":2
+                        }, 
+                        {
                          "name":"loadLocation",
                          "type":"int",
                          "value":1
@@ -214,8 +209,8 @@
                  "type":"Start",
                  "visible":true,
                  "width":16,
-                 "x":82.2877374548921,
-                 "y":23.7358207938994
+                 "x":80,
+                 "y":16
                 }, 
                 {
                  "height":16,
@@ -252,7 +247,7 @@
         {
          "name":"bgm",
          "type":"string",
-         "value":"debug"
+         "value":"forest1"
         }],
  "renderorder":"right-down",
  "tiledversion":"1.8.6",

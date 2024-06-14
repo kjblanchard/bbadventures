@@ -4,6 +4,20 @@
 #include <BbAdventures/components/LocationComponent.hpp>
 #include <BbAdventures/entities/Solid.hpp>
 namespace Bba {
+    GameObject* NewSolidObject(geRectangle& r) {
+	auto go = new GameObject();
+	auto s = SolidObjectComponent();
+    s.BoxCollider.x = r.x;
+    s.BoxCollider.y = r.y;
+    s.BoxCollider.w = r.w;
+    s.BoxCollider.h = r.h;
+    auto l = LocationComponent();
+    l.Location.x = s.BoxCollider.x;
+    l.Location.y = s.BoxCollider.y;
+	go->AddComponent<SolidObjectComponent>(s);
+	go->AddComponent<LocationComponent>(l);
+	return go;
+    }
 
 GameObject* NewSolidObject(TiledMap::TiledObject& t) {
 	auto go = new GameObject();

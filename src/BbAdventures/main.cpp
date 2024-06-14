@@ -1,4 +1,4 @@
-#include <GoonEngine/content/bgm.h>
+#include <SDL2/SDL.h>
 #include <GoonEngine/content/content.h>
 #include <GoonEngine/content/text.h>
 #include <GoonEngine/debug.h>
@@ -14,7 +14,6 @@
 #include <BbAdventures/ui/Panel.hpp>
 #include <BbAdventures/ui/Textbox.hpp>
 
-static geBgm *bgm = nullptr;
 static Bba::Panel *panel;
 static Bba::Textbox *textbox;
 std::string defaultLevel = "debugTown";
@@ -26,6 +25,7 @@ void Update(double deltatime) {
 	if (!Bba::State::IsLoadingMap) {
 		Bba::UpdatePlayers();
 		Bba::UpdateAnimationComponents();
+		Bba::UpdateCamera();
 	}
 	textbox->Update();
 	panel->Update();
@@ -41,19 +41,11 @@ void Draw() {
 	textbox->Draw();
 }
 
-void initBgm() {
-	bgm = geBgmNew("town2");
-}
-
-int main() {
+int main(int argc, char *argv[]) {
 	geInitializeEngine();
 	geGameSetUpdateFunc(Update);
 	geGameSetDrawFunc(Draw);
-	initBgm();
 	geLoadAllContent();
-	if (bgm) {
-		geBgmPlay(bgm, 1.0, -1);
-	}
 	panel = new Bba::Panel();
 	textbox = new Bba::Textbox;
 	Bba::State::NextMapName = defaultLevel;

@@ -6,8 +6,7 @@
     "folders": [
         "."
     ],
-    "properties": [
-    ],
+    "objectTypesFile": "",
     "propertyTypes": [
         {
             "id": 3,
@@ -23,8 +22,6 @@
             "valuesAsFlags": false
         },
         {
-            "color": "#ff04b348",
-            "drawFill": true,
             "id": 2,
             "members": [
                 {
@@ -39,59 +36,17 @@
                 }
             ],
             "name": "Exit",
-            "type": "class",
-            "useAs": [
-                "property",
-                "map",
-                "layer",
-                "object",
-                "tile",
-                "tileset",
-                "wangcolor",
-                "wangset",
-                "project"
-            ]
+            "type": "class"
         },
         {
-            "color": "#ffa0a0a4",
-            "drawFill": true,
-            "id": 4,
-            "members": [
-                {
-                    "name": "bgm",
-                    "type": "string",
-                    "value": ""
-                },
-                {
-                    "name": "loopEnd",
-                    "type": "float",
-                    "value": 0
-                },
-                {
-                    "name": "loopStart",
-                    "type": "float",
-                    "value": 0
-                }
-            ],
-            "name": "RpgMap",
-            "type": "class",
-            "useAs": [
-                "property",
-                "map",
-                "layer",
-                "object",
-                "tile",
-                "tileset",
-                "wangcolor",
-                "wangset",
-                "project"
-            ]
-        },
-        {
-            "color": "#ff07b300",
-            "drawFill": true,
             "id": 1,
             "members": [
+                {
+                    "name": "direction",
+                    "propertyType": "Direction",
+                    "type": "int",
+                    "value": 0
+                },
                 {
                     "name": "loadLocation",
                     "type": "int",
@@ -99,18 +54,7 @@
                 }
             ],
             "name": "Start",
-            "type": "class",
-            "useAs": [
-                "property",
-                "map",
-                "layer",
-                "object",
-                "tile",
-                "tileset",
-                "wangcolor",
-                "wangset",
-                "project"
-            ]
+            "type": "class"
         }
     ]
 }

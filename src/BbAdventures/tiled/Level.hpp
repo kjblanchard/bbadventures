@@ -6,6 +6,7 @@
 #include <BbAdventures/tiled/TiledMap.hpp>
 #include <memory>
 #include <tuple>
+typedef struct geBgm geBgm;
 namespace Bba {
 class Panel;
 /**
@@ -50,11 +51,13 @@ class Level {
 	 * @return struct SDL_Surface* The loaded surface
 	 */
 	geImage *GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset);
+	void StartBgm();
 
    private:
 	std::string _name;
 	geImage *_background;
 	std::vector<GameObject *> _gameObjects;
 	std::unique_ptr<TiledMap> _mapData;
+	geBgm *_bgm;
 };
 }  // namespace Bba

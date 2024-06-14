@@ -1,5 +1,9 @@
+#include <GoonEngine/content/bgm.h>
 #include <GoonEngine/debug.h>
+#include <GoonEngine/utils.h>
 
+#include <BbAdventures/components/CameraComponent.hpp>
+#include <BbAdventures/entities/Camera.hpp>
 #include <BbAdventures/entities/Solid.hpp>
 #include <BbAdventures/gnpch.hpp>
 #include <BbAdventures/shared/constants.hpp>
@@ -34,6 +38,8 @@ Level::~Level() {
 	}
 
 	_gameObjects.clear();
+	// TODO should we actually clear this?  Save for manual cleanup.
+	// geBgmDelete(_bgm);
 }
 std::vector<TiledMap::TiledObject> Level::GetAllObjects() {
 	return _mapData->Objects;
@@ -58,12 +64,16 @@ void Level::LoadSurfaces() {
 		if (tileset.Type == TilesetType::Image) {
 			for (auto &tile : tileset.Tiles) {
 				auto surfacePath = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + tile.Image;
-				auto i = geImageNewFromFile(surfacePath.c_str());
+				char buf[1000];
+				GetLoadFilename(buf, sizeof(buf), surfacePath.c_str());
+				auto i = geImageNewFromFile(buf);
 				_imagesCache.push_back({tile.Image, i});
 			}
 		} else {
 			auto surfacePath = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + tileset.Image;
-			auto i = geImageNewFromFile(surfacePath.c_str());
+			char buf[1000];
+			GetLoadFilename(buf, sizeof(buf), surfacePath.c_str());
+			auto i = geImageNewFromFile(buf);
 			_imagesCache.push_back({tileset.Image, i});
 		}
 	}
@@ -73,7 +83,18 @@ void Level::LoadSolidObjects() {
 		auto go = NewSolidObject(solid);
 		_gameObjects.push_back(go);
 	}
+	const int boxSize = 16;
+	auto size = GetSize();
+	geRectangle top = {0, 0, size.x, boxSize};
+	geRectangle right = {size.x + 1, 0, boxSize, size.y};
+	geRectangle bottom = {0, size.y + 1, size.x, boxSize};
+	geRectangle left = {-boxSize, 0, boxSize, size.y};
+	_gameObjects.push_back(NewSolidObject(top));
+	_gameObjects.push_back(NewSolidObject(right));
+	_gameObjects.push_back(NewSolidObject(bottom));
+	_gameObjects.push_back(NewSolidObject(left));
 }
+
 geImage *Level::GetSurfaceForGid(int gid, const TiledMap::Tileset *tileset) {
 	if (tileset->Type == TilesetType::Image) {
 		for (auto &tile : tileset->Tiles) {
@@ -117,6 +138,10 @@ void Level::CreateBackgroundImage() {
 							dstY -= (sourceRect.h - _mapData->TileHeight);
 						}
 						auto dstRect = geRectangle{dstX, dstY, sourceRect.w, sourceRect.h};
+						if (!tileSurface || !_background) {
+							continue;
+						}
+
 						geImageDrawImageToImage(tileSurface, _background, &sourceRect, &dstRect);
 					}
 				}
@@ -128,6 +153,7 @@ void Level::CreateBackgroundImage() {
 void Level::RestartLevel() {
 	CreateBackgroundImage();
 	LoadSolidObjects();
+	Bba::StartPlayers();
 }
 void Level::UnloadLevel() {
 	Bba::FreeAnimationComponents();
@@ -142,6 +168,12 @@ void Level::LoadNewLevel() {
 	lastLevel = Bba::State::CurrentLevel;
 	Bba::State::CurrentLevel = l;
 	l->LoadAllGameObjects();
+	auto c = NewCamera();
+	auto &cc = c->GetComponent<CameraComponent>();
+	auto worldSize = l->GetSize();
+	cc.Bounds.x = worldSize.x;
+	cc.Bounds.y = worldSize.y;
+	l->AddGameObjectToLevel(c);
 	l->RestartLevel();
 	if (lastLevel) {
 		lastLevel->UnloadLevel();
@@ -150,16 +182,60 @@ void Level::LoadNewLevel() {
 	Bba::LoadPlayers();
 	Bba::LoadAnimationComponents();
 	Bba::LoadTextInteractions();
+	l->StartBgm();
+	Bba::StartPlayers();
+	Bba::UpdateCamera();
 	State::FadePanel->FadeIn(LevelLoaded);
+}
+
+void Level::StartBgm() {
+	for (auto &&prop : _mapData->Properties) {
+		if (prop.Name == "bgm") {
+			auto bgmName = std::get<std::string>(prop.Value);
+			_bgm = geBgmNew(bgmName.c_str());
+			if (bgmName != State::PlayingMusic) {
+				State::PlayingMusic = bgmName;
+				geBgmLoad(_bgm);
+				geBgmPlay(_bgm, 1.0, -1);
+			}
+			break;
+		}
+	}
 }
 
 void Level::Draw() {
 	if (_background) {
-		geRectangle r;
-		r.x = 0;
-		r.y = 0;
-		r.w = 512;
-		r.h = 288;
-		geImageDraw(_background, NULL, &r);
+		// Try to reduce jitter / blurryness from the camera offset on the background due to float/int
+		// Other options
+		// SDL_RenderSetViewport, rendering full src and offset dst, something else?
+		int camX = static_cast<int>(State::CameraX);
+		int camY = static_cast<int>(State::CameraY);
+		// Calculate the fractional part of the camera coordinates
+		// float offsetX = (int)State::CameraX - camX;
+		// float offsetY = (int)State::CameraY - camY;
+		float offsetX = State::CameraX - camX;
+		float offsetY = State::CameraY - camY;
+		// Source rectangle using integer coordinates
+
+		// If the map is smaller than the screen size, the source size should be the size of it.
+		auto size = GetSize();
+		geRectangle s;
+		s.x = camX;
+		s.y = camY;
+		// s.w = 512;
+		s.w = size.x <= SCREEN_WIDTH ? size.x : SCREEN_WIDTH;
+		// s.h = 288;
+		s.h = size.y <= SCREEN_HEIGHT ? size.y : SCREEN_HEIGHT;
+		// Destination rectangle with floating-point offsets
+		geRectangleF d;
+		// d.x = (float)(int)-offsetX;  // Offset by the fractional part
+		// d.y = (float)(int)-offsetY;  // Offset by the fractional part
+		d.x = -offsetX;	 // Offset by the fractional part
+		d.y = -offsetY;	 // Offset by the fractional part
+		// d.w = 512.0f;
+		// d.h = 288.0f;
+		d.w = size.x <= SCREEN_WIDTH ? size.x : SCREEN_WIDTH;
+		d.h = size.y <= SCREEN_HEIGHT ? size.y : SCREEN_HEIGHT;
+		geImageDrawF(_background, &s, &d);
 	}
 }

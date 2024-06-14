@@ -6,14 +6,16 @@
 #include <BbAdventures/base/GameObject.hpp>
 #include <BbAdventures/components/DebugDrawComponent.hpp>
 #include <BbAdventures/components/LocationComponent.hpp>
+#include <BbAdventures/shared/state.hpp>
 namespace Bba {
+
 void DrawDebugDrawComponents() {
-	auto view = GameObject::_registry.view<const LocationComponent, DebugDrawComponent>();
-	for (auto&& [_, l, d] : view.each()) {
-		auto r = geRectangle{(int)l.Location.x + d.Box.x, (int)l.Location.y + d.Box.y, d.Box.w, d.Box.h};
-		auto c = geColor{255, 255, 255, 255};
-		geUtilsDrawRect(&r, &c);
-	}
+	Bba::GameObject::ForEach<LocationComponent, DebugDrawComponent>(
+		[](Bba::GameObject gameObject, const LocationComponent& location, const DebugDrawComponent& debugDraw) {
+			auto r = geRectangleF{(location.Location.x + debugDraw.Box.x) - State::CameraX,(location.Location.y + debugDraw.Box.y) - State::CameraY, (float)debugDraw.Box.w, (float)debugDraw.Box.h};
+			auto c = geColor{255, 255, 255, 255};
+			geUtilsDrawRectF(&r, &c);
+		});
 }
 
 }  // namespace Bba

@@ -1,4 +1,3 @@
-#pragma once
 #include <BbAdventures/base/GameObject.hpp>
 #include <BbAdventures/entities/PlayerStart.hpp>
 #include <BbAdventures/entities/PlayerExit.hpp>

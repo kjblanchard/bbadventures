@@ -6,38 +6,35 @@
 #include <memory>
 namespace Bba {
 void LoadAnimationComponents() {
-	auto view = GameObject::_registry.view<AnimationComponent>();
-	for (auto&& [_, a] : view.each()) {
+	GameObject::ForEach<AnimationComponent>([](GameObject g, AnimationComponent& a) {
 		a.Animation = new AsepriteAnimation(a.AnimationName);
 		a.AnimationImage = geImageNewFromFile(a.Animation->Filename().c_str());
-	}
+	});
 }
+
 void UpdateAnimationComponents() {
 	auto msTime = State::DeltaTime * 1000;
-	auto view = GameObject::_registry.view<AnimationComponent>();
-	for (auto&& [_, a] : view.each()) {
+	GameObject::ForEach<AnimationComponent>([&msTime](GameObject g, AnimationComponent& a) {
 		if (!a.Playing) {
-			continue;
+			return;
 		}
 		a.Animation->UpdateAnimation(msTime);
-	}
+	});
 }
 
 void DrawAnimationComponents() {
-	auto view = GameObject::_registry.view<AnimationComponent, LocationComponent>();
-	for (auto&& [_, a, l] : view.each()) {
+	GameObject::ForEach<AnimationComponent, LocationComponent>([](GameObject g, AnimationComponent& a, LocationComponent& l) {
 		auto s = a.Animation->FrameCoords();
-		auto d = geRectangle{(int)l.Location.x + a.Offset.x, (int)l.Location.y + a.Offset.y, s.w, s.h};
-		geImageDraw(a.AnimationImage, &s, &d);
-	}
+		auto d = geRectangleF{(l.Location.x + a.Offset.x) - State::CameraX, (l.Location.y + a.Offset.y) - State::CameraY, (float)s.w, (float)s.h};
+		// geImageDraw(a.AnimationImage, &s, &d);
+		geImageDrawF(a.AnimationImage, &s, &d);
+	});
 }
 
 void FreeAnimationComponents() {
-	auto view = GameObject::_registry.view<AnimationComponent>();
-	for (auto&& [_, a] : view.each()) {
+	// auto view = GameObject::_registry.view<AnimationComponent>();
+	GameObject::ForEach<AnimationComponent>([](GameObject g, AnimationComponent& a) {
 		delete (a.Animation);
-		// TODO should we actually unload this?  Currently just let it stay, the images in the animation component will still be there
-		// geImageFree(a.AnimationImage);
-	}
+	});
 }
 }  // namespace Bba
