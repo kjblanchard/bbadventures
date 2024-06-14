@@ -25,18 +25,18 @@ const geRectangle interactionRect = {-14, -14, 20, 20};
 const int moveSpeed = 100;
 namespace Bba {
 
-static Directions getOverlapDirection(geRectangle* obj, geRectangle* overlapBox) {
-	if (overlapBox->w < overlapBox->h) {
-		if (overlapBox->x > obj->x) {
-			return Directions::East;
-		}
-		return Directions::West;
-	}
-	if (overlapBox->y > obj->y) {
-		return Directions::South;
-	}
-	return Directions::North;
-}
+// static Directions getOverlapDirection(geRectangle* obj, geRectangle* overlapBox) {
+// 	if (overlapBox->w < overlapBox->h) {
+// 		if (overlapBox->x > obj->x) {
+// 			return Directions::East;
+// 		}
+// 		return Directions::West;
+// 	}
+// 	if (overlapBox->y > obj->y) {
+// 		return Directions::South;
+// 	}
+// 	return Directions::North;
+// }
 
 static Directions getOverlapDirectionF(geRectangleF* obj, geRectangleF* overlapBox) {
 	if (overlapBox->w < overlapBox->h) {
@@ -93,7 +93,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	playerRbRect.y += l.Location.y + tryMoveSpeed.y;
 	geVec2 desiredPosition = {l.Location.x + tryMoveSpeed.x, l.Location.y + tryMoveSpeed.y};
 	bool collision = false;
-	GameObject::ForEach<SolidObjectComponent>([&l, &tryMoveSpeed, &collision, &playerRbRect, &desiredPosition](GameObject g, SolidObjectComponent s) {
+	GameObject::ForEach<SolidObjectComponent>([&collision, &playerRbRect, &desiredPosition](GameObject g, SolidObjectComponent s) {
 		auto bcf = s.BoxColliderF();
 		if (geRectangleFIsOverlap(&playerRbRect, &bcf)) {
 			auto r = geRectangleFGetOverlapRect(&playerRbRect, &bcf);
@@ -161,13 +161,13 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	playerRbRect.x += l.Location.x + tryMoveSpeed.x;
 	playerRbRect.y += l.Location.y + tryMoveSpeed.y;
 	GameObject::ForEach<PlayerExitComponent>([&playerRbRect](GameObject g, PlayerExitComponent pe) {
-		auto pebf = geRectangleF { (float)pe.BoundingBox.x, (float)pe.BoundingBox.y, (float)pe.BoundingBox.w, (float)pe.BoundingBox.h };
+		auto pebf = geRectangleF{(float)pe.BoundingBox.x, (float)pe.BoundingBox.y, (float)pe.BoundingBox.w, (float)pe.BoundingBox.h};
 		if (geRectangleFIsOverlap(&playerRbRect, &pebf)) {
 			if (!sfx) {
 				sfx = geSfxNew("transition");
 				geSfxLoad(sfx);
 			}
-			geSfxPlay(sfx, 1.0, 1);
+			geSfxPlay(sfx, 1.0);
 			State::IsLoadingMap = true;
 			State::NextMapName = pe.NextMap;
 			State::SpawnLocation = pe.SpawnLocationId;
@@ -179,8 +179,8 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	if (geKeyJustPressed(geKey_SPACE) && go.HasComponent<InteractorComponent>()) {
 		// If we are displaying text, close it.
 		if (State::TextDisplay->Text) {
-			State::TextDisplay->UnDisplayText();
-			State::IsDisplayingText = false;
+			State::TextDisplay->Interact(State::TextDisplay->Text);
+			// State::TextDisplay->UnDisplayText();
 			return;
 		}
 
@@ -190,9 +190,8 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 			auto ir = geRectangle{(int)l.Location.x + i.Box.x, (int)l.Location.y + i.Box.y, i.Box.w, i.Box.h};
 
 			if (geUtilsIsPointInRect(&ir, &p)) {
-				// Start the sound
-				State::IsDisplayingText = true;
-				State::TextDisplay->DisplayText(ti.TextImage);
+				State::TextDisplay->Interact(ti.TextImage);
+				// State::TextDisplay->DisplayText(ti.TextImage);
 			}
 		});
 	}

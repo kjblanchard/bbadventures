@@ -6,6 +6,7 @@ namespace Bba {
 class Textbox {
    public:
 	Textbox();
+	void Interact(geText* t);
 	void DisplayText(geText* t);
 	void UnDisplayText();
 	void Update();

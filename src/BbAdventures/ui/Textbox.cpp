@@ -11,8 +11,8 @@ const float timeWait = 0.05;
 
 Textbox::Textbox() {
 	Text = nullptr;
-	geColor c = {0,0,100,200};
-	_backgroundTexture = geImageNewRenderTarget("textboxBackground", 300, 75, &c );
+	geColor c = {0, 0, 100, 200};
+	_backgroundTexture = geImageNewRenderTarget("textboxBackground", 300, 75, &c);
 }
 
 void Textbox::DisplayText(geText* t) {
@@ -25,13 +25,30 @@ void Textbox::DisplayText(geText* t) {
 		geBgmSetBackground(_textBgm, true);
 		geBgmLoad(_textBgm);
 	}
+	State::IsDisplayingText = true;
 	geBgmPlay(_textBgm, 1.0, -1);
+}
+
+void Textbox::Interact(geText* t) {
+	if (State::IsDisplayingText) {
+		if (!_isComplete) {
+			geTextSetNumDrawCharacters(Text, geTextLength(Text));
+			geBgmStop(_textBgm);
+			_isComplete = true;
+			return;
+		} else {
+			UnDisplayText();
+		}
+	} else {
+		DisplayText(t);
+	}
 }
 void Textbox::UnDisplayText() {
 	geTextSetNumDrawCharacters(Text, 0);
 	Text = nullptr;
 	_isComplete = false;
 	geBgmStop(_textBgm);
+	State::IsDisplayingText = false;
 }
 void Textbox::Update() {
 	if (!Text || _isComplete) {
