@@ -17,6 +17,9 @@ GameObject* NewTextInteraction(TiledMap::TiledObject& t) {
 			break;
 		}
 	}
+	ti.Size.x = t.Width;
+	ti.Size.y = t.Height;
+
 	go->AddComponent<LocationComponent>(l);
 	go->AddComponent<TextInteractionComponent>(ti);
 	return go;

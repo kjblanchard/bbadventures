@@ -186,12 +186,11 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 
 		// Check to see if we are interacting
 		GameObject::ForEach<LocationComponent, TextInteractionComponent>([&l, &i](GameObject g, LocationComponent li, TextInteractionComponent ti) {
-			gePoint p = {(int)li.Location.x, (int)li.Location.y};
+			auto interactionRect  = geRectangle{(int)li.Location.x, (int)li.Location.y, ti.Size.x, ti.Size.y};
 			auto ir = geRectangle{(int)l.Location.x + i.Box.x, (int)l.Location.y + i.Box.y, i.Box.w, i.Box.h};
 
-			if (geUtilsIsPointInRect(&ir, &p)) {
+			if (geRectangleIsOverlap(&ir, &interactionRect)) {
 				State::TextDisplay->Interact(ti.TextImage);
-				// State::TextDisplay->DisplayText(ti.TextImage);
 			}
 		});
 	}

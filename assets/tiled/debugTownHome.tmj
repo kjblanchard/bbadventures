@@ -264,63 +264,12 @@
                  "rotation":0,
                  "type":"TextInteract",
                  "visible":true,
-                 "width":16,
+                 "width":64,
                  "x":0,
                  "y":96
                 }, 
                 {
-                 "height":16,
-                 "id":26,
-                 "name":"Sign",
-                 "properties":[
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"Pots and pans"
-                        }],
-                 "rotation":0,
-                 "type":"TextInteract",
-                 "visible":true,
-                 "width":16,
-                 "x":16,
-                 "y":96
-                }, 
-                {
-                 "height":16,
-                 "id":27,
-                 "name":"Sign",
-                 "properties":[
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"Pots and pans"
-                        }],
-                 "rotation":0,
-                 "type":"TextInteract",
-                 "visible":true,
-                 "width":16,
-                 "x":48,
-                 "y":96
-                }, 
-                {
-                 "height":16,
-                 "id":28,
-                 "name":"Sign",
-                 "properties":[
-                        {
-                         "name":"text",
-                         "type":"string",
-                         "value":"Pots and pans"
-                        }],
-                 "rotation":0,
-                 "type":"TextInteract",
-                 "visible":true,
-                 "width":16,
-                 "x":32,
-                 "y":96
-                }, 
-                {
-                 "height":16,
+                 "height":40.8092421534822,
                  "id":29,
                  "name":"Sign",
                  "properties":[
@@ -332,9 +281,9 @@
                  "rotation":0,
                  "type":"TextInteract",
                  "visible":true,
-                 "width":16,
+                 "width":32,
                  "x":224,
-                 "y":128
+                 "y":112
                 }],
          "opacity":1,
          "type":"objectgroup",
