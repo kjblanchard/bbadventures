@@ -132,27 +132,24 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 		a.Animation->PlayAnimation("walk" + std::string(letter));
 		p.Direction = d;
 		// Update the interaction rect
-		// int iOffsetX = 0, iOffsetY = 0;
 		// auto& dd = go.GetComponent<DebugDrawComponent>();
 		switch (d) {
 			case Directions::East:
-				// i.Box.x = interactionRect.x - r.W + interactionRect.w;
 				i.Box.x = r.W;
-				i.Box.y = r.H + interactionRect.y;
+				i.Box.y = r.H / 2;
 				break;
 			case Directions::West:
-				i.Box.x = -r.W + interactionRect.x;
-				i.Box.y = r.H + interactionRect.y;
+				i.Box.x = r.W - interactionRect.w;
+				i.Box.y = r.H / 2;
 				break;
 			case Directions::North:
-				// i.Box.y = r.H - interactionRect.y;
-				// i.Box.y = interactionRect.y + r.H + r.OffsetY - interactionRect.h;
 				i.Box.y = (interactionRect.y + r.OffsetY - interactionRect.h) + r.H;
-				i.Box.x = r.W + interactionRect.x;
+				i.Box.x = r.W + (interactionRect.x / 2);
 				break;
 			case Directions::South:
 				i.Box.y = r.H - interactionRect.y;
-				i.Box.x = r.W + interactionRect.x;
+				// i.Box.x = r.W + interactionRect.x;
+				i.Box.x = r.W + (interactionRect.x / 2);
 				break;
 		}
 	}
