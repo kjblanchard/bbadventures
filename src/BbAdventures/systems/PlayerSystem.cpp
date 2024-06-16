@@ -93,7 +93,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	playerRbRect.y += l.Location.y + tryMoveSpeed.y;
 	geVec2 desiredPosition = {l.Location.x + tryMoveSpeed.x, l.Location.y + tryMoveSpeed.y};
 	bool collision = false;
-	GameObject::ForEach<SolidObjectComponent>([&collision, &playerRbRect, &desiredPosition](GameObject g, SolidObjectComponent s) {
+	GameObject::ForEach<SolidObjectComponent>([&collision, &playerRbRect, &desiredPosition](GameObject , SolidObjectComponent s) {
 		auto bcf = s.BoxColliderF();
 		if (geRectangleFIsOverlap(&playerRbRect, &bcf)) {
 			auto r = geRectangleFGetOverlapRect(&playerRbRect, &bcf);
@@ -157,7 +157,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	playerRbRect = r.GetRectF();
 	playerRbRect.x += l.Location.x + tryMoveSpeed.x;
 	playerRbRect.y += l.Location.y + tryMoveSpeed.y;
-	GameObject::ForEach<PlayerExitComponent>([&playerRbRect](GameObject g, PlayerExitComponent pe) {
+	GameObject::ForEach<PlayerExitComponent>([&playerRbRect](GameObject , PlayerExitComponent pe) {
 		auto pebf = geRectangleF{(float)pe.BoundingBox.x, (float)pe.BoundingBox.y, (float)pe.BoundingBox.w, (float)pe.BoundingBox.h};
 		if (geRectangleFIsOverlap(&playerRbRect, &pebf)) {
 			if (!sfx) {
@@ -182,7 +182,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 		}
 
 		// Check to see if we are interacting
-		GameObject::ForEach<LocationComponent, TextInteractionComponent>([&l, &i](GameObject g, LocationComponent li, TextInteractionComponent ti) {
+		GameObject::ForEach<LocationComponent, TextInteractionComponent>([&l, &i](GameObject , LocationComponent li, TextInteractionComponent ti) {
 			auto interactionRect  = geRectangle{(int)li.Location.x, (int)li.Location.y, ti.Size.x, ti.Size.y};
 			auto ir = geRectangle{(int)l.Location.x + i.Box.x, (int)l.Location.y + i.Box.y, i.Box.w, i.Box.h};
 
@@ -193,11 +193,11 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	}
 }
 
-static void loadPlayerEach(GameObject g, PlayerSpawnComponent& ps) {
+static void loadPlayerEach(GameObject , PlayerSpawnComponent& ps) {
 	if (ps.SpawnLocationId != State::SpawnLocation) {
 		return;
 	}
-	for (size_t i = 0; i < State::NumPlayers; i++) {
+	for (size_t i = 0; i < (unsigned int)State::NumPlayers; i++) {
 		auto go = new GameObject();
 		LocationComponent l = LocationComponent();
 		l.Location.x = ps.Location.x + (i * 5);

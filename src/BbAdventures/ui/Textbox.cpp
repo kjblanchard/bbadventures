@@ -22,6 +22,7 @@ geImage* Textbox::BackgroundImage() {
 	if (i && i->Data.Image) {
 		return i->Data.Image;
 	}
+	return nullptr;
 }
 
 void Textbox::DisplayText(geText* t) {

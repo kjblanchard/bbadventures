@@ -7,7 +7,8 @@
 #include <BbAdventures/ui/Textbox.hpp>
 namespace Bba {
 void LoadTextInteractions() {
-	GameObject::ForEach<TextInteractionComponent>([](GameObject g, TextInteractionComponent& t) {
+	GameObject::ForEach<TextInteractionComponent>([](GameObject, TextInteractionComponent& t) {
+		//
 		t.TextImage = geTextNew(t.Text.c_str(), "BitPotion", 32);
 		auto tb = State::TextDisplay->BackgroundImage();
 		if (!tb) {
