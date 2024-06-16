@@ -27,6 +27,8 @@
 ==512873==    by 0x19E74B: void Bba::GameObject::ForEach<Bba::TextInteractionComponent, Bba::LoadTextInteractions()::{lambda(Bba::GameObject, Bba::TextInteractionComponent&)#1}>(Bba::LoadTextInteractions()::{lambda(Bba::GameObject, Bba::TextInteractionComponent&)#1}) (GameObject.hpp:73)
 ==512873==    by 0x19E717: Bba::LoadTextInteractions() (InteractionSystem.cpp:10)
 ==512873==
+
+
 ==512873== Invalid read of size 8
 ==512873==    at 0x1D08BD: geImageFree (external/sg_engine/src/GoonEngine/content/image.c:299)
 ==512873==    by 0x1D1F6F: textFree (external/sg_engine/src/GoonEngine/content/text.c:247)
