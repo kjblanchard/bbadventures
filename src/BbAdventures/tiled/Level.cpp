@@ -65,14 +65,14 @@ void Level::LoadSurfaces() {
 			for (auto &tile : tileset.Tiles) {
 				auto surfacePath = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + tile.Image;
 				char buf[1000];
-				GetLoadFilename(buf, sizeof(buf), surfacePath.c_str());
+				geGetLoadFilename(buf, sizeof(buf), surfacePath.c_str());
 				auto i = geImageNewFromFile(buf);
 				_imagesCache.push_back({tile.Image, i});
 			}
 		} else {
 			auto surfacePath = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + tileset.Image;
 			char buf[1000];
-			GetLoadFilename(buf, sizeof(buf), surfacePath.c_str());
+			geGetLoadFilename(buf, sizeof(buf), surfacePath.c_str());
 			auto i = geImageNewFromFile(buf);
 			_imagesCache.push_back({tileset.Image, i});
 		}

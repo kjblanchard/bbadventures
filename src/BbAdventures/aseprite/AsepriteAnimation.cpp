@@ -23,7 +23,7 @@ AsepriteAnimation::~AsepriteAnimation() {
 std::string AsepriteAnimation::Filename() {
 	auto f = _animationPrefix+ _aseDocument->meta.image;
 	char buf[1000];
-	GetLoadFilename(buf, sizeof(buf), f.c_str());
+	geGetLoadFilename(buf, sizeof(buf), f.c_str());
 	return buf;
 }
 

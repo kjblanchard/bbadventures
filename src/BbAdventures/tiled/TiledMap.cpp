@@ -61,7 +61,7 @@ geRectangle TiledMap::GetGidSourceRect(int gid) {
 TiledMap::TiledMap(std::string filename) {
 	auto pathPrefix = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + filename + ".tmj";
 	char buf[1000];
-	GetLoadFilename(buf, sizeof(buf), pathPrefix.c_str());
+	geGetLoadFilename(buf, sizeof(buf), pathPrefix.c_str());
 	std::ifstream file(buf);
 	json data = json::parse(file);
 	// auto &tilesets = data["tilesets"];
@@ -79,7 +79,7 @@ TiledMap::TiledMap(std::string filename) {
 		auto tileset = Tileset();
 		tileset.FirstGid = tiledmapTileset.FirstGid;
 		std::string tilesetPrefix = ASSET_PREFIX + '/' + TILED_PREFIX + '/' + tiledmapTileset.Source;
-		GetLoadFilename(buf, sizeof(buf), tilesetPrefix.c_str());
+		geGetLoadFilename(buf, sizeof(buf), tilesetPrefix.c_str());
 		std::ifstream file(buf);
 		json tilesetData = json::parse(file);
 		// read the tileset file, and load info about it here.
