@@ -1,5 +1,6 @@
 
 #include <GoonEngine/content/bgm.h>
+#include <GoonEngine/content/content.h>
 #include <GoonEngine/content/image.h>
 
 #include <BbAdventures/shared/state.hpp>
@@ -13,6 +14,14 @@ Textbox::Textbox() {
 	Text = nullptr;
 	geColor c = {0, 0, 100, 200};
 	_backgroundTexture = geImageNewRenderTarget("textboxBackground", 300, 75, &c);
+}
+
+geImage* Textbox::BackgroundImage() {
+	// Increase refcount, and send image.
+	auto i = geGetLoadedContent(geContentTypeImage, "textboxBackground");
+	if (i && i->Data.Image) {
+		return i->Data.Image;
+	}
 }
 
 void Textbox::DisplayText(geText* t) {

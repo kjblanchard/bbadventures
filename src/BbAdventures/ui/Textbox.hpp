@@ -14,12 +14,13 @@ class Textbox {
 	inline bool Complete() { return _isComplete; }
 	geText* Text;
 	// TODO this should be private?
-	geImage* _backgroundTexture;
+	geImage* BackgroundImage();
 
    private:
 	float _currentTime = 0;
 	int _revealedLetters = 0;
 	bool _isComplete = false;
+	geImage* _backgroundTexture;
 
 };
 
