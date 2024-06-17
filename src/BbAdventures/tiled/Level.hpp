@@ -25,10 +25,9 @@ class Level {
 	const inline std::string &GetName() const { return _name; }
 	inline gePoint GetSize() { return gePoint{_mapData->Width * _mapData->TileWidth, _mapData->Height * _mapData->TileHeight}; }
 	inline void AddGameObjectToLevel(GameObject *g) { _gameObjects.push_back(g); }
-	void UnloadLevel();
 	void LoadAllGameObjects();
-	std::vector<TiledMap::TiledObject> GetAllObjects();
-	inline std::vector<TiledMap::TiledObject> GetAllSolidObjects() const { return _mapData->SolidObjects; }
+	// std::vector<TiledMap::TiledObject> GetAllObjects();
+	// inline std::vector<TiledMap::TiledObject> GetAllSolidObjects() const { return _mapData->SolidObjects; }
 	Panel *LoadPanel;
 	void Draw();
 	void RestartLevel();
@@ -38,6 +37,7 @@ class Level {
 	 * @brief Loads all the surfaces from the tilesets in this level, so that we can blit them properly
 	 */
 	void LoadSurfaces();
+	bool CheckIfTilesetIsCached(const std::string& name) const;
 	void LoadSolidObjects();
 	/**
 	 * @brief Create a Background Atlas object and blits everything to it
