@@ -26,13 +26,11 @@ void DrawAnimationComponents() {
 	GameObject::ForEach<AnimationComponent, LocationComponent>([](GameObject , AnimationComponent& a, LocationComponent& l) {
 		auto s = a.Animation->FrameCoords();
 		auto d = geRectangleF{(l.Location.x + a.Offset.x) - State::CameraX, (l.Location.y + a.Offset.y) - State::CameraY, (float)s.w, (float)s.h};
-		// geImageDraw(a.AnimationImage, &s, &d);
 		geImageDrawF(a.AnimationImage, &s, &d);
 	});
 }
 
 void FreeAnimationComponents() {
-	// auto view = GameObject::_registry.view<AnimationComponent>();
 	GameObject::ForEach<AnimationComponent>([](GameObject, AnimationComponent& a) {
 		delete (a.Animation);
 	});

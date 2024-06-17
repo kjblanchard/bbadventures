@@ -13,6 +13,5 @@ class Ui {
    private:
 	std::unique_ptr<Panel> _panel;
 	std::unique_ptr<Textbox> _textbox;
-	int _revealedLetters = 0;
 };
 }  // namespace Bba
