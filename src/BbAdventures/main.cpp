@@ -44,6 +44,7 @@ int main(int, char*[]) {
 	Bba::State::NextMapName = defaultLevel;
 	Bba::Level::LoadNewLevel();
 	gePlayLoop();
+	delete(Bba::State::CurrentLevel);
 	geUnloadAllContent();
 	return 0;
 }
