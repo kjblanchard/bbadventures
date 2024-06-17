@@ -193,15 +193,11 @@ set(FULL_COMPILE_OPTIONS
     -Wextra
     -Wpedantic
     -Wdeprecated
-    # -Wno-newline-eof
-    # -Wno-strict-prototypes
-    # -Wno-sign-compare
-    # -Wno-unused-parameter
     # -pthread
 )
 
 if(WIN32)
-    # set(FULL_COMPILE_OPTIONS /std:c99)
+    set(FULL_COMPILE_OPTIONS /W4 /WX)
 elseif(EMSCRIPTEN)
     # target_compile_options(${EXECUTABLE_TARGET_NAME} PRIVATE -sUSE_SDL_TTF=2)
 endif(WIN32)
