@@ -25,30 +25,38 @@ static const int _moveSpeed = 100;
 
 namespace Bba {
 
-static bool handleMovement(Directions& d, geVec2& m) {
+static bool handleMovement(Directions& d, geVec2& m, AnimationComponent& a) {
 	if (State::IsDisplayingText) {
 		return false;
 	}
 	bool moved = false;
+	auto moveSpeed = _moveSpeed;
+	bool run = false;
+	a.AnimationSpeed = 1.0;
+	if (geKeyJustPressed(geKey_LSHIFT) || geKeyHeldDown(geKey_LSHIFT)) {
+		const int multiplier = 2.0;
+		moveSpeed *= multiplier;
+		a.AnimationSpeed = multiplier;
+	}
 	if (geKeyJustPressed(geKey_W) || geKeyHeldDown(geKey_W)) {
 		d = Directions::North;
 		moved = true;
-		m.y -= _moveSpeed * State::DeltaTime;
+		m.y -= moveSpeed * State::DeltaTime;
 	}
 	if (geKeyJustPressed(geKey_A) || geKeyHeldDown(geKey_A)) {
 		d = Directions::West;
 		moved = true;
-		m.x -= _moveSpeed * State::DeltaTime;
+		m.x -= moveSpeed * State::DeltaTime;
 	}
 	if (geKeyJustPressed(geKey_S) || geKeyHeldDown(geKey_S)) {
 		d = Directions::South;
 		moved = true;
-		m.y += _moveSpeed * State::DeltaTime;
+		m.y += moveSpeed * State::DeltaTime;
 	}
 	if (geKeyJustPressed(geKey_D) || geKeyHeldDown(geKey_D)) {
 		d = Directions::East;
 		moved = true;
-		m.x += _moveSpeed * State::DeltaTime;
+		m.x += moveSpeed * State::DeltaTime;
 	}
 	return moved;
 }
@@ -60,7 +68,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	auto& i = go.GetComponent<InteractorComponent>();
 	auto d = p.Direction;
 	auto tryMoveSpeed = geVec2{0, 0};
-	auto moved = handleMovement(d, tryMoveSpeed);
+	auto moved = handleMovement(d, tryMoveSpeed, a);
 	// Check if we can move
 	auto playerRbRect = r.GetRectF();
 	playerRbRect.x += l.Location.x + tryMoveSpeed.x;

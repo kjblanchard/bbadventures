@@ -14,11 +14,12 @@ void LoadAnimationComponents() {
 
 void UpdateAnimationComponents() {
 	auto msTime = State::DeltaTime * 1000;
+
 	GameObject::ForEach<AnimationComponent>([&msTime](GameObject , AnimationComponent& a) {
 		if (!a.Playing) {
 			return;
 		}
-		a.Animation->UpdateAnimation(msTime);
+		a.Animation->UpdateAnimation(msTime * a.AnimationSpeed);
 	});
 }
 
