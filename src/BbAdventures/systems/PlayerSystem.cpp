@@ -19,37 +19,11 @@
 #include <BbAdventures/ui/Panel.hpp>
 #include <BbAdventures/ui/Textbox.hpp>
 
-static geSfx* sfx = nullptr;
+static geSfx* _sfx = nullptr;
+static const geRectangle _interactionRect = {-14, -14, 20, 20};
+static const int _moveSpeed = 100;
 
-const geRectangle interactionRect = {-14, -14, 20, 20};
-const int moveSpeed = 100;
 namespace Bba {
-
-// static Directions getOverlapDirection(geRectangle* obj, geRectangle* overlapBox) {
-// 	if (overlapBox->w < overlapBox->h) {
-// 		if (overlapBox->x > obj->x) {
-// 			return Directions::East;
-// 		}
-// 		return Directions::West;
-// 	}
-// 	if (overlapBox->y > obj->y) {
-// 		return Directions::South;
-// 	}
-// 	return Directions::North;
-// }
-
-static Directions getOverlapDirectionF(geRectangleF* obj, geRectangleF* overlapBox) {
-	if (overlapBox->w < overlapBox->h) {
-		if (overlapBox->x > obj->x) {
-			return Directions::East;
-		}
-		return Directions::West;
-	}
-	if (overlapBox->y > obj->y) {
-		return Directions::South;
-	}
-	return Directions::North;
-}
 
 static bool handleMovement(Directions& d, geVec2& m) {
 	if (State::IsDisplayingText) {
@@ -59,22 +33,22 @@ static bool handleMovement(Directions& d, geVec2& m) {
 	if (geKeyJustPressed(geKey_W) || geKeyHeldDown(geKey_W)) {
 		d = Directions::North;
 		moved = true;
-		m.y -= moveSpeed * State::DeltaTime;
+		m.y -= _moveSpeed * State::DeltaTime;
 	}
 	if (geKeyJustPressed(geKey_A) || geKeyHeldDown(geKey_A)) {
 		d = Directions::West;
 		moved = true;
-		m.x -= moveSpeed * State::DeltaTime;
+		m.x -= _moveSpeed * State::DeltaTime;
 	}
 	if (geKeyJustPressed(geKey_S) || geKeyHeldDown(geKey_S)) {
 		d = Directions::South;
 		moved = true;
-		m.y += moveSpeed * State::DeltaTime;
+		m.y += _moveSpeed * State::DeltaTime;
 	}
 	if (geKeyJustPressed(geKey_D) || geKeyHeldDown(geKey_D)) {
 		d = Directions::East;
 		moved = true;
-		m.x += moveSpeed * State::DeltaTime;
+		m.x += _moveSpeed * State::DeltaTime;
 	}
 	return moved;
 }
@@ -93,27 +67,26 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	playerRbRect.y += l.Location.y + tryMoveSpeed.y;
 	geVec2 desiredPosition = {l.Location.x + tryMoveSpeed.x, l.Location.y + tryMoveSpeed.y};
 	bool collision = false;
-	GameObject::ForEach<SolidObjectComponent>([&collision, &playerRbRect, &desiredPosition](GameObject , SolidObjectComponent s) {
+	GameObject::ForEach<SolidObjectComponent>([&collision, &playerRbRect, &desiredPosition](GameObject, SolidObjectComponent s) {
 		auto bcf = s.BoxColliderF();
 		if (geRectangleFIsOverlap(&playerRbRect, &bcf)) {
 			auto r = geRectangleFGetOverlapRect(&playerRbRect, &bcf);
-			auto d = getOverlapDirectionF(&playerRbRect, &r);
-
+			auto d = GetOverlapDirectionF(&playerRbRect, &r);
 			switch (d) {
 				case Directions::North:
 					desiredPosition.y += r.h;
 					collision = true;
 					break;
 				case Directions::East:
-					desiredPosition.x -= r.w;  // Adjust x to move out of collision
+					desiredPosition.x -= r.w;
 					collision = true;
 					break;
 				case Directions::South:
-					desiredPosition.y -= r.h;  // Adjust y to move out of collision
+					desiredPosition.y -= r.h;
 					collision = true;
 					break;
 				case Directions::West:
-					desiredPosition.x += r.w;  // Adjust x to move out of collision
+					desiredPosition.x += r.w;
 					collision = true;
 					break;
 				default:
@@ -123,8 +96,6 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	});
 	l.Location.x = desiredPosition.x;
 	l.Location.y = desiredPosition.y;
-	// l.Location.x += tryMoveSpeed.x;
-	// l.Location.y += tryMoveSpeed.y;
 	a.Playing = moved;
 	if (d != p.Direction) {
 		// Update the Animation for the new direction
@@ -132,24 +103,23 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 		a.Animation->PlayAnimation("walk" + std::string(letter));
 		p.Direction = d;
 		// Update the interaction rect
-		// auto& dd = go.GetComponent<DebugDrawComponent>();
+		// auto& dd = go.GetComponent<DebugDrawComponent>(); //Update debug rect if needed
 		switch (d) {
 			case Directions::East:
 				i.Box.x = r.W;
 				i.Box.y = r.H / 2;
 				break;
 			case Directions::West:
-				i.Box.x = r.W - interactionRect.w;
+				i.Box.x = r.W - _interactionRect.w;
 				i.Box.y = r.H / 2;
 				break;
 			case Directions::North:
-				i.Box.y = (interactionRect.y + r.OffsetY - interactionRect.h) + r.H;
-				i.Box.x = r.W + (interactionRect.x / 2);
+				i.Box.y = (_interactionRect.y + r.OffsetY - _interactionRect.h) + r.H;
+				i.Box.x = r.W + (_interactionRect.x / 2);
 				break;
 			case Directions::South:
-				i.Box.y = r.H - interactionRect.y;
-				// i.Box.x = r.W + interactionRect.x;
-				i.Box.x = r.W + (interactionRect.x / 2);
+				i.Box.y = r.H - _interactionRect.y;
+				i.Box.x = r.W + (_interactionRect.x / 2);
 				break;
 		}
 	}
@@ -157,14 +127,14 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	playerRbRect = r.GetRectF();
 	playerRbRect.x += l.Location.x + tryMoveSpeed.x;
 	playerRbRect.y += l.Location.y + tryMoveSpeed.y;
-	GameObject::ForEach<PlayerExitComponent>([&playerRbRect](GameObject , PlayerExitComponent pe) {
+	GameObject::ForEach<PlayerExitComponent>([&playerRbRect](GameObject, PlayerExitComponent pe) {
 		auto pebf = geRectangleF{(float)pe.BoundingBox.x, (float)pe.BoundingBox.y, (float)pe.BoundingBox.w, (float)pe.BoundingBox.h};
 		if (geRectangleFIsOverlap(&playerRbRect, &pebf)) {
-			if (!sfx) {
-				sfx = geSfxNew("transition");
-				geSfxLoad(sfx);
+			if (!_sfx) {
+				_sfx = geSfxNew("transition");
+				geSfxLoad(_sfx);
 			}
-			geSfxPlay(sfx, 1.0);
+			geSfxPlay(_sfx, 1.0);
 			State::IsLoadingMap = true;
 			State::NextMapName = pe.NextMap;
 			State::SpawnLocation = pe.SpawnLocationId;
@@ -177,13 +147,12 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 		// If we are displaying text, close it.
 		if (State::TextDisplay->Text) {
 			State::TextDisplay->Interact(State::TextDisplay->Text);
-			// State::TextDisplay->UnDisplayText();
 			return;
 		}
 
 		// Check to see if we are interacting
-		GameObject::ForEach<LocationComponent, TextInteractionComponent>([&l, &i](GameObject , LocationComponent li, TextInteractionComponent ti) {
-			auto interactionRect  = geRectangle{(int)li.Location.x, (int)li.Location.y, ti.Size.x, ti.Size.y};
+		GameObject::ForEach<LocationComponent, TextInteractionComponent>([&l, &i](GameObject, LocationComponent li, TextInteractionComponent ti) {
+			auto interactionRect = geRectangle{(int)li.Location.x, (int)li.Location.y, ti.Size.x, ti.Size.y};
 			auto ir = geRectangle{(int)l.Location.x + i.Box.x, (int)l.Location.y + i.Box.y, i.Box.w, i.Box.h};
 
 			if (geRectangleIsOverlap(&ir, &interactionRect)) {
@@ -193,7 +162,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	}
 }
 
-static void loadPlayerEach(GameObject , PlayerSpawnComponent& ps) {
+static void loadPlayerEach(GameObject, PlayerSpawnComponent& ps) {
 	if (ps.SpawnLocationId != State::SpawnLocation) {
 		return;
 	}
@@ -213,9 +182,9 @@ static void loadPlayerEach(GameObject , PlayerSpawnComponent& ps) {
 		r.W = 10;
 		r.H = 14;
 		auto ic = InteractorComponent();
-		ic.Box = interactionRect;
+		ic.Box = _interactionRect;
 		auto dd = DebugDrawComponent();
-		dd.Box = interactionRect;
+		dd.Box = _interactionRect;
 		go->AddComponent<RigidBodyComponent>(r);
 		go->AddComponent<LocationComponent>(l);
 		go->AddComponent<PlayerComponent>(p);
