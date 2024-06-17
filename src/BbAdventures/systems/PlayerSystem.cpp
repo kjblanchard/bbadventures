@@ -48,27 +48,51 @@ static bool handleMovement(Directions& d, geVec2& m, AnimationComponent& a, int 
 		moveSpeed *= multiplier;
 		a.AnimationSpeed = multiplier;
 	}
+	// Check for left thunbstick movement
+	auto xStick = geGamepadLeftAxisXFloat(playerNum);
+	auto yStick = geGamepadLeftAxisYFloat(playerNum);
+	if (fabs(xStick) > fabs(yStick)) {
+		if (xStick > 0.1) {
+			d = Directions::East;
+		} else if (xStick < -0.1) {
+			d = Directions::West;
+		}
+	} else {
+		if (yStick > 0.1) {
+			d = Directions::South;
+		} else if (yStick < -0.1) {
+			d = Directions::North;
+		}
+	}
 
-	if ((playerNum == 0 && (geKeyJustPressed(geKey_W) || geKeyHeldDown(geKey_W))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_UP) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_UP))) {
-		d = Directions::North;
+	// Check for joystick movement
+	if (xStick || yStick) {
+		m.x += moveSpeed * xStick * State::DeltaTime;
+		m.y += moveSpeed * yStick * State::DeltaTime;
 		moved = true;
-		m.y -= moveSpeed * State::DeltaTime;
+	} else {
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_W) || geKeyHeldDown(geKey_W))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_UP) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_UP))) {
+			d = Directions::North;
+			moved = true;
+			m.y -= moveSpeed * State::DeltaTime;
+		}
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_A) || geKeyHeldDown(geKey_A))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_LEFT) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_LEFT))) {
+			d = Directions::West;
+			moved = true;
+			m.x -= moveSpeed * State::DeltaTime;
+		}
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_S) || geKeyHeldDown(geKey_S))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_DOWN) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_DOWN))) {
+			d = Directions::South;
+			moved = true;
+			m.y += moveSpeed * State::DeltaTime;
+		}
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_D) || geKeyHeldDown(geKey_D))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_RIGHT) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_RIGHT))) {
+			d = Directions::East;
+			moved = true;
+			m.x += moveSpeed * State::DeltaTime;
+		}
 	}
-	if ((playerNum == 0 && (geKeyJustPressed(geKey_A) || geKeyHeldDown(geKey_A))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_LEFT) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_LEFT))) {
-		d = Directions::West;
-		moved = true;
-		m.x -= moveSpeed * State::DeltaTime;
-	}
-	if ((playerNum == 0 && (geKeyJustPressed(geKey_S) || geKeyHeldDown(geKey_S))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_DOWN) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_DOWN))) {
-		d = Directions::South;
-		moved = true;
-		m.y += moveSpeed * State::DeltaTime;
-	}
-	if ((playerNum == 0 && (geKeyJustPressed(geKey_D) || geKeyHeldDown(geKey_D))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_RIGHT) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_RIGHT))) {
-		d = Directions::East;
-		moved = true;
-		m.x += moveSpeed * State::DeltaTime;
-	}
+
 	return moved;
 }
 
