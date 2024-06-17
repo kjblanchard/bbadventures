@@ -19,6 +19,7 @@ void LoadTextInteractions() {
 		geTextSetBounds(t.TextImage, w, h);
 		geTextSetNumDrawCharacters(t.TextImage, 0);
 		geTextSetImage(t.TextImage, tb);
+		geTextSetPadding(t.TextImage, 4, 0, 0, 0);
 		auto p = gePoint{100, 200};
 		geTextSetLocation(t.TextImage, p.x, p.y);
 		geTextLoad(t.TextImage);
