@@ -19,11 +19,7 @@ void UpdateCamera() {
 	if (cc.Box.x < 0) {
 		cc.Box.x = 0;
 	} else if (cc.Box.x > cc.Bounds.x - SCREEN_WIDTH) {
-		cc.Box.x = cc.Bounds.x - SCREEN_WIDTH;
-		// TODO why do we need this?  This should never happen but happens in forest south.
-		if (cc.Box.x < 0) {
-			cc.Box.x = 0;
-		}
+		cc.Box.x = std::max(cc.Bounds.x - SCREEN_WIDTH, 0);
 	}
 	if (cc.Box.y < 0) {
 		cc.Box.y = 0;

@@ -74,7 +74,7 @@ set_property(TARGET ${EXECUTABLE_TARGET_NAME} PROPERTY CXX_STANDARD 17)
 # #########################################
 # Options
 # #########################################
-option(CMAKE_DEBUG_VARIABLES "Runs a debug on all variables for troubleshooting" ON)
+option(CMAKE_DEBUG_VARIABLES "Runs a debug on all variables for troubleshooting" OFF)
 option(GOON_BUILD_PCH "Uses a PCH file to try and speed up compilation" ON)
 option(GOON_DEBUG_SOUND "Builds sound from subdirectory instead of using a made package so we can debug" ON)
 option(GOON_MULTITHREADED_SOUND "Adds multithreaded support for sound updates, experimental and has a memory leak somehow" OFF)
@@ -193,16 +193,12 @@ set(FULL_COMPILE_OPTIONS
     -Wextra
     -Wpedantic
     -Wdeprecated
-    -Wno-newline-eof
-
-    # -Wno-strict-prototypes
-    -Wno-sign-compare
-    -Wno-unused-parameter
-    -pthread
+    # -pthread
 )
 
 if(WIN32)
-    set(FULL_COMPILE_OPTIONS /std:c99)
+    # set(FULL_COMPILE_OPTIONS /W4 /WX)
+    set(FULL_COMPILE_OPTIONS /W4)
 elseif(EMSCRIPTEN)
     # target_compile_options(${EXECUTABLE_TARGET_NAME} PRIVATE -sUSE_SDL_TTF=2)
 endif(WIN32)

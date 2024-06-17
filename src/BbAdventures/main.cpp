@@ -1,4 +1,3 @@
-#include <SDL2/SDL.h>
 #include <GoonEngine/content/content.h>
 #include <GoonEngine/content/text.h>
 #include <GoonEngine/debug.h>
@@ -7,18 +6,15 @@
 #include <GoonEngine/prim/point.h>
 #include <GoonEngine/prim/rectangle.h>
 #include <GoonEngine/utils.h>
+#include <SDL2/SDL.h>
 
 #include <BbAdventures/shared/state.hpp>
 #include <BbAdventures/systems/Systems.hpp>
 #include <BbAdventures/tiled/Level.hpp>
-#include <BbAdventures/ui/Panel.hpp>
-#include <BbAdventures/ui/Textbox.hpp>
+#include <BbAdventures/ui/Ui.hpp>
 
-static Bba::Panel *panel;
-static Bba::Textbox *textbox;
-std::string defaultLevel = "debugTown";
-int revealedLetters = 0;
-float currentTime = 0;
+static const std::string defaultLevel = "debugTown";
+static Bba::Ui* _ui;
 
 void Update(double deltatime) {
 	Bba::State::DeltaTime = deltatime;
@@ -27,31 +23,26 @@ void Update(double deltatime) {
 		Bba::UpdateAnimationComponents();
 		Bba::UpdateCamera();
 	}
-	textbox->Update();
-	panel->Update();
+	_ui->Update();
 }
 
 void Draw() {
 	if (Bba::State::CurrentLevel) {
 		Bba::State::CurrentLevel->Draw();
 	}
-	Bba::DrawDebugDrawComponents();
 	Bba::DrawAnimationComponents();
-	panel->Draw();
-	textbox->Draw();
+	Bba::DrawDebugDrawComponents();
+	_ui->Draw();
 }
 
-int main(int argc, char *argv[]) {
+int main(int, char*[]) {
 	geInitializeEngine();
 	geGameSetUpdateFunc(Update);
 	geGameSetDrawFunc(Draw);
 	geLoadAllContent();
-	panel = new Bba::Panel();
-	textbox = new Bba::Textbox;
+	_ui = new Bba::Ui();
 	Bba::State::NextMapName = defaultLevel;
 	Bba::Level::LoadNewLevel();
-	Bba::State::FadePanel = panel;
-	Bba::State::TextDisplay = textbox;
 	gePlayLoop();
 	geUnloadAllContent();
 	return 0;

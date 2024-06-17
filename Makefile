@@ -74,5 +74,11 @@ wzlib:
 sign:
 	@cd ./$(BUILD_FOLDER)/$(BINARY_FOLDER) && codesign --deep --force --verify --verbose --sign "Kevin Blanchard Dev" BbAdventures.app
 
+xdsign:
+	@cd ./$(BUILD_FOLDER)/$(BINARY_FOLDER)/Debug && codesign --deep --force --verify --verbose --sign "Kevin Blanchard Dev" BbAdventures.app
+xrsign:
+	@cd ./$(BUILD_FOLDER)/$(BINARY_FOLDER)/Release && codesign --deep --force --verify --verbose --sign "Kevin Blanchard Dev" BbAdventures.app
+
+
 validate:
 	@cd ./$(BUILD_FOLDER)/$(BINARY_FOLDER) && codesign --verify --deep --strict --verbose=2 ./BbAdventures.app

@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
+typedef struct geRectangle geRectangle;
+typedef struct geRectangleF geRectangleF;
 namespace Bba {
 
 extern std::string ASSET_PREFIX;
@@ -24,5 +26,9 @@ inline const char* GetLetterForDirection(Directions d) {
 		case Directions::West:
 			return "L";
 	}
+	return "";
 }
+
+Directions GetOverlapDirection(geRectangle* obj, geRectangle* overlapBox);
+Directions GetOverlapDirectionF(geRectangleF* obj, geRectangleF* overlapBox);
 }  // namespace Bba

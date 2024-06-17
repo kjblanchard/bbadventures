@@ -15,7 +15,7 @@ AsepriteDocument::AsepriteDocument(std::string p) {
 	auto fullPathNoType = _asepritePrefix + p;
 	auto fullPathJson = fullPathNoType + ".json";
 	char buf[1000];
-	GetLoadFilename(buf, sizeof(buf), fullPathJson.c_str());
+	geGetLoadFilename(buf, sizeof(buf), fullPathJson.c_str());
 
 	std::ifstream fileStream(buf);
 	auto j = json::parse(fileStream);

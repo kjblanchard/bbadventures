@@ -6,5 +6,6 @@ namespace Bba {
 struct TextInteractionComponent {
 	std::string Text;
     geText* TextImage;
+    gePoint Size;
 };
 }  // namespace Bba

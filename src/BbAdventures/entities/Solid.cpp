@@ -26,11 +26,11 @@ GameObject* NewSolidObject(TiledMap::TiledObject& t) {
     s.BoxCollider.y = t.Y;
     s.BoxCollider.w = t.Width;
     s.BoxCollider.h = t.Height;
-    auto d = DebugDrawComponent();
-    d.Box.x = 0;
-    d.Box.y = 0;
-    d.Box.w = s.BoxCollider.w;
-    d.Box.h = s.BoxCollider.h;
+    // auto d = DebugDrawComponent();
+    // d.Box.x = 0;
+    // d.Box.y = 0;
+    // d.Box.w = s.BoxCollider.w;
+    // d.Box.h = s.BoxCollider.h;
     auto l = LocationComponent();
     l.Location.x = s.BoxCollider.x;
     l.Location.y = s.BoxCollider.y;

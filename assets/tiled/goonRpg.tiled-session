@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "debugSouth.tmj",
+    "activeFile": "debugTown.tmj",
     "expandedProjectPaths": [
         "."
     ],
@@ -19,8 +19,8 @@
             "scale": 2.185565476190476,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 164.48832300674067,
-                "y": 231.5190304350787
+                "x": 173.18172533533058,
+                "y": -258.5143324028052
             }
         },
         "debugSouth.tmx": {
@@ -39,11 +39,11 @@
                 5,
                 3
             ],
-            "scale": 0.6178,
-            "selectedLayer": 4,
+            "scale": 1.5378,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 203.1401748138556,
-                "y": 134.34768533505985
+                "x": 234.42580309533096,
+                "y": 134.60788138899727
             }
         },
         "debugTown.tmx": {
@@ -63,10 +63,10 @@
                 5
             ],
             "scale": 3.9731,
-            "selectedLayer": 4,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 164.73282827011653,
-                "y": 121.06415645214064
+                "x": 44.17205708388916,
+                "y": 116.53368905892125
             }
         },
         "house..tsj": {
@@ -119,10 +119,10 @@
     "project": "goonRpg.tiled-project",
     "property.type": "string",
     "recentFiles": [
-        "debugTown.tmj",
-        "debugTownHome.tmj",
         "inside.tsj",
         "debugSouth.tmj",
+        "debugTownHome.tmj",
+        "debugTown.tmj",
         "terrain.tsx",
         "outside.tsx",
         "house.tsx",
