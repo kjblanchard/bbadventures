@@ -9,6 +9,7 @@ namespace Bba {
 struct AnimationComponent {
 	AsepriteAnimation* Animation;
 	std::string AnimationName;
+	float AnimationSpeed;
 	geImage* AnimationImage;
 	gePoint Offset;
 	bool Playing;

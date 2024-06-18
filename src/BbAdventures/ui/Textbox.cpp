@@ -2,18 +2,22 @@
 #include <GoonEngine/content/bgm.h>
 #include <GoonEngine/content/content.h>
 #include <GoonEngine/content/image.h>
+#include <GoonEngine/debug.h>
+#include <GoonEngine/prim/point.h>
+#include <GoonEngine/utils.h>
 
 #include <BbAdventures/shared/state.hpp>
 #include <BbAdventures/ui/Textbox.hpp>
 using namespace Bba;
 
 static geBgm* _textBgm = nullptr;
-const float timeWait = 0.05;
+const float _timeWait = 0.05;
+const gePoint _boxSize = {300, 75};
 
 Textbox::Textbox() {
 	Text = nullptr;
 	geColor c = {0, 0, 100, 200};
-	_backgroundTexture = geImageNewRenderTarget("textboxBackground", 300, 75, &c);
+	_backgroundTexture = geImageNewRenderTarget("textboxBackground", _boxSize.x, _boxSize.y, &c);
 }
 
 geImage* Textbox::BackgroundImage() {
@@ -66,8 +70,8 @@ void Textbox::Update() {
 	}
 	auto deltatime = State::DeltaTime;
 	_currentTime += deltatime;
-	if (_currentTime > timeWait) {
-		_currentTime -= timeWait;
+	if (_currentTime > _timeWait) {
+		_currentTime -= _timeWait;
 		++_revealedLetters;
 		geTextSetNumDrawCharacters(Text, _revealedLetters);
 	}
@@ -79,5 +83,16 @@ void Textbox::Update() {
 void Textbox::Draw() {
 	if (Text) {
 		geTextDraw(Text);
+		// Draw a outline around the text
+		// auto bounds = geTextBoundingBox(Text);
+		auto loc = geTextLocation(Text);
+		auto c = geColor{255, 255, 255, 255};
+		auto d = geRectangle{loc.x, loc.y, _boxSize.x, _boxSize.y};
+		geUtilsDrawRect(&d, &c);
+		d.x -= 1;
+		d.y -= 1;
+		d.w += 2;
+		d.h += 2;
+		geUtilsDrawRect(&d, &c);
 	}
 }

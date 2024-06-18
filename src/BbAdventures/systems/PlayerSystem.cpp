@@ -1,5 +1,6 @@
 #include <GoonEngine/content/sfx.h>
 #include <GoonEngine/debug.h>
+#include <GoonEngine/input/joystick.h>
 #include <GoonEngine/input/keyboard.h>
 #include <GoonEngine/utils.h>
 
@@ -25,31 +26,73 @@ static const int _moveSpeed = 100;
 
 namespace Bba {
 
-static bool handleMovement(Directions& d, geVec2& m) {
+static bool handleMovement(Directions& d, geVec2& m, AnimationComponent& a, int playerNum) {
 	if (State::IsDisplayingText) {
 		return false;
 	}
 	bool moved = false;
-	if (geKeyJustPressed(geKey_W) || geKeyHeldDown(geKey_W)) {
-		d = Directions::North;
-		moved = true;
-		m.y -= _moveSpeed * State::DeltaTime;
+	bool isRunning = false;
+	auto moveSpeed = _moveSpeed;
+	a.AnimationSpeed = 1.0;
+
+	// If player is player 0, we should check keyboard and joystick, else just joystick.
+	if (playerNum == 0 && (geKeyJustPressed(geKey_LSHIFT) || geKeyHeldDown(geKey_LSHIFT))) {
+		isRunning = true;
 	}
-	if (geKeyJustPressed(geKey_A) || geKeyHeldDown(geKey_A)) {
-		d = Directions::West;
-		moved = true;
-		m.x -= _moveSpeed * State::DeltaTime;
+	if (geGamepadButtonJustPressed(playerNum, geGameControllerButtonX) || geGamepadButtonHeldDown(playerNum, geGameControllerButtonX)) {
+		isRunning = true;
 	}
-	if (geKeyJustPressed(geKey_S) || geKeyHeldDown(geKey_S)) {
-		d = Directions::South;
-		moved = true;
-		m.y += _moveSpeed * State::DeltaTime;
+
+	if (isRunning) {
+		const int multiplier = 2.0;
+		moveSpeed *= multiplier;
+		a.AnimationSpeed = multiplier;
 	}
-	if (geKeyJustPressed(geKey_D) || geKeyHeldDown(geKey_D)) {
-		d = Directions::East;
-		moved = true;
-		m.x += _moveSpeed * State::DeltaTime;
+	// Check for left thunbstick movement
+	auto xStick = geGamepadLeftAxisXFloat(playerNum);
+	auto yStick = geGamepadLeftAxisYFloat(playerNum);
+	if (fabs(xStick) > fabs(yStick)) {
+		if (xStick > 0.1) {
+			d = Directions::East;
+		} else if (xStick < -0.1) {
+			d = Directions::West;
+		}
+	} else {
+		if (yStick > 0.1) {
+			d = Directions::South;
+		} else if (yStick < -0.1) {
+			d = Directions::North;
+		}
 	}
+
+	// Check for joystick movement
+	if (xStick || yStick) {
+		m.x += moveSpeed * xStick * State::DeltaTime;
+		m.y += moveSpeed * yStick * State::DeltaTime;
+		moved = true;
+	} else {
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_W) || geKeyHeldDown(geKey_W))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_UP) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_UP))) {
+			d = Directions::North;
+			moved = true;
+			m.y -= moveSpeed * State::DeltaTime;
+		}
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_A) || geKeyHeldDown(geKey_A))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_LEFT) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_LEFT))) {
+			d = Directions::West;
+			moved = true;
+			m.x -= moveSpeed * State::DeltaTime;
+		}
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_S) || geKeyHeldDown(geKey_S))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_DOWN) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_DOWN))) {
+			d = Directions::South;
+			moved = true;
+			m.y += moveSpeed * State::DeltaTime;
+		}
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_D) || geKeyHeldDown(geKey_D))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_RIGHT) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_RIGHT))) {
+			d = Directions::East;
+			moved = true;
+			m.x += moveSpeed * State::DeltaTime;
+		}
+	}
+
 	return moved;
 }
 
@@ -60,7 +103,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	auto& i = go.GetComponent<InteractorComponent>();
 	auto d = p.Direction;
 	auto tryMoveSpeed = geVec2{0, 0};
-	auto moved = handleMovement(d, tryMoveSpeed);
+	auto moved = handleMovement(d, tryMoveSpeed, a, p.PlayerNum);
 	// Check if we can move
 	auto playerRbRect = r.GetRectF();
 	playerRbRect.x += l.Location.x + tryMoveSpeed.x;
@@ -143,7 +186,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 		}
 	});
 	// Check if we should interact
-	if (geKeyJustPressed(geKey_SPACE) && go.HasComponent<InteractorComponent>()) {
+	if (((p.PlayerNum == 0 && geKeyJustPressed(geKey_SPACE)) || geGamepadButtonJustPressed(p.PlayerNum, geGameControllerButtonA)) && go.HasComponent<InteractorComponent>()) {
 		// If we are displaying text, close it.
 		if (State::TextDisplay->Text) {
 			State::TextDisplay->Interact(State::TextDisplay->Text);
@@ -167,12 +210,17 @@ static void loadPlayerEach(GameObject, PlayerSpawnComponent& ps) {
 		return;
 	}
 	for (size_t i = 0; i < (unsigned int)State::NumPlayers; i++) {
+		if (!State::CurrentLevel) {
+			LogWarn("Somehow couldn't add player, current level doesn't exist?");
+			return;
+		}
 		auto go = new GameObject();
 		LocationComponent l = LocationComponent();
 		l.Location.x = ps.Location.x + (i * 5);
 		l.Location.y = ps.Location.y;
 		PlayerComponent p = PlayerComponent();
 		p.Direction = ps.SpawnDirection;
+		p.PlayerNum = i;
 		auto a = AnimationComponent();
 		a.AnimationName = "player";
 		a.Offset = gePoint{0, 0};
@@ -191,11 +239,7 @@ static void loadPlayerEach(GameObject, PlayerSpawnComponent& ps) {
 		go->AddComponent<AnimationComponent>(a);
 		go->AddComponent<InteractorComponent>(ic);
 		// go->AddComponent<DebugDrawComponent>(dd);
-		if (State::CurrentLevel) {
-			State::CurrentLevel->AddGameObjectToLevel(go);
-			return;
-		}
-		LogWarn("Somehow couldn't add player, current level doesn't exist?");
+		State::CurrentLevel->AddGameObjectToLevel(go);
 	}
 }
 static void startPlayersEach(GameObject g, PlayerComponent p) {
