@@ -11,6 +11,7 @@ std::string TILED_PREFIX = "tiled";
 std::string IMAGES_PREFIX = "images";
 int SCREEN_WIDTH = 512;
 int SCREEN_HEIGHT = 288;
+int JOYSTICK_DEFAULT = 255;
 
 Directions GetOverlapDirection(geRectangle* obj, geRectangle* overlapBox) {
 	if (overlapBox->w < overlapBox->h) {

@@ -19,6 +19,7 @@ static Bba::Ui* _ui;
 void Update(double deltatime) {
 	Bba::State::DeltaTime = deltatime;
 	if (!Bba::State::IsLoadingMap) {
+		Bba::UpdatePlayerJoysticks();
 		Bba::UpdatePlayers();
 		Bba::UpdateAnimationComponents();
 		Bba::UpdateCamera();
