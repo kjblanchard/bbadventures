@@ -224,7 +224,7 @@ static void loadPlayerEach(GameObject, PlayerSpawnComponent& ps) {
 		PlayerComponent p = PlayerComponent();
 		p.Direction = ps.SpawnDirection;
 		p.PlayerNum = i;
-		p.ControllerNum = JOYSTICK_DEFAULT;
+		p.ControllerNum = State::PlayerControllerMap[p.PlayerNum];
 		auto a = AnimationComponent();
 		a.AnimationName = "player";
 		a.Offset = gePoint{0, 0};
@@ -257,6 +257,7 @@ static void updatePlayerJoystickEach(GameObject go, PlayerComponent& p) {
 		if (geGamepadButtonJustPressedAnyPad(geGameControllerButtonSTART, &firstPadPressed)) {
 			LogWarn("Assigning player pad num %d", firstPadPressed);
 			p.ControllerNum = firstPadPressed;
+			State::PlayerControllerMap[p.PlayerNum] = firstPadPressed;
 		}
 	}
 }

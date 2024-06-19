@@ -14,4 +14,4 @@ Textbox* State::TextDisplay = nullptr;
 std::string State::PlayingMusic = "";
 float State::CameraX = 0;
 float State::CameraY = 0;
-
+unsigned int State::PlayerControllerMap[2] = { JOYSTICK_DEFAULT, JOYSTICK_DEFAULT };

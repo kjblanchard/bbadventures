@@ -9,7 +9,7 @@ extern std::string TILED_PREFIX;
 extern std::string IMAGES_PREFIX;
 extern int SCREEN_WIDTH;
 extern int SCREEN_HEIGHT;
-extern int JOYSTICK_DEFAULT;
+extern const unsigned int JOYSTICK_DEFAULT;
 enum class Directions {
 	North,
 	East,
