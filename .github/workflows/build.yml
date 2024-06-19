@@ -147,7 +147,14 @@ jobs:
           name: ${{ matrix.os }}-artifacts
       - name: Get current tag annotation
         id: tag-data
-        uses: ericcornelissen/git-tag-annotation-action@v2
+        run: |
+          {
+            echo 'annotation<<EOF'
+            git for-each-ref "${GITHUB_REF}" --format '%(contents)'
+            echo 'EOF'
+          } >>"${GITHUB_OUTPUT}"
+        # id: tag-data
+        # uses: ericcornelissen/git-tag-annotation-action@v2
 
       - name: Upload binaries to release
         env:
