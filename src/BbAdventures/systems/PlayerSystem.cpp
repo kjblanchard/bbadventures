@@ -23,6 +23,7 @@
 static geSfx* _sfx = nullptr;
 static const geRectangle _interactionRect = {-14, -14, 20, 20};
 static const int _moveSpeed = 100;
+static int _playerLoadNum = 0;
 
 namespace Bba {
 
@@ -208,42 +209,87 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	}
 }
 
-static void loadPlayerEach(GameObject, PlayerSpawnComponent& ps) {
+static void loadPlayerOnPlayer(GameObject, PlayerComponent& pp, LocationComponent& pl) {
+	if (pp.PlayerNum != 0) {
+		return;
+	}
+	if (!State::CurrentLevel) {
+		LogWarn("Somehow couldn't add player, current level doesn't exist?");
+		return;
+	}
+	auto go = new GameObject();
+	LocationComponent l = LocationComponent();
+	l.Location.x = pl.Location.x;
+	l.Location.y = pl.Location.y;
+	PlayerComponent p = PlayerComponent();
+	p.Direction = pp.Direction;
+	p.PlayerNum = _playerLoadNum;
+	p.ControllerNum = State::PlayerControllerMap[p.PlayerNum];
+	auto a = AnimationComponent();
+	a.AnimationName = "player" + std::to_string(p.PlayerNum + 1);
+	a.Offset = gePoint{0, 0};
+	auto r = RigidBodyComponent();
+	r.OffsetX = 8;
+	r.OffsetY = 20;
+	r.W = 10;
+	r.H = 14;
+	auto ic = InteractorComponent();
+	ic.Box = _interactionRect;
+	auto dd = DebugDrawComponent();
+	dd.Box = _interactionRect;
+	go->AddComponent<RigidBodyComponent>(r);
+	go->AddComponent<LocationComponent>(l);
+	go->AddComponent<PlayerComponent>(p);
+	go->AddComponent<AnimationComponent>(a);
+	go->AddComponent<InteractorComponent>(ic);
+	// go->AddComponent<DebugDrawComponent>(dd);
+	State::CurrentLevel->AddGameObjectToLevel(go);
+}
+
+static void loadPlayer(GameObject, PlayerSpawnComponent& ps) {
+	if (ps.SpawnLocationId != State::SpawnLocation) {
+		return;
+	}
+	if (!State::CurrentLevel) {
+		LogWarn("Somehow couldn't add player, current level doesn't exist?");
+		return;
+	}
+	auto go = new GameObject();
+	LocationComponent l = LocationComponent();
+	l.Location.x = ps.Location.x + (_playerLoadNum * 5);
+	l.Location.y = ps.Location.y;
+	PlayerComponent p = PlayerComponent();
+	p.Direction = ps.SpawnDirection;
+	p.PlayerNum = _playerLoadNum;
+	p.ControllerNum = State::PlayerControllerMap[p.PlayerNum];
+	auto a = AnimationComponent();
+	a.AnimationName = "player" + std::to_string(p.PlayerNum + 1);
+	a.Offset = gePoint{0, 0};
+	auto r = RigidBodyComponent();
+	r.OffsetX = 8;
+	r.OffsetY = 20;
+	r.W = 10;
+	r.H = 14;
+	auto ic = InteractorComponent();
+	ic.Box = _interactionRect;
+	auto dd = DebugDrawComponent();
+	dd.Box = _interactionRect;
+	go->AddComponent<RigidBodyComponent>(r);
+	go->AddComponent<LocationComponent>(l);
+	go->AddComponent<PlayerComponent>(p);
+	go->AddComponent<AnimationComponent>(a);
+	go->AddComponent<InteractorComponent>(ic);
+	// go->AddComponent<DebugDrawComponent>(dd);
+	State::CurrentLevel->AddGameObjectToLevel(go);
+}
+
+static void loadPlayerEach(GameObject go, PlayerSpawnComponent& ps) {
 	if (ps.SpawnLocationId != State::SpawnLocation) {
 		return;
 	}
 	for (size_t i = 0; i < (unsigned int)State::NumPlayers; i++) {
-		if (!State::CurrentLevel) {
-			LogWarn("Somehow couldn't add player, current level doesn't exist?");
-			return;
-		}
-		auto go = new GameObject();
-		LocationComponent l = LocationComponent();
-		l.Location.x = ps.Location.x + (i * 5);
-		l.Location.y = ps.Location.y;
-		PlayerComponent p = PlayerComponent();
-		p.Direction = ps.SpawnDirection;
-		p.PlayerNum = i;
-		p.ControllerNum = State::PlayerControllerMap[p.PlayerNum];
-		auto a = AnimationComponent();
-		a.AnimationName = "player";
-		a.Offset = gePoint{0, 0};
-		auto r = RigidBodyComponent();
-		r.OffsetX = 8;
-		r.OffsetY = 20;
-		r.W = 10;
-		r.H = 14;
-		auto ic = InteractorComponent();
-		ic.Box = _interactionRect;
-		auto dd = DebugDrawComponent();
-		dd.Box = _interactionRect;
-		go->AddComponent<RigidBodyComponent>(r);
-		go->AddComponent<LocationComponent>(l);
-		go->AddComponent<PlayerComponent>(p);
-		go->AddComponent<AnimationComponent>(a);
-		go->AddComponent<InteractorComponent>(ic);
-		// go->AddComponent<DebugDrawComponent>(dd);
-		State::CurrentLevel->AddGameObjectToLevel(go);
+		_playerLoadNum = i;
+		loadPlayer(go, ps);
 	}
 }
 static void startPlayersEach(GameObject g, PlayerComponent p) {
@@ -251,7 +297,7 @@ static void startPlayersEach(GameObject g, PlayerComponent p) {
 	auto letter = GetLetterForDirection(p.Direction);
 	a.Animation->PlayAnimation("walk" + std::string(letter));
 }
-static void updatePlayerJoystickEach(GameObject go, PlayerComponent& p) {
+static void updatePlayerJoystickEach(GameObject, PlayerComponent& p) {
 	if (p.ControllerNum == JOYSTICK_DEFAULT) {
 		int firstPadPressed;
 		if (geGamepadButtonJustPressedAnyPad(geGameControllerButtonSTART, &firstPadPressed)) {
@@ -262,15 +308,41 @@ static void updatePlayerJoystickEach(GameObject go, PlayerComponent& p) {
 	}
 }
 
-void UpdatePlayerJoysticks() {
-	// We should check to see if there are any players that don't have an assigned joystick
-	GameObject::ForEach<PlayerComponent>(updatePlayerJoystickEach);
+void LoadPlayer(int playerNum) {
+	_playerLoadNum = playerNum;
+	GameObject::ForEach<PlayerComponent, LocationComponent>(loadPlayerOnPlayer);
+}
 
-	// Check to see if there are any controllers that are not assigned to players and players are less than 2
-	// Check to see if any of the unassigned controllers are pressing the start button
-	// We should create the second player and assign the controller if so.
-	// Camera should only follow player 1
-	// Can not walk outside of camera bounds.
+void UpdatePlayerJoysticks() {
+	// We should check to see if there are any players that don't have an assigned joystick and assign to them first
+	GameObject::ForEach<PlayerComponent>(updatePlayerJoystickEach);
+	// Now, if num players is less than max players, we should try and create a new player.
+	if (State::NumPlayers >= LOCAL_PLAYERS_MAX) {
+		return;
+	}
+	// auto assignedJoystick = JOYSTICK_DEFAULT;
+	// Check each gamepad if it isn't in the player controller list
+	for (size_t i = 0; i < geGamepadMaxPads(); i++) {
+		// If this gamepad isn't pressing start, move on
+		if (!geGamepadButtonJustPressed(i, geGameControllerButtonSTART)) continue;
+		bool alreadyAssigned = false;
+		// Check to see if this gamepad is already assigned somewhere
+		for (size_t j = 0; j < LOCAL_PLAYERS_MAX; j++) {
+			if (State::PlayerControllerMap[j] == i) {
+				alreadyAssigned = true;
+				break;
+			}
+		}
+		// If this gamepad is already assigned, move on to the next
+		if (alreadyAssigned) continue;
+		auto playerNum = State::NumPlayers++;
+		// Assign this gamepad to the new player
+		State::PlayerControllerMap[playerNum] = i;
+		// We should create a new player, add it to the map, and go.
+		LoadPlayer(playerNum);
+		// If a player is loaded and assigned a controller, we should be done here.
+		break;
+	}
 }
 
 void UpdatePlayers() {
