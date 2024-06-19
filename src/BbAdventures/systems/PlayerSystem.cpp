@@ -23,10 +23,11 @@
 static geSfx* _sfx = nullptr;
 static const geRectangle _interactionRect = {-14, -14, 20, 20};
 static const int _moveSpeed = 100;
+static int _playerLoadNum = 0;
 
 namespace Bba {
 
-static bool handleMovement(Directions& d, geVec2& m, AnimationComponent& a, int playerNum) {
+static bool handleMovement(Directions& d, geVec2& m, AnimationComponent& a, int playerNum, int joystickNum) {
 	if (State::IsDisplayingText) {
 		return false;
 	}
@@ -39,7 +40,7 @@ static bool handleMovement(Directions& d, geVec2& m, AnimationComponent& a, int 
 	if (playerNum == 0 && (geKeyJustPressed(geKey_LSHIFT) || geKeyHeldDown(geKey_LSHIFT))) {
 		isRunning = true;
 	}
-	if (geGamepadButtonJustPressed(playerNum, geGameControllerButtonX) || geGamepadButtonHeldDown(playerNum, geGameControllerButtonX)) {
+	if (joystickNum != JOYSTICK_DEFAULT && (geGamepadButtonJustPressed(joystickNum, geGameControllerButtonX) || geGamepadButtonHeldDown(joystickNum, geGameControllerButtonX))) {
 		isRunning = true;
 	}
 
@@ -48,45 +49,48 @@ static bool handleMovement(Directions& d, geVec2& m, AnimationComponent& a, int 
 		moveSpeed *= multiplier;
 		a.AnimationSpeed = multiplier;
 	}
-	// Check for left thunbstick movement
-	auto xStick = geGamepadLeftAxisXFloat(playerNum);
-	auto yStick = geGamepadLeftAxisYFloat(playerNum);
-	if (fabs(xStick) > fabs(yStick)) {
-		if (xStick > 0.1) {
-			d = Directions::East;
-		} else if (xStick < -0.1) {
-			d = Directions::West;
+
+	if (joystickNum != JOYSTICK_DEFAULT) {
+		auto xStick = geGamepadLeftAxisXFloat(joystickNum);
+		auto yStick = geGamepadLeftAxisYFloat(joystickNum);
+		if (fabs(xStick) > fabs(yStick)) {
+			if (xStick > 0.1) {
+				d = Directions::East;
+			} else if (xStick < -0.1) {
+				d = Directions::West;
+			}
+		} else {
+			if (yStick > 0.1) {
+				d = Directions::South;
+			} else if (yStick < -0.1) {
+				d = Directions::North;
+			}
 		}
-	} else {
-		if (yStick > 0.1) {
-			d = Directions::South;
-		} else if (yStick < -0.1) {
-			d = Directions::North;
+		// Check for joystick movement
+		if (xStick || yStick) {
+			m.x += moveSpeed * xStick * State::DeltaTime;
+			m.y += moveSpeed * yStick * State::DeltaTime;
+			moved = true;
 		}
 	}
 
-	// Check for joystick movement
-	if (xStick || yStick) {
-		m.x += moveSpeed * xStick * State::DeltaTime;
-		m.y += moveSpeed * yStick * State::DeltaTime;
-		moved = true;
-	} else {
-		if ((playerNum == 0 && (geKeyJustPressed(geKey_W) || geKeyHeldDown(geKey_W))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_UP) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_UP))) {
+	if (!moved) {
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_W) || geKeyHeldDown(geKey_W))) || (joystickNum != JOYSTICK_DEFAULT && (geGamepadButtonHeldDown(joystickNum, geGameControllerButtonDPAD_UP) || geGamepadButtonJustPressed(joystickNum, geGameControllerButtonDPAD_UP)))) {
 			d = Directions::North;
 			moved = true;
 			m.y -= moveSpeed * State::DeltaTime;
 		}
-		if ((playerNum == 0 && (geKeyJustPressed(geKey_A) || geKeyHeldDown(geKey_A))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_LEFT) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_LEFT))) {
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_A) || geKeyHeldDown(geKey_A))) || (joystickNum != JOYSTICK_DEFAULT && (geGamepadButtonHeldDown(joystickNum, geGameControllerButtonDPAD_LEFT) || geGamepadButtonJustPressed(joystickNum, geGameControllerButtonDPAD_LEFT)))) {
 			d = Directions::West;
 			moved = true;
 			m.x -= moveSpeed * State::DeltaTime;
 		}
-		if ((playerNum == 0 && (geKeyJustPressed(geKey_S) || geKeyHeldDown(geKey_S))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_DOWN) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_DOWN))) {
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_S) || geKeyHeldDown(geKey_S))) || (joystickNum != JOYSTICK_DEFAULT && (geGamepadButtonHeldDown(joystickNum, geGameControllerButtonDPAD_DOWN) || geGamepadButtonJustPressed(joystickNum, geGameControllerButtonDPAD_DOWN)))) {
 			d = Directions::South;
 			moved = true;
 			m.y += moveSpeed * State::DeltaTime;
 		}
-		if ((playerNum == 0 && (geKeyJustPressed(geKey_D) || geKeyHeldDown(geKey_D))) || (geGamepadButtonHeldDown(playerNum, geGameControllerButtonDPAD_RIGHT) || geGamepadButtonJustPressed(playerNum, geGameControllerButtonDPAD_RIGHT))) {
+		if ((playerNum == 0 && (geKeyJustPressed(geKey_D) || geKeyHeldDown(geKey_D))) || (joystickNum != JOYSTICK_DEFAULT && (geGamepadButtonHeldDown(joystickNum, geGameControllerButtonDPAD_RIGHT) || geGamepadButtonJustPressed(joystickNum, geGameControllerButtonDPAD_RIGHT)))) {
 			d = Directions::East;
 			moved = true;
 			m.x += moveSpeed * State::DeltaTime;
@@ -103,7 +107,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	auto& i = go.GetComponent<InteractorComponent>();
 	auto d = p.Direction;
 	auto tryMoveSpeed = geVec2{0, 0};
-	auto moved = handleMovement(d, tryMoveSpeed, a, p.PlayerNum);
+	auto moved = handleMovement(d, tryMoveSpeed, a, p.PlayerNum, p.ControllerNum);
 	// Check if we can move
 	auto playerRbRect = r.GetRectF();
 	playerRbRect.x += l.Location.x + tryMoveSpeed.x;
@@ -186,7 +190,7 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 		}
 	});
 	// Check if we should interact
-	if (((p.PlayerNum == 0 && geKeyJustPressed(geKey_SPACE)) || geGamepadButtonJustPressed(p.PlayerNum, geGameControllerButtonA)) && go.HasComponent<InteractorComponent>()) {
+	if (((p.PlayerNum == 0 && geKeyJustPressed(geKey_SPACE)) || (p.ControllerNum != JOYSTICK_DEFAULT && geGamepadButtonJustPressed(p.ControllerNum, geGameControllerButtonA))) && go.HasComponent<InteractorComponent>()) {
 		// If we are displaying text, close it.
 		if (State::TextDisplay->Text) {
 			State::TextDisplay->Interact(State::TextDisplay->Text);
@@ -205,47 +209,140 @@ static void updatePlayersEach(GameObject go, PlayerComponent& p) {
 	}
 }
 
-static void loadPlayerEach(GameObject, PlayerSpawnComponent& ps) {
+static void loadPlayerOnPlayer(GameObject, PlayerComponent& pp, LocationComponent& pl) {
+	if (pp.PlayerNum != 0) {
+		return;
+	}
+	if (!State::CurrentLevel) {
+		LogWarn("Somehow couldn't add player, current level doesn't exist?");
+		return;
+	}
+	auto go = new GameObject();
+	LocationComponent l = LocationComponent();
+	l.Location.x = pl.Location.x;
+	l.Location.y = pl.Location.y;
+	PlayerComponent p = PlayerComponent();
+	p.Direction = pp.Direction;
+	p.PlayerNum = _playerLoadNum;
+	p.ControllerNum = State::PlayerControllerMap[p.PlayerNum];
+	auto a = AnimationComponent();
+	a.AnimationName = "player" + std::to_string(p.PlayerNum + 1);
+	a.Offset = gePoint{0, 0};
+	auto r = RigidBodyComponent();
+	r.OffsetX = 8;
+	r.OffsetY = 20;
+	r.W = 10;
+	r.H = 14;
+	auto ic = InteractorComponent();
+	ic.Box = _interactionRect;
+	auto dd = DebugDrawComponent();
+	dd.Box = _interactionRect;
+	go->AddComponent<RigidBodyComponent>(r);
+	go->AddComponent<LocationComponent>(l);
+	go->AddComponent<PlayerComponent>(p);
+	go->AddComponent<AnimationComponent>(a);
+	go->AddComponent<InteractorComponent>(ic);
+	// go->AddComponent<DebugDrawComponent>(dd);
+	State::CurrentLevel->AddGameObjectToLevel(go);
+}
+
+static void loadPlayer(GameObject, PlayerSpawnComponent& ps) {
+	if (ps.SpawnLocationId != State::SpawnLocation) {
+		return;
+	}
+	if (!State::CurrentLevel) {
+		LogWarn("Somehow couldn't add player, current level doesn't exist?");
+		return;
+	}
+	auto go = new GameObject();
+	LocationComponent l = LocationComponent();
+	l.Location.x = ps.Location.x + (_playerLoadNum * 5);
+	l.Location.y = ps.Location.y;
+	PlayerComponent p = PlayerComponent();
+	p.Direction = ps.SpawnDirection;
+	p.PlayerNum = _playerLoadNum;
+	p.ControllerNum = State::PlayerControllerMap[p.PlayerNum];
+	auto a = AnimationComponent();
+	a.AnimationName = "player" + std::to_string(p.PlayerNum + 1);
+	a.Offset = gePoint{0, 0};
+	auto r = RigidBodyComponent();
+	r.OffsetX = 8;
+	r.OffsetY = 20;
+	r.W = 10;
+	r.H = 14;
+	auto ic = InteractorComponent();
+	ic.Box = _interactionRect;
+	auto dd = DebugDrawComponent();
+	dd.Box = _interactionRect;
+	go->AddComponent<RigidBodyComponent>(r);
+	go->AddComponent<LocationComponent>(l);
+	go->AddComponent<PlayerComponent>(p);
+	go->AddComponent<AnimationComponent>(a);
+	go->AddComponent<InteractorComponent>(ic);
+	// go->AddComponent<DebugDrawComponent>(dd);
+	State::CurrentLevel->AddGameObjectToLevel(go);
+}
+
+static void loadPlayerEach(GameObject go, PlayerSpawnComponent& ps) {
 	if (ps.SpawnLocationId != State::SpawnLocation) {
 		return;
 	}
 	for (size_t i = 0; i < (unsigned int)State::NumPlayers; i++) {
-		if (!State::CurrentLevel) {
-			LogWarn("Somehow couldn't add player, current level doesn't exist?");
-			return;
-		}
-		auto go = new GameObject();
-		LocationComponent l = LocationComponent();
-		l.Location.x = ps.Location.x + (i * 5);
-		l.Location.y = ps.Location.y;
-		PlayerComponent p = PlayerComponent();
-		p.Direction = ps.SpawnDirection;
-		p.PlayerNum = i;
-		auto a = AnimationComponent();
-		a.AnimationName = "player";
-		a.Offset = gePoint{0, 0};
-		auto r = RigidBodyComponent();
-		r.OffsetX = 8;
-		r.OffsetY = 20;
-		r.W = 10;
-		r.H = 14;
-		auto ic = InteractorComponent();
-		ic.Box = _interactionRect;
-		auto dd = DebugDrawComponent();
-		dd.Box = _interactionRect;
-		go->AddComponent<RigidBodyComponent>(r);
-		go->AddComponent<LocationComponent>(l);
-		go->AddComponent<PlayerComponent>(p);
-		go->AddComponent<AnimationComponent>(a);
-		go->AddComponent<InteractorComponent>(ic);
-		// go->AddComponent<DebugDrawComponent>(dd);
-		State::CurrentLevel->AddGameObjectToLevel(go);
+		_playerLoadNum = i;
+		loadPlayer(go, ps);
 	}
 }
 static void startPlayersEach(GameObject g, PlayerComponent p) {
 	auto a = g.GetComponent<AnimationComponent>();
 	auto letter = GetLetterForDirection(p.Direction);
 	a.Animation->PlayAnimation("walk" + std::string(letter));
+}
+static void updatePlayerJoystickEach(GameObject, PlayerComponent& p) {
+	if (p.ControllerNum == JOYSTICK_DEFAULT) {
+		int firstPadPressed;
+		if (geGamepadButtonJustPressedAnyPad(geGameControllerButtonSTART, &firstPadPressed)) {
+			LogWarn("Assigning player pad num %d", firstPadPressed);
+			p.ControllerNum = firstPadPressed;
+			State::PlayerControllerMap[p.PlayerNum] = firstPadPressed;
+		}
+	}
+}
+
+void LoadPlayer(int playerNum) {
+	_playerLoadNum = playerNum;
+	GameObject::ForEach<PlayerComponent, LocationComponent>(loadPlayerOnPlayer);
+}
+
+void UpdatePlayerJoysticks() {
+	// We should check to see if there are any players that don't have an assigned joystick and assign to them first
+	GameObject::ForEach<PlayerComponent>(updatePlayerJoystickEach);
+	// Now, if num players is less than max players, we should try and create a new player.
+	if (State::NumPlayers >= LOCAL_PLAYERS_MAX) {
+		return;
+	}
+	// auto assignedJoystick = JOYSTICK_DEFAULT;
+	// Check each gamepad if it isn't in the player controller list
+	for (size_t i = 0; i < geGamepadMaxPads(); i++) {
+		// If this gamepad isn't pressing start, move on
+		if (!geGamepadButtonJustPressed(i, geGameControllerButtonSTART)) continue;
+		bool alreadyAssigned = false;
+		// Check to see if this gamepad is already assigned somewhere
+		for (size_t j = 0; j < LOCAL_PLAYERS_MAX; j++) {
+			if (State::PlayerControllerMap[j] == i) {
+				alreadyAssigned = true;
+				break;
+			}
+		}
+		// If this gamepad is already assigned, move on to the next
+		if (alreadyAssigned) continue;
+		auto playerNum = State::NumPlayers++;
+		// Assign this gamepad to the new player
+		State::PlayerControllerMap[playerNum] = i;
+		// We should create a new player, add it to the map, and go.
+		LoadPlayer(playerNum);
+		// If a player is loaded and assigned a controller, we should be done here.
+		break;
+	}
 }
 
 void UpdatePlayers() {

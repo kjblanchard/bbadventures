@@ -40,6 +40,7 @@ class Tween {
 	Tween(float start, float end, float duration, Easings ease);
 	float Value();
 	bool Update();
+	inline bool Complete(){return _currentDuration >= _duration;}
 
    private:
 	float _begin = 0, _end = 0, _currentDuration = 0, _duration = 0;

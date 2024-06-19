@@ -6,16 +6,27 @@
 #include <BbAdventures/shared/state.hpp>
 namespace Bba {
 
+void getFollowTarget(CameraComponent& cc) {
+	GameObject::ForEach<PlayerComponent, LocationComponent>([&cc](GameObject, PlayerComponent& pc, LocationComponent& lc) {
+		if (pc.PlayerNum != 0) {
+			return;
+		}
+		cc.FollowTarget = &lc;
+	});
+}
+
 void UpdateCamera() {
-	auto p = GameObject::GetGameObjectWithComponents<PlayerComponent>();
 	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
-	if (!c.has_value() || !p.has_value()) {
+	if (!c.has_value()) {
 		return;
 	}
 	auto& cc = c->GetComponent<CameraComponent>();
-	auto& pl = p->GetComponent<LocationComponent>();
-	cc.Box.x = pl.Location.x - (SCREEN_WIDTH / 2);
-	cc.Box.y = pl.Location.y - (SCREEN_HEIGHT / 2);
+	if (!cc.FollowTarget) {
+		getFollowTarget(cc);
+	}
+	auto pl = cc.FollowTarget;
+	cc.Box.x = pl->Location.x - (SCREEN_WIDTH / 2);
+	cc.Box.y = pl->Location.y - (SCREEN_HEIGHT / 2);
 	if (cc.Box.x < 0) {
 		cc.Box.x = 0;
 	} else if (cc.Box.x > cc.Bounds.x - SCREEN_WIDTH) {

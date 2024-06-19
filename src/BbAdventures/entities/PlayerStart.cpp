@@ -1,6 +1,5 @@
 #include <BbAdventures/base/GameObject.hpp>
 #include <BbAdventures/components/PlayerSpawnComponent.hpp>
-#include <BbAdventures/entities/Player.hpp>
 #include <BbAdventures/entities/PlayerStart.hpp>
 #include <BbAdventures/shared/state.hpp>
 namespace Bba {

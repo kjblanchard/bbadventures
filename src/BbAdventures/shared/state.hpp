@@ -23,6 +23,8 @@ class State {
 
 	static float CameraX;
 	static float CameraY;
+	// Controllers
+	static unsigned int PlayerControllerMap[2];
 
    private:
 };
