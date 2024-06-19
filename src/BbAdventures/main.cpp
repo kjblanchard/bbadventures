@@ -35,7 +35,6 @@ void Update(double deltatime) {
 		} else {
 			if (!_fadeInTween->Complete()) {
 				auto doneValue = (int)_fadeInTween->Value();
-				LogWarn("Done value is %d", doneValue);
 				geImageStaticSetAlpha(_logo, doneValue);
 			} else {
 				auto doneValue = (int)_fadeOutTween->Value();
