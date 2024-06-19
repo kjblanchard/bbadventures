@@ -7,8 +7,8 @@
 namespace Bba {
 
 void getFollowTarget(CameraComponent& cc) {
-	GameObject::ForEach<PlayerComponent, LocationComponent>([&cc](GameObject, PlayerComponent & pc, LocationComponent & lc){
-		if(pc.PlayerNum != 0) {
+	GameObject::ForEach<PlayerComponent, LocationComponent>([&cc](GameObject, PlayerComponent& pc, LocationComponent& lc) {
+		if (pc.PlayerNum != 0) {
 			return;
 		}
 		cc.FollowTarget = &lc;
@@ -16,10 +16,7 @@ void getFollowTarget(CameraComponent& cc) {
 }
 
 void UpdateCamera() {
-	// GameObject::ForEach<PlayerComponent>
-	// auto p = GameObject::GetGameObjectWithComponents<PlayerComponent>();
 	auto c = GameObject::GetGameObjectWithComponents<CameraComponent>();
-	// if (!c.has_value() || !p.has_value()) {
 	if (!c.has_value()) {
 		return;
 	}
@@ -27,7 +24,6 @@ void UpdateCamera() {
 	if (!cc.FollowTarget) {
 		getFollowTarget(cc);
 	}
-	// auto& pl = p->GetComponent<LocationComponent>();
 	auto pl = cc.FollowTarget;
 	cc.Box.x = pl->Location.x - (SCREEN_WIDTH / 2);
 	cc.Box.y = pl->Location.y - (SCREEN_HEIGHT / 2);
