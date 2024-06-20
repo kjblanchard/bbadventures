@@ -32,6 +32,7 @@ void Update(double deltatime) {
 			_ui = new Bba::Ui();
 			Bba::State::NextMapName = defaultLevel;
 			Bba::Level::LoadNewLevel();
+			Bba::State::IsLoadingMap = true;
 		} else {
 			if (!_fadeInTween->Complete()) {
 				auto doneValue = (int)_fadeInTween->Value();
@@ -40,8 +41,8 @@ void Update(double deltatime) {
 				auto doneValue = (int)_fadeOutTween->Value();
 				geImageStaticSetAlpha(_logo, doneValue);
 			}
+			return;
 		}
-		return;
 	}
 	if (!Bba::State::IsLoadingMap) {
 		Bba::UpdatePlayerJoysticks();
